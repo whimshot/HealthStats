@@ -29,18 +29,32 @@ class HealthStats(BoxLayout):
         """handles the function keys"""
 
         try:
-            weight = float(self.screen_text)
+            vital_stat = float(self.screen_text)
 
-            if (name == "clear"):
-                self.screen_text = "Health Stats"
+            if  (name == "delete"):
+                self.screen_text = self.screen_text[:-1]
 
-            elif (name == "enter"):
+            elif (name == "weight"):
                 date = time.strftime("%Y-%m-%d %H:%M:%S %z")
                 self.screen_text = "Health Stats"
-                self.aio.send(self.aio_feed, weight)
+                self.aio.send(name, vital_stat)
+                bmi = int(vital_stat/3.0625)
+                self.aio.send('bmi', bmi)
 
-            elif (name == "delete"):
-                self.screen_text = self.screen_text[:-1]
+            elif (name == "systolic"):
+                date = time.strftime("%Y-%m-%d %H:%M:%S %z")
+                self.screen_text = "Health Stats"
+                self.aio.send(name, vital_stat)
+
+            elif (name == "diastolic"):
+                date = time.strftime("%Y-%m-%d %H:%M:%S %z")
+                self.screen_text = "Health Stats"
+                self.aio.send(name, vital_stat)
+
+            elif (name == "pulse"):
+                date = time.strftime("%Y-%m-%d %H:%M:%S %z")
+                self.screen_text = "Health Stats"
+                self.aio.send(name, vital_stat)
 
         except ValueError:
             self.screen_text = "Health Stats"
