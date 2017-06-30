@@ -38,7 +38,7 @@ class HealthStats(BoxLayout):
                 date = time.strftime("%Y-%m-%d %H:%M:%S %z")
                 self.screen_text = "Health Stats"
                 self.aio.send(name, vital_stat)
-                bmi = int(vital_stat/3.0625)
+                bmi = int(vital_stat/3.161284)
                 self.aio.send('bmi', bmi)
 
             elif (name == "systolic"):
