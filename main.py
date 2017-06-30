@@ -3,7 +3,6 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.clock import Clock
 from Adafruit_IO import Client
 import time
-import csv
 from adafruitiokey import aoi_key
 
 
