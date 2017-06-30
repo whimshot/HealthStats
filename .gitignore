@@ -1,0 +1,8 @@
+*.pyc
+*.csv
+adafruitiokey.py
+__pycache__
+.buildozer
+bin/
+hs27/
+hs3/
