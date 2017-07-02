@@ -5,7 +5,7 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 
-class StatsChart:
+class StatsChart(object):
     """Stats charts object."""
 
     def __init__(self):
