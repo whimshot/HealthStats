@@ -68,6 +68,7 @@ class StatsChart:
                 for ax in fig.axes:
                     matplotlib.pyplot.sca(ax)
                     plt.xticks(rotation=45)
+                    ax.grid(axis='y', linestyle='-.')
 
                 fig.tight_layout()
                 fig.savefig('weight.png', dpi=300)
