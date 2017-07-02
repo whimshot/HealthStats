@@ -59,10 +59,18 @@
 
 <HealthStats>:
     inputpad: input_pad
+    weightchart: weigh_chart
     size: self.size
     orientation: 'horizontal'
-    Image:
+    BoxLayout:
+        orientation: 'vertical'
         size_hint: (.5,1)
+        Image:
+            size_hint: (1,.5)
+            source: 'weight.png'
+            id: weigh_chart
+            allow_stretch: True
+            keep_ratio: False
     BoxLayout:
         numscreen: number_screen
         text: ""
