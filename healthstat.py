@@ -59,11 +59,11 @@ class StatsChart:
 
                 bp.plot(systolics.dates, systolics.data, 'bo')
                 bp.plot(diastolics.dates, diastolics.data, 'go')
-                bp.set_ylabel('Systolic & Diasolic')
+                bp.set_ylabel('Blood Pressure')
 
                 weight.plot(weights.dates, weights.data)
-                weight.set_ylabel('Kg')
-                weight.set_ylim(120, 144)
+                weight.set_ylabel('Weight (Kg)')
+                weight.set_ylim(120, 150)
 
                 for ax in fig.axes:
                     matplotlib.pyplot.sca(ax)
