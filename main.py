@@ -1,6 +1,6 @@
 """Health Stats app in kivy."""
 from Adafruit_IO import Client
-from adafruitiokey import aoi_key
+from AdafruitIOKey import aoi_key
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.clock import Clock
