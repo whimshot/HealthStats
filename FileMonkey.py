@@ -19,5 +19,7 @@ class FileMonkey(object):
                 return True
             else:
                 return False
-        except ValueError:
+        except (ValueError):
             return False
+        except (OSError):
+            return True
