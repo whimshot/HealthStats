@@ -42,6 +42,12 @@ pip install --upgrade -r requirements3.txt
 
 ### Installing
 
+You'll need to create a file called adatfruitiokey.py (or whatever you like just change the import line). And it should look something like this:
+
+```
+aoi_key = 'Your key goes here'
+```
+
 ## Running the tests
 
 Right now there aren't any tests.
