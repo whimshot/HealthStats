@@ -30,7 +30,7 @@ class StatsChart(object):
                     or (systolics != self.oldsystolics)
                     or (diastolics != self.olddiasolics)):
 
-                fig, (weight, bp) = plt.subplots(2, figsize=(4, 5.5))
+                fig, (weight, bp) = plt.subplots(2, figsize=(4, 6))
 
                 bp.plot(systolics.dates, systolics.data, 'bo')
                 bp.plot(diastolics.dates, diastolics.data, 'go')
