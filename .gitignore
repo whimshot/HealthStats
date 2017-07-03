@@ -1,6 +1,7 @@
 *.pyc
 *.csv
 adafruitiokey.py
+AdafruitIOKey.py
 __pycache__
 .buildozer
 bin/
