@@ -45,18 +45,22 @@ class HealthStats(BoxLayout):
                 self.aio.send(name, vital_stat)
                 bmi = int(vital_stat/3.161284)
                 self.aio.send('bmi', bmi)
+                self.update_charts()
 
             elif (name == "systolic"):
                 self.screen_text = "Health Stats"
                 self.aio.send(name, vital_stat)
+                self.update_charts()
 
             elif (name == "diastolic"):
                 self.screen_text = "Health Stats"
                 self.aio.send(name, vital_stat)
+                self.update_charts()
 
             elif (name == "pulse"):
                 self.screen_text = "Health Stats"
                 self.aio.send(name, vital_stat)
+                self.update_charts()
 
         except ValueError:
             self.screen_text = "Health Stats"
@@ -71,7 +75,7 @@ class HealthStatsApp(App):
         """Build function for Health Stats kivy app."""
         hs = HealthStats()
         Clock.schedule_interval(hs.update, 1.0 / 10.0)
-        Clock.schedule_interval(hs.update_charts, 60.0)
+        Clock.schedule_interval(hs.update_charts, 600.0)
 
         return hs
 
