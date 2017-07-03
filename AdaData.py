@@ -1,7 +1,7 @@
 """Get data from io.adafruit.com."""
 from datetime import datetime
 from Adafruit_IO import Client
-from adafruitiokey import aoi_key
+from AdafruitIOKey import aoi_key
 
 
 class AdaData(object):
