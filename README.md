@@ -42,7 +42,9 @@ pip install --upgrade -r requirements3.txt
 
 ### Installing
 
-You'll need to create a file called adatfruitiokey.py (or whatever you like just change the import line). And it should look something like this:
+You'll need to create a file called *AdafruitIOKey.py* (or whatever you like just change the import line). And it should look something like this:
+
+*AdafruitIOKey.py*:
 
 ```
 aoi_key = 'Your key goes here'
