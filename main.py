@@ -8,26 +8,24 @@ from StatsChart import StatsChart
 from FileMonkey import FileMonkey
 
 
-statschart = StatsChart()
-statschart.draw_chart()
-
-
 class HealthStats(BoxLayout):
     """A simple class for a Health Stats app in kivy."""
 
     screen_text = "Health Stats"
     aio = Client(aoi_key)
     fm = FileMonkey('weight.png')
+    statschart = StatsChart()
+    statschart.draw_chart()
 
     def update(self, dt):
         """Update the display and charts."""
         self.inputpad.numscreen.text = self.screen_text
         if (self.fm.ook()):
-            self.weightchart.reload()
+            self.statsimage.reload()
 
     def update_charts(self, dt):
         """Make the charts."""
-        statschart.draw_chart()
+        self.statschart.draw_chart()
 
     def new_digit(self, text):
         """Add a digit or decimal point to the input display."""
@@ -73,7 +71,7 @@ class HealthStatsApp(App):
         """Build function for Health Stats kivy app."""
         hs = HealthStats()
         Clock.schedule_interval(hs.update, 1.0 / 10.0)
-        Clock.schedule_interval(hs.update_charts, 5.0)
+        Clock.schedule_interval(hs.update_charts, 60.0)
 
         return hs
 
