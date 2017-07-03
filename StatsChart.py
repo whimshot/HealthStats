@@ -1,12 +1,15 @@
 """StatsChart class."""
 from AdaData import AdaData
 import matplotlib
+from FileMonkey import FileMonkey
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 
 class StatsChart(object):
     """Stats charts object."""
+
+    fm = FileMonkey('weight.png')
 
     def __init__(self):
         """Make that statschart."""
@@ -25,10 +28,12 @@ class StatsChart(object):
             systolics.get_data()
             diastolics.get_data()
 
-            # Only rebuild images if the data has changed.
+            # Only rebuild images if the data has changed or if
+            # there is no image.
             if ((weights != self.oldweights)
                     or (systolics != self.oldsystolics)
-                    or (diastolics != self.olddiasolics)):
+                    or (diastolics != self.olddiasolics)
+                    or (self.fm.ook())):
 
                 fig, (weight, bp) = plt.subplots(2, figsize=(5, 6))
 
