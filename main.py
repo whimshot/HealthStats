@@ -20,12 +20,11 @@ class HealthStats(BoxLayout):
     def update(self, dt):
         """Update the display and charts."""
         self.inputpad.numscreen.text = self.screen_text
-        self.statschart.draw_chart()
         if (self.fm.ook()):
             self.statsimage.reload()
 
-    def update_charts(self):
-        """Make the charts."""
+    def periodic(self, dt):
+        """Update function for the charts."""
         self.statschart.draw_chart()
 
     def new_digit(self, text):
@@ -46,22 +45,22 @@ class HealthStats(BoxLayout):
                 self.aio.send(name, vital_stat)
                 bmi = int(vital_stat/3.161284)
                 self.aio.send('bmi', bmi)
-                self.update_charts()
+                self.statschart.draw_chart()
 
             elif (name == "systolic"):
                 self.screen_text = "Health Stats"
                 self.aio.send(name, vital_stat)
-                self.update_charts()
+                self.statschart.draw_chart()
 
             elif (name == "diastolic"):
                 self.screen_text = "Health Stats"
                 self.aio.send(name, vital_stat)
-                self.update_charts()
+                self.statschart.draw_chart()
 
             elif (name == "pulse"):
                 self.screen_text = "Health Stats"
                 self.aio.send(name, vital_stat)
-                self.update_charts()
+                self.statschart.draw_chart()
 
         except ValueError:
             self.screen_text = "Health Stats"
@@ -76,6 +75,7 @@ class HealthStatsApp(App):
         """Build function for Health Stats kivy app."""
         hs = HealthStats()
         Clock.schedule_interval(hs.update, 1.0 / 10.0)
+        Clock.schedule_interval(hs.periodic, 5.0)
 
         return hs
 
