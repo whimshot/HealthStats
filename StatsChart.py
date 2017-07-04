@@ -12,39 +12,47 @@ class StatsChart(object):
     fm = FileMonkey('weight.png')
 
     def __init__(self):
-        """Make that statschart."""
-        self.oldweights = AdaData('weight')
-        self.oldsystolics = AdaData('systolic')
-        self.olddiasolics = AdaData('diastolic')
-        self.oldpulses = AdaData('pulse')
+        """
+        Initial StatsCart.
+
+        Gets initial data from io.adafruit.com to compare against
+        for changes later.
+        """
+        self.oldweight = AdaData('weight')
+        self.oldsystolic = AdaData('systolic')
+        self.olddiastolic = AdaData('diastolic')
+        self.oldpulse = AdaData('pulse')
 
     def draw_chart(self):
         """Make the stats chart image."""
         try:
-            weights = AdaData('weight')
-            systolics = AdaData('systolic')
-            diastolics = AdaData('diastolic')
+            weight = AdaData('weight')
+            systolic = AdaData('systolic')
+            diastolic = AdaData('diastolic')
+            pulse = AdaData('pulse')
 
-            weights.get_data()
-            systolics.get_data()
-            diastolics.get_data()
+            weight.get_data()
+            systolic.get_data()
+            diastolic.get_data()
+            pulse.get_data()
 
             # Only rebuild images if the data has changed or if
             # there is no image.
-            if ((weights != self.oldweights)
-                    or (systolics != self.oldsystolics)
-                    or (diastolics != self.olddiasolics)
+            if ((weight != self.oldweight)
+                    or (systolic != self.oldsystolic)
+                    or (diastolic != self.olddiastolic)
+                    or (pulse != self.oldpulse)
                     or (self.fm.ook())):
 
-                fig, (weight, bp) = plt.subplots(2, figsize=(5, 6))
+                fig, (weight_chart, bp_chart) = plt.subplots(2, figsize=(5, 6))
 
-                bp.plot(systolics.dates, systolics.data)
-                bp.plot(diastolics.dates, diastolics.data)
-                bp.set_ylabel('Blood Pressure (mmHg)')
+                bp_chart.plot(systolic.dates, systolic.data)
+                bp_chart.plot(diastolic.dates, diastolic.data)
+                bp_chart.set_ylabel('Blood Pressure (mmHg)')
 
-                weight.plot(weights.dates, weights.data)
-                weight.set_ylabel('Weight (Kg)')
-                weight.set_ylim(120, 150)
+                weight_chart.plot(weight.dates, weight.data)
+                weight_chart.set_ylabel('Weight (Kg)')
+                weight_chart.set_ylim(120, 150)
 
                 for ax in fig.axes:
                     matplotlib.pyplot.sca(ax)
@@ -60,6 +68,7 @@ class StatsChart(object):
             print("somethings not right %s" % str(ve))
 
         finally:
-            self.oldweights = weights
-            self.oldsystolics = systolics
-            self.olddiasolics = diastolics
+            self.oldweight = weight
+            self.oldsystolic = systolic
+            self.olddiastolic = diastolic
+            self.oldpulse = pulse
