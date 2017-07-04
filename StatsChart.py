@@ -15,8 +15,8 @@ class StatsChart(object):
         """
         Initial StatsCart.
 
-        Gets initial data from io.adafruit.com to compare against
-        for changes later.
+        Sets up initial containers for data from io.adafruit.com to
+        compare against for changes later.
         """
         self.oldweight = AdaData('weight')
         self.oldsystolic = AdaData('systolic')
