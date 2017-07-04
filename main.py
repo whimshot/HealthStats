@@ -21,10 +21,6 @@ class HealthStats(BoxLayout):
         """Update the display and charts."""
         self.inputpad.numscreen.text = self.screen_text
 
-    def periodic(self, dt):
-        """Update function for the charts."""
-        self.statschart.draw_chart()
-
     def new_digit(self, text):
         """Add a digit or decimal point to the input display."""
         if (self.screen_text == "Health Stats"):
@@ -34,9 +30,10 @@ class HealthStats(BoxLayout):
 
     def statistic_key(self, name):
         """Handle the statistic keys."""
+        vital_text = self.screen_text
+        self.screen_text = "updating . . ."
         try:
-            vital_stat = float(self.screen_text)
-            self.screen_text = "updating . . ."
+            vital_stat = float(vital_text)
             if (name == "weight"):
                 bmi = int(vital_stat/3.161284)
                 self.aio.send('bmi', bmi)
