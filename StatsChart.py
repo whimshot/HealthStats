@@ -40,7 +40,7 @@ class StatsChart(object):
 
                 bp.plot(systolics.dates, systolics.data)
                 bp.plot(diastolics.dates, diastolics.data)
-                bp.set_ylabel('Blood Pressure')
+                bp.set_ylabel('Blood Pressure (mmHg)')
 
                 weight.plot(weights.dates, weights.data)
                 weight.set_ylabel('Weight (Kg)')
