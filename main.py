@@ -34,34 +34,28 @@ class HealthStats(BoxLayout):
         else:
             self.screen_text = self.screen_text + text
 
-    def key_function(self, name):
-        """Handle the function keys."""
+    def statistic_key(self, name):
+        """Handle the statistic keys."""
         try:
             vital_stat = float(self.screen_text)
-            if (name == "delete"):
-                self.screen_text = self.screen_text[:-1]
-            elif (name == "weight"):
-                self.screen_text = "Health Stats"
-                self.aio.send(name, vital_stat)
+            if (name == "weight"):
                 bmi = int(vital_stat/3.161284)
                 self.aio.send('bmi', bmi)
-                self.statschart.draw_chart()
+            self.aio.send(name, vital_stat)
+        except ValueError:
+            self.screen_text = "Health Stats"
+        finally:
+            self.screen_text = "Health Stats"
+            self.statschart.draw_chart()
+            self.statsimage.reload()
 
-            elif (name == "systolic"):
+    def delete_key(self, name):
+        """Handle the function keys."""
+        try:
+            if (self.screen_text != "Health Stats"):
+                self.screen_text = self.screen_text[:-1]
+            elif (self.screen_text == ""):
                 self.screen_text = "Health Stats"
-                self.aio.send(name, vital_stat)
-                self.statschart.draw_chart()
-
-            elif (name == "diastolic"):
-                self.screen_text = "Health Stats"
-                self.aio.send(name, vital_stat)
-                self.statschart.draw_chart()
-
-            elif (name == "pulse"):
-                self.screen_text = "Health Stats"
-                self.aio.send(name, vital_stat)
-                self.statschart.draw_chart()
-
         except ValueError:
             self.screen_text = "Health Stats"
 
