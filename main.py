@@ -36,6 +36,7 @@ class HealthStats(BoxLayout):
         """Handle the statistic keys."""
         try:
             vital_stat = float(self.screen_text)
+            self.screen_text = "updating . . ."
             if (name == "weight"):
                 bmi = int(vital_stat/3.161284)
                 self.aio.send('bmi', bmi)
