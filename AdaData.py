@@ -1,5 +1,6 @@
 """Get data from io.adafruit.com."""
 from datetime import datetime
+from pytz import timezone
 from Adafruit_IO import Client
 from AdafruitIOKey import aoi_key
 
@@ -24,5 +25,8 @@ class AdaData(object):
         feed_data = self.aio.data(self.feed)
         for entry in feed_data:
             self.data.append(entry.value)
-            date = str(entry.created_at).replace('Z', '+0000')
-            self.dates.append(datetime.strptime(date, "%Y-%m-%dT%H:%M:%S%z"))
+            zdate = str(entry.created_at).replace('Z', '+0000')
+            edate = (datetime
+                     .strptime(zdate, "%Y-%m-%dT%H:%M:%S%z")
+                     .astimezone(timezone('US/Eastern')))
+            self.dates.append(edate)
