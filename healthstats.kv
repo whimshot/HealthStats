@@ -5,9 +5,14 @@
     on_press: self.parent.parent.parent.new_digit(self.text)
     background_color: (0.0, 0, 128, 0.5)
 
-<FunctionButton@Button>
+<DeleteButton@Button>
     font_size: '24sp'
-    on_press: self.parent.parent.parent.key_function(self.text)
+    on_press: self.parent.parent.parent.delete_key(self.text)
+    background_color: (128, 0, 0, 0.3)
+
+<StatisticButton@Button>
+    font_size: '24sp'
+    on_press: self.parent.parent.parent.statistic_key(self.text)
     background_color: (0, 128, 0, 0.3)
 
 <ExitButton@Button>
@@ -21,13 +26,13 @@
 
 <FunctionPad@GridLayout>
     cols: 4
-    FunctionButton:
+    StatisticButton:
         text: "weight"
-    FunctionButton:
+    StatisticButton:
         text: "systolic"
-    FunctionButton:
+    StatisticButton:
         text: "diastolic"
-    FunctionButton:
+    StatisticButton:
         text: "pulse"
 
 <NumberPad@GridLayout>
@@ -50,7 +55,7 @@
         text: "8"
     NumberButton:
         text: "9"
-    FunctionButton:
+    DeleteButton:
         text: "delete"
     NumberButton:
         text: "0"
