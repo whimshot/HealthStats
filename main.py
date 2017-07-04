@@ -20,6 +20,7 @@ class HealthStats(BoxLayout):
     def update(self, dt):
         """Update the display and charts."""
         self.inputpad.numscreen.text = self.screen_text
+        self.statschart.draw_chart()
         if (self.fm.ook()):
             self.statsimage.reload()
 
@@ -75,7 +76,6 @@ class HealthStatsApp(App):
         """Build function for Health Stats kivy app."""
         hs = HealthStats()
         Clock.schedule_interval(hs.update, 1.0 / 10.0)
-        Clock.schedule_interval(hs.update_charts, 5.0)
 
         return hs
 
