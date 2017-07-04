@@ -23,7 +23,7 @@ class HealthStats(BoxLayout):
         if (self.fm.ook()):
             self.statsimage.reload()
 
-    def update_charts(self, dt):
+    def update_charts(self):
         """Make the charts."""
         self.statschart.draw_chart()
 
