@@ -14,8 +14,9 @@ class StatsChart(object):
     def __init__(self):
         """Make that statschart."""
         self.oldweights = AdaData('weight')
-        self.systolics = AdaData('systolic')
-        self.diastolics = AdaData('diastolic')
+        self.oldsystolics = AdaData('systolic')
+        self.olddiasolics = AdaData('diastolic')
+        self.oldpulses = AdaData('pulse')
 
     def draw_chart(self):
         """Make the stats chart image."""
@@ -37,8 +38,8 @@ class StatsChart(object):
 
                 fig, (weight, bp) = plt.subplots(2, figsize=(5, 6))
 
-                bp.plot(systolics.dates, systolics.data, 'bo')
-                bp.plot(diastolics.dates, diastolics.data, 'go')
+                bp.plot(systolics.dates, systolics.data)
+                bp.plot(diastolics.dates, diastolics.data)
                 bp.set_ylabel('Blood Pressure')
 
                 weight.plot(weights.dates, weights.data)
