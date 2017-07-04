@@ -75,7 +75,7 @@ class HealthStatsApp(App):
         """Build function for Health Stats kivy app."""
         hs = HealthStats()
         Clock.schedule_interval(hs.update, 1.0 / 10.0)
-        Clock.schedule_interval(hs.periodic, 5.0)
+        Clock.schedule_interval(hs.periodic, 60.0)
 
         return hs
 
