@@ -1,18 +1,49 @@
 """Health Stats app in kivy."""
 from Adafruit_IO import Client
-from AdafruitIOKey import aoi_key
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.clock import Clock
 from StatsChart import StatsChart
 from FileMonkey import FileMonkey
+from Adafruit_IO import MQTTClient
+from AdafruitIOKey import aio_key, aio_id
+
+
+feeds = ['weight', 'diastolic', 'systolic', 'pulse', 'bmi']
+
+
+def connected(client):
+    """Called when connection to io.adafruit.com is successful."""
+    print('Connected to Adafruit IO!  Listening for DemoFeed changes...')
+    # Subscribe to changes on a feed named DemoFeed.
+    for feed in feeds:
+        client.subscribe(feed)
+
+
+def disconnected(client):
+    """Called when disconnected from io.adafruit.com."""
+    print('Disconnected from Adafruit IO!')
+
+
+def message(client, feed_id, payload):
+    """Called when a subscribed feed gets new data."""
+    print('Feed {0} received new value: {1}'.format(feed_id, payload))
+
+
+# Create an MQTT client instance.
+client = MQTTClient(aio_id, aio_key)
+
+# Setup the callback functions defined above.
+client.on_connect = connected
+client.on_disconnect = disconnected
+client.on_message = message
 
 
 class HealthStats(BoxLayout):
     """A simple class for a Health Stats app in kivy."""
 
     screen_text = "Health Stats"
-    aio = Client(aoi_key)
+    aio = Client(aio_key)
     fm = FileMonkey('weight.png')
     statschart = StatsChart()
     statschart.draw_chart()
