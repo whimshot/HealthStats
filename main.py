@@ -10,33 +10,8 @@ from AdafruitIOKey import aio_key, aio_id
 
 
 feeds = ['weight', 'diastolic', 'systolic', 'pulse', 'bmi']
-
-
-def connected(client):
-    """Called when connection to io.adafruit.com is successful."""
-    print('Connected to Adafruit IO!  Listening for DemoFeed changes...')
-    # Subscribe to changes on a feed named DemoFeed.
-    for feed in feeds:
-        client.subscribe(feed)
-
-
-def disconnected(client):
-    """Called when disconnected from io.adafruit.com."""
-    print('Disconnected from Adafruit IO!')
-
-
-def message(client, feed_id, payload):
-    """Called when a subscribed feed gets new data."""
-    print('Feed {0} received new value: {1}'.format(feed_id, payload))
-
-
-# Create an MQTT client instance.
-client = MQTTClient(aio_id, aio_key)
-
-# Setup the callback functions defined above.
-client.on_connect = connected
-client.on_disconnect = disconnected
-client.on_message = message
+statschart = StatsChart()
+statschart.draw_chart()
 
 
 class HealthStats(BoxLayout):
@@ -45,12 +20,42 @@ class HealthStats(BoxLayout):
     screen_text = "Health Stats"
     aio = Client(aio_key)
     fm = FileMonkey('weight.png')
-    statschart = StatsChart()
-    statschart.draw_chart()
+    # Create an MQTT client instance.
+    client = MQTTClient(aio_id, aio_key)
+
+    def connected(client):
+        """Called when connection to io.adafruit.com is successful."""
+        print('Connected to Adafruit IO!  Listening for changes...')
+        # Subscribe to changes for the feeds listed.
+        for feed in feeds:
+            client.subscribe(feed)
+
+    def disconnected(client):
+        """Called when disconnected from io.adafruit.com."""
+        print('Disconnected from Adafruit IO!')
+
+    def message(client, feed_id, payload):
+        """Called when a subscribed feed gets new data."""
+        print('Feed {0} received new value: {1}'.format(feed_id, payload))
+        statschart.draw_chart()
+
+    # Setup the callback functions defined above.
+    client.on_connect = connected
+    client.on_disconnect = disconnected
+    client.on_message = message
+    # Connect to the Adafruit IO server.
+    client.connect()
+    # Start the client loop in the background.
+    client.loop_background()
 
     def update(self, dt):
         """Update the display and charts."""
         self.inputpad.numscreen.text = self.screen_text
+
+    def update_chart(self, dt):
+        """Reload the chart image if it has changed."""
+        if (self.fm.ook()):
+            self.statsimage.reload()
 
     def new_digit(self, text):
         """Add a digit or decimal point to the input display."""
@@ -67,14 +72,12 @@ class HealthStats(BoxLayout):
             vital_stat = float(vital_text)
             if (name == "weight"):
                 bmi = int(vital_stat/3.161284)
-                self.aio.send('bmi', bmi)
-            self.aio.send(name, vital_stat)
+                self.client.publish('bmi', bmi)
+            self.client.publish(name, vital_stat)
         except ValueError:
             self.screen_text = "Health Stats"
         finally:
             self.screen_text = "Health Stats"
-            self.statschart.draw_chart()
-            self.statsimage.reload()
 
     def delete_key(self, name):
         """Handle the function keys."""
@@ -96,7 +99,7 @@ class HealthStatsApp(App):
         """Build function for Health Stats kivy app."""
         hs = HealthStats()
         Clock.schedule_interval(hs.update, 1.0 / 10.0)
-
+        Clock.schedule_interval(hs.update_chart, 5.0)
         return hs
 
 
