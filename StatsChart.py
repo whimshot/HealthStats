@@ -25,6 +25,7 @@ class StatsChart(object):
 
     def draw_chart(self):
         """Make the stats chart image."""
+        print("New Chart?")
         try:
             weight = AdaData('weight')
             systolic = AdaData('systolic')
@@ -43,6 +44,8 @@ class StatsChart(object):
                     or (diastolic != self.olddiastolic)
                     or (pulse != self.oldpulse)
                     or (self.fm.ook())):
+
+                print("Making new chart.")
 
                 fig, (weight_chart, bp_chart) = plt.subplots(2, figsize=(5, 6))
 
