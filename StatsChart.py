@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 class StatsChart(object):
     """Stats charts object."""
 
-    fm = FileMonkey('weight.png')
+    fm = FileMonkey('StatsCharts.png')
 
     def __init__(self):
         """
@@ -63,7 +63,7 @@ class StatsChart(object):
                     ax.grid(axis='y', linestyle='-.')
 
                 fig.tight_layout()
-                fig.savefig('weight.png', dpi=300)
+                fig.savefig('StatsCharts.png', dpi=300)
 
                 plt.clf()
 

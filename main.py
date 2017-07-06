@@ -19,7 +19,7 @@ class HealthStats(BoxLayout):
 
     screen_text = "Health Stats"
     aio = Client(aio_key)
-    fm = FileMonkey('weight.png')
+    fm = FileMonkey('StatsCharts.png')
     # Create an MQTT client instance.
     client = MQTTClient(aio_id, aio_key)
 

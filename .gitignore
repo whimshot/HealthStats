@@ -7,5 +7,4 @@ __pycache__
 bin/
 hs27/
 hs3/
-weight.png
-bp.png
+*.png
