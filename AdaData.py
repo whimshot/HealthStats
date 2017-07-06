@@ -2,13 +2,13 @@
 from datetime import datetime
 from pytz import timezone
 from Adafruit_IO import Client, MQTTClient
-from AdafruitIOKey import aio_key, aio_id
+from AdafruitIOKey import AIO_KEY, AIO_ID
 
 
 class AdaData(object):
     """AdaData object."""
 
-    aio = Client(aio_key)
+    aio = Client(AIO_KEY)
 
     def __init__(self, feed):
         """Create new HealthStats object."""

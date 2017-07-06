@@ -6,7 +6,7 @@ from kivy.clock import Clock
 from StatsChart import StatsChart
 from FileMonkey import FileMonkey
 from Adafruit_IO import MQTTClient
-from AdafruitIOKey import aio_key, aio_id
+from AdafruitIOKey import AIO_KEY, AIO_ID
 
 
 feeds = ['weight', 'diastolic', 'systolic', 'pulse', 'bmi']
@@ -18,10 +18,10 @@ class HealthStats(BoxLayout):
     """A simple class for a Health Stats app in kivy."""
 
     screen_text = "Health Stats"
-    aio = Client(aio_key)
+    aio = Client(AIO_KEY)
     fm = FileMonkey('StatsCharts.png')
     # Create an MQTT client instance.
-    client = MQTTClient(aio_id, aio_key)
+    client = MQTTClient(AIO_ID, AIO_KEY)
 
     def connected(client):
         """Called when connection to io.adafruit.com is successful."""
