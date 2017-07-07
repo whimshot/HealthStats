@@ -5,7 +5,5 @@ AdafruitIOKey.py
 __pycache__
 .buildozer
 bin/
-hs27/
-hs3/
 *.png
 Python3/
