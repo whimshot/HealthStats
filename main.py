@@ -5,13 +5,11 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.clock import Clock
 from StatsChart import StatsChart
 from FileMonkey import FileMonkey
-from Adafruit_IO import MQTTClient
-from AdafruitIOKey import AIO_KEY, AIO_ID
+from AdafruitIOKey import AIO_KEY
 
 
 feeds = ['weight', 'diastolic', 'systolic', 'pulse', 'bmi']
 statschart = StatsChart()
-statschart.draw_chart()
 
 
 class HealthStats(BoxLayout):
@@ -20,33 +18,6 @@ class HealthStats(BoxLayout):
     screen_text = "Health Stats"
     aio = Client(AIO_KEY)
     fm = FileMonkey('StatsCharts.png')
-    # Create an MQTT client instance.
-    client = MQTTClient(AIO_ID, AIO_KEY)
-
-    def connected(client):
-        """Called when connection to io.adafruit.com is successful."""
-        print('Connected to Adafruit IO!  Listening for changes...')
-        # Subscribe to changes for the feeds listed.
-        for feed in feeds:
-            client.subscribe(feed)
-
-    def disconnected(client):
-        """Called when disconnected from io.adafruit.com."""
-        print('Disconnected from Adafruit IO!')
-
-    def message(client, feed_id, payload):
-        """Called when a subscribed feed gets new data."""
-        print('Feed {0} received new value: {1}'.format(feed_id, payload))
-        statschart.draw_chart()
-
-    # Setup the callback functions defined above.
-    client.on_connect = connected
-    client.on_disconnect = disconnected
-    client.on_message = message
-    # Connect to the Adafruit IO server.
-    client.connect()
-    # Start the client loop in the background.
-    client.loop_background()
 
     def update(self, dt):
         """Update the display and charts."""
@@ -72,8 +43,8 @@ class HealthStats(BoxLayout):
             vital_stat = float(vital_text)
             if (name == "weight"):
                 bmi = int(vital_stat/3.161284)
-                self.client.publish('bmi', bmi)
-            self.client.publish(name, vital_stat)
+                self.aio.send('bmi', bmi)
+            self.aio.send(name, vital_stat)
         except ValueError:
             self.screen_text = "Health Stats"
         finally:
