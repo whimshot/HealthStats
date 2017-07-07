@@ -1,8 +1,8 @@
 """Get data from io.adafruit.com."""
 from datetime import datetime
 from pytz import timezone
-from Adafruit_IO import Client, MQTTClient
-from AdafruitIOKey import AIO_KEY, AIO_ID
+from Adafruit_IO import Client
+from AdafruitIOKey import AIO_KEY
 
 
 class AdaData(object):
@@ -22,6 +22,8 @@ class AdaData(object):
 
     def get_data(self):
         """Get data from io.adatruit.com."""
+        self.data = []
+        self.dates = []
         feed_data = self.aio.data(self.feed)
         for entry in feed_data:
             self.data.append(entry.value)
