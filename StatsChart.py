@@ -1,7 +1,8 @@
 """StatsChart class."""
 from AdaData import AdaData
+from AdafruitIOKey import AIO_KEY, AIO_ID
 import matplotlib
-from FileMonkey import FileMonkey
+from Adafruit_IO import MQTTClient
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
@@ -9,7 +10,7 @@ import matplotlib.pyplot as plt
 class StatsChart(object):
     """Stats charts object."""
 
-    fm = FileMonkey('StatsCharts.png')
+    feeds = ['weight', 'diastolic', 'systolic', 'pulse', 'bmi']
 
     def __init__(self):
         """
@@ -18,60 +19,66 @@ class StatsChart(object):
         Sets up initial containers for data from io.adafruit.com to
         compare against for changes later.
         """
-        self.oldweight = AdaData('weight')
-        self.oldsystolic = AdaData('systolic')
-        self.olddiastolic = AdaData('diastolic')
-        self.oldpulse = AdaData('pulse')
+
+        self.client = MQTTClient(AIO_ID, AIO_KEY)
+        self.client.on_connect = self.connected
+        self.client.on_disconnect = self.disconnected
+        self.client.on_message = self.message
+        self.client.connect()
+
+        self.weight = AdaData('weight')
+        self.systolic = AdaData('systolic')
+        self.diastolic = AdaData('diastolic')
+        self.pulse = AdaData('pulse')
+
+        self.client.loop_background()
+        self.draw_chart()
+
+    def connected(self, client):
+        """Called when connection to io.adafruit.com is successful."""
+        # Subscribe to changes for the feeds listed.
+        for feed in self.feeds:
+            self.client.subscribe(feed)
+
+    def disconnected(self, client):
+        """Called when disconnected from io.adafruit.com."""
+        print('Disconnected from Adafruit IO!')
+
+    def message(self, client, feed_id, payload):
+        """Called when a subscribed feed gets new data."""
+        self.draw_chart()
 
     def draw_chart(self):
         """Make the stats chart image."""
-        print("New Chart?")
         try:
-            weight = AdaData('weight')
-            systolic = AdaData('systolic')
-            diastolic = AdaData('diastolic')
-            pulse = AdaData('pulse')
+            self.weight.get_data()
+            self.systolic.get_data()
+            self.diastolic.get_data()
+            self.pulse.get_data()
 
-            weight.get_data()
-            systolic.get_data()
-            diastolic.get_data()
-            pulse.get_data()
+            fig, (weight_chart, bp_chart) = plt.subplots(2, figsize=(5, 6))
 
-            # Only rebuild images if the data has changed or if
-            # there is no image.
-            if ((weight != self.oldweight)
-                    or (systolic != self.oldsystolic)
-                    or (diastolic != self.olddiastolic)
-                    or (pulse != self.oldpulse)
-                    or (self.fm.ook())):
+            bp_chart.plot(self.systolic.dates, self.systolic.data)
+            bp_chart.plot(self.diastolic.dates, self.diastolic.data)
+            bp_chart.set_ylabel('Blood Pressure (mmHg)')
 
-                print("Making new chart.")
+            weight_chart.plot(self.weight.dates, self.weight.data)
+            weight_chart.set_ylabel('Weight (Kg)')
+            weight_chart.set_ylim(120, 150)
 
-                fig, (weight_chart, bp_chart) = plt.subplots(2, figsize=(5, 6))
+            for ax in fig.axes:
+                matplotlib.pyplot.sca(ax)
+                plt.xticks(rotation=45)
+                ax.grid(axis='y', linestyle='-.')
 
-                bp_chart.plot(systolic.dates, systolic.data)
-                bp_chart.plot(diastolic.dates, diastolic.data)
-                bp_chart.set_ylabel('Blood Pressure (mmHg)')
+            fig.tight_layout()
+            fig.savefig('StatsCharts.png', dpi=300)
 
-                weight_chart.plot(weight.dates, weight.data)
-                weight_chart.set_ylabel('Weight (Kg)')
-                weight_chart.set_ylim(120, 150)
-
-                for ax in fig.axes:
-                    matplotlib.pyplot.sca(ax)
-                    plt.xticks(rotation=45)
-                    ax.grid(axis='y', linestyle='-.')
-
-                fig.tight_layout()
-                fig.savefig('StatsCharts.png', dpi=300)
-
-                plt.clf()
+            plt.clf()
 
         except ValueError as ve:
             print("somethings not right %s" % str(ve))
 
-        finally:
-            self.oldweight = weight
-            self.oldsystolic = systolic
-            self.olddiastolic = diastolic
-            self.oldpulse = pulse
+    def run(self):
+        self.client.loop_background()
+        self.draw_chart()
