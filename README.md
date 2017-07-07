@@ -47,7 +47,8 @@ You'll need to create a file called *AdafruitIOKey.py* (or whatever you like jus
 *AdafruitIOKey.py*:
 
 ```
-aoi_key = 'Your key goes here'
+AIO_KEY = 'Your key goes here.'
+AIO_ID = 'Your user id goes here.'
 ```
 
 ## Running the tests
