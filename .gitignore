@@ -6,4 +6,5 @@ __pycache__
 .buildozer
 bin/
 *.png
-Python3/
+envs/
+.env
