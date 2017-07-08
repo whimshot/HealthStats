@@ -27,8 +27,8 @@ class AdaData(object):
         feed_data = self.aio.data(self.feed)
         for entry in feed_data:
             self.data.append(entry.value)
-            zdate = str(entry.created_at).replace('Z', '+0000')
+            zdate = str(entry.created_at).replace('Z', 'UTC')
             edate = (datetime
-                     .strptime(zdate, "%Y-%m-%dT%H:%M:%S%z")
+                     .strptime(zdate, "%Y-%m-%dT%H:%M:%S%Z")
                      .astimezone(timezone('US/Eastern')))
             self.dates.append(edate)
