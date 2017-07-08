@@ -3,22 +3,21 @@
 <NumberButton@Button>
     font_size: '24sp'
     on_press: self.parent.parent.parent.new_digit(self.text)
-    background_color: (0.0, 0, 128, 0.5)
+    background_color: [0, 0, 1, 1]
 
 <DeleteButton@Button>
     font_size: '24sp'
     on_press: self.parent.parent.parent.delete_key(self.text)
-    background_color: (128, 0, 0, 0.3)
+    background_color: [1, 0, 0, 1]
 
 <StatisticButton@Button>
     font_size: '24sp'
     on_press: self.parent.parent.parent.statistic_key(self.text)
-    background_color: (0, 128, 0, 0.3)
+    background_color: [0, 1, 0, 1]
 
 <ExitButton@Button>
     font_size: '24sp'
     on_press: app.stop()
-    background_color: (255, 0, 0, 0.5)
 
 <NumberDisplay@Label>
     text: self.parent.parent.screen_text
