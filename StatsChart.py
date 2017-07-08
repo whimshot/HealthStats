@@ -80,5 +80,6 @@ class StatsChart(object):
             print("somethings not right %s" % str(ve))
 
     def run(self):
+        """Get the party started."""
         self.client.loop_background()
         self.draw_chart()
