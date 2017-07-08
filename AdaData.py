@@ -1,6 +1,6 @@
 """Get data from io.adafruit.com."""
 from datetime import datetime
-from pytz import timezone
+from dateutil import tz
 from Adafruit_IO import Client
 from AdafruitIOKey import AIO_KEY
 
@@ -9,6 +9,8 @@ class AdaData(object):
     """AdaData object."""
 
     aio = Client(AIO_KEY)
+    from_zone = tz.tzutc()
+    to_zone = tz.tzlocal()
 
     def __init__(self, feed):
         """Create new HealthStats object."""
@@ -27,8 +29,7 @@ class AdaData(object):
         feed_data = self.aio.data(self.feed)
         for entry in feed_data:
             self.data.append(entry.value)
-            zdate = str(entry.created_at).replace('Z', 'UTC')
-            edate = (datetime
-                     .strptime(zdate, "%Y-%m-%dT%H:%M:%S%Z")
-                     .astimezone(timezone('US/Eastern')))
-            self.dates.append(edate)
+            utc = datetime.strptime(entry.created_at, '%Y-%m-%dT%H:%M:%SZ')
+            utc = utc.replace(tzinfo=self.from_zone)
+            local = utc.astimezone(self.to_zone)
+            self.dates.append(local)
