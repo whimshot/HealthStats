@@ -19,7 +19,6 @@ class StatsChart(object):
         Sets up initial containers for data from io.adafruit.com to
         compare against for changes later.
         """
-
         self.client = MQTTClient(AIO_ID, AIO_KEY)
         self.client.on_connect = self.connected
         self.client.on_disconnect = self.disconnected
@@ -69,6 +68,7 @@ class StatsChart(object):
             for ax in fig.axes:
                 matplotlib.pyplot.sca(ax)
                 plt.xticks(rotation=45)
+                ax.tick_params(direction='out')
                 ax.grid(axis='y', linestyle='-.')
 
             fig.tight_layout()
