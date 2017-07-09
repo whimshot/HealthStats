@@ -56,7 +56,7 @@ class StatsChart(object):
             self.diastolic.get_data()
             self.pulse.get_data()
 
-            fig, (weight_chart, bp_chart) = plt.subplots(2, figsize=(5, 6))
+            fig, (weight_chart, bp_chart) = plt.subplots(2, figsize=(4, 5))
 
             bp_chart.plot(self.systolic.dates, self.systolic.data, 'b.-')
             bp_chart.plot(self.diastolic.dates, self.diastolic.data, 'r.-')
