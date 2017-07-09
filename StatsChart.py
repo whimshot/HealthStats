@@ -58,8 +58,8 @@ class StatsChart(object):
 
             fig, (weight_chart, bp_chart) = plt.subplots(2, figsize=(5, 6))
 
-            bp_chart.plot(self.systolic.dates, self.systolic.data, 'o-')
-            bp_chart.plot(self.diastolic.dates, self.diastolic.data, 'o-')
+            bp_chart.plot(self.systolic.dates, self.systolic.data, 'bo-')
+            bp_chart.plot(self.diastolic.dates, self.diastolic.data, 'ro-')
             bp_chart.set_ylabel('Blood Pressure (mmHg)')
 
             weight_chart.plot(self.weight.dates, self.weight.data, 'go-')
