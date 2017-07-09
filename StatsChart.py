@@ -76,7 +76,7 @@ class StatsChart(object):
                 ax.grid(axis='y', linestyle='-.')
 
             fig.tight_layout()
-            fig.savefig('StatsCharts.png', dpi=300)
+            fig.savefig('StatsCharts.png', dpi=100)
 
             plt.clf()
 
