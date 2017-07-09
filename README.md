@@ -8,11 +8,12 @@ Display](https://www.raspberrypi.org/products/raspberry-pi-touch-display/).
 
 ## Getting Started
 
-If you are really interested feel free to download and take a look. The requirements files are for Python 2.7 and 3 and should be up to date (should be).
+If you are really interested feel free to download and take a look. The
+requirements file is for Python 2.7 and 3 and should be up to date (should be).
 
 ### Prerequisites
 
-You'll need Python and Kivy and some Python modules.
+You'll need Python, Kivy, and some Python modules.
 
 *  adafruit-io version 1.1.0
 *  certifi version 2017.4.17
@@ -24,20 +25,13 @@ You'll need Python and Kivy and some Python modules.
 *  Kivy version 1.10.0
 *  Kivy-Garden version 0.1.4
 *  matplotlib version 2.0.2
-*  mccabe version 0.6.1
 *  numpy version 1.13.0
-*  paho-mqtt version 1.3.0
-*  pycodestyle version 2.3.1
-*  pydocstyle version 2.0.0
-*  pyflakes version 1.5.0
-*  pygame version 1.9.3
 *  Pygments version 2.2.0
 *  pyparsing version 2.2.0
 *  python-dateutil version 2.6.0
 *  pytz version 2017.2
 *  requests version 2.18.1
 *  six version 1.10.0
-*  snowballstemmer version 1.2.1
 *  urllib3 version 1.21.1
 
 ```
