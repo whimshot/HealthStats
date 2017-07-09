@@ -35,7 +35,7 @@ You'll need Python, Kivy, and some Python modules.
 *  urllib3 version 1.21.1
 
 ```
-pip install --upgrade -r requirements3.txt
+pip install --upgrade -r requirements.txt
 ```
 ### Installing
 
