@@ -3,6 +3,7 @@ from AdaData import AdaData
 from AdafruitIOKey import AIO_KEY, AIO_ID
 import matplotlib
 from Adafruit_IO import MQTTClient
+import numpy as np
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
@@ -69,6 +70,9 @@ class StatsChart(object):
                 matplotlib.pyplot.sca(ax)
                 plt.xticks(rotation=45)
                 ax.tick_params(direction='out')
+                start, end = ax.get_xlim()
+                ax.spines['right'].set_visible(False)
+                ax.spines['top'].set_visible(False)
                 ax.grid(axis='y', linestyle='-.')
 
             fig.tight_layout()
