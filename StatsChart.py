@@ -3,9 +3,13 @@ from AdaData import AdaData
 from AdafruitIOKey import AIO_KEY, AIO_ID
 import matplotlib
 from Adafruit_IO import MQTTClient
-import numpy as np
+import logging
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+
+
+# create logger
+module_logger = logging.getLogger('HealthStats.StatsChart')
 
 
 class StatsChart(object):
@@ -15,11 +19,13 @@ class StatsChart(object):
 
     def __init__(self):
         """
-        Initial StatsCart.
+        Initial StatsChart.
 
         Sets up initial containers for data from io.adafruit.com to
         compare against for changes later.
         """
+        self.logger = logging.getLogger('HealthStats.StatsChart.StatsChart')
+        self.logger.info('creating an instance of StatsChart')
         self.client = MQTTClient(AIO_ID, AIO_KEY)
         self.client.on_connect = self.connected
         self.client.on_disconnect = self.disconnected
@@ -31,30 +37,37 @@ class StatsChart(object):
         self.diastolic = AdaData('diastolic')
         self.pulse = AdaData('pulse')
 
+        self.logger.info('Getting StatsChart instance up and running.')
         self.client.loop_background()
         self.draw_chart()
 
     def connected(self, client):
         """Called when connection to io.adafruit.com is successful."""
         # Subscribe to changes for the feeds listed.
+        self.logger.info('Connected to Adafruit, subscribing to feeds.')
         for feed in self.feeds:
+            self.logger.info('Subscribing to {0} feed.'.format(feed))
             self.client.subscribe(feed)
 
     def disconnected(self, client):
         """Called when disconnected from io.adafruit.com."""
-        print('Disconnected from Adafruit IO!')
+        self.logger.info('Disconnected from Adafruit IO!')
 
     def message(self, client, feed_id, payload):
         """Called when a subscribed feed gets new data."""
+        self.logger.info('Feed: {0} received new data: {1}'.format(feed_id,
+                                                                   payload))
         self.draw_chart()
 
     def draw_chart(self):
         """Make the stats chart image."""
         try:
+            self.logger.info('Building new image.')
             self.weight.get_data()
             self.systolic.get_data()
             self.diastolic.get_data()
             self.pulse.get_data()
+            self.logger.debug('Got new data from Adafruit.')
 
             fig, (weight_chart, bp_chart) = plt.subplots(2, figsize=(4, 4.8))
 
@@ -82,9 +95,4 @@ class StatsChart(object):
             plt.clf()
 
         except ValueError as ve:
-            print("somethings not right %s" % str(ve))
-
-    def run(self):
-        """Get the party started."""
-        self.client.loop_background()
-        self.draw_chart()
+            self.logger.debug('Caught: {0}'.format(ve))
