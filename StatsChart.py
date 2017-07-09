@@ -70,7 +70,7 @@ class StatsChart(object):
                 matplotlib.pyplot.sca(ax)
                 plt.xticks(rotation=45)
                 ax.tick_params(direction='out', top='off', right='off',
-                               labelsize='small')
+                               labelsize='8')
                 start, end = ax.get_xlim()
                 ax.spines['right'].set_visible(False)
                 ax.spines['top'].set_visible(False)
