@@ -94,5 +94,5 @@ class StatsChart(object):
 
             plt.clf()
 
-        except ValueError as ve:
-            self.logger.debug('Caught: {0}'.format(ve))
+        except Exception:
+            self.logger.exception('Caught exception.')

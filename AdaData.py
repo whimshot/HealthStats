@@ -32,14 +32,17 @@ class AdaData(object):
 
     def get_data(self):
         """Get data from io.adatruit.com."""
-        self.logger.info('Getting data from {0}'.format(self.feed))
-        self.data = []
-        self.dates = []
-        feed_data = self.aio.data(self.feed)
-        self.logger.debug('Parsing dates from {0}'.format(self.feed))
-        for entry in feed_data:
-            self.data.append(entry.value)
-            utc = datetime.strptime(entry.created_at, '%Y-%m-%dT%H:%M:%SZ')
-            utc = utc.replace(tzinfo=self.from_zone)
-            local = utc.astimezone(self.to_zone)
-            self.dates.append(local)
+        try:
+            self.logger.info('Getting data from {0}'.format(self.feed))
+            self.data = []
+            self.dates = []
+            feed_data = self.aio.data(self.feed)
+            self.logger.debug('Parsing dates from {0}'.format(self.feed))
+            for entry in feed_data:
+                self.data.append(entry.value)
+                utc = datetime.strptime(entry.created_at, '%Y-%m-%dT%H:%M:%SZ')
+                utc = utc.replace(tzinfo=self.from_zone)
+                local = utc.astimezone(self.to_zone)
+                self.dates.append(local)
+        except Exception:
+            self.logger.exception('Caught exception.')

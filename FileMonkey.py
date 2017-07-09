@@ -29,8 +29,8 @@ class FileMonkey(object):
                 self.logger.debug('{0} has not changed.'.format(self.filename))
                 return False
         except (ValueError) as ve:
-            self.logger.debug('Caught error {0}'.format(ve))
+            self.logger.exception('Caught error {0}'.format(ve))
             return False
-        except (OSError) as oe:
-            self.logger.debug('Caught error {0}'.format(oe))
+        except (EnvironmentError) as ee:
+            self.logger.exception('Caught error {0}'.format(ee))
             return True
