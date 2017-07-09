@@ -9,7 +9,7 @@ Display](https://www.raspberrypi.org/products/raspberry-pi-touch-display/).
 ## Getting Started
 
 If you are really interested feel free to download and take a look. The
-requirements file is for Python 2.7 and 3 and should be up to date (should be).
+requirements file is for Python 2.7 & 3.
 
 ### Prerequisites
 
