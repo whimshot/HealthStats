@@ -69,7 +69,7 @@ class StatsChart(object):
             for ax in fig.axes:
                 matplotlib.pyplot.sca(ax)
                 plt.xticks(rotation=45)
-                ax.tick_params(direction='out')
+                ax.tick_params(direction='out', top='off', right='off')
                 start, end = ax.get_xlim()
                 ax.spines['right'].set_visible(False)
                 ax.spines['top'].set_visible(False)
