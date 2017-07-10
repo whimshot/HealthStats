@@ -94,7 +94,7 @@ class StatsChart(object):
             pulse_chart.plot(self.pulse.dates, self.pulse.data, 'c.-')
             pulse_chart.set_ylabel('Pulse (BPM)',
                                    fontsize='9', color='cyan')
-            pulse_chart.set_ylim(40, 120)
+            pulse_chart.set_ylim(40, 140)
             pulse_chart.tick_params(axis='y', colors='cyan')
 
             weight_chart.plot(self.weight.dates, self.weight.data, 'm.-')
