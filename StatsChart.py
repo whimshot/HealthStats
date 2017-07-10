@@ -27,7 +27,8 @@ class StatsChart(object):
         compare against for changes later.
         """
         try:
-            self.logger = logging.getLogger('HealthStats.StatsChart.StatsChart')
+            self.logger = \
+                logging.getLogger('HealthStats.StatsChart.StatsChart')
             self.logger.addFilter(HostnameFilter())
             self.logger.info('creating an instance of StatsChart')
             self.client = MQTTClient(AIO_ID, AIO_KEY)
