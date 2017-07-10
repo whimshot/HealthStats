@@ -95,13 +95,13 @@ class StatsChart(object):
             pulse_chart.tick_params(colors='c')
 
             weight_chart.plot(self.weight.dates, self.weight.data, 'g.-')
-            weight_chart.set_ylabel('Weight (Kg)', fontsize='9', color='g')
+            weight_chart.set_ylabel('Weight (Kg)', color='g')
             weight_chart.set_ylim(75, 145)
             weight_chart.tick_params(axis='y', colors='g')
 
             bmi_chart = weight_chart.twinx()
             bmi_chart.plot(self.bmi.dates, self.bmi.data, 'm.-')
-            bmi_chart.set_ylabel('BMI', fontsize='9', color='m')
+            bmi_chart.set_ylabel('BMI', color='m')
             bmi_chart.set_ylim(24, 50)
             bmi_chart.tick_params(axis='y', colors='m')
 
