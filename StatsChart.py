@@ -85,7 +85,7 @@ class StatsChart(object):
 
             bp_chart.plot(self.systolic.dates, self.systolic.data, 'b.-')
             bp_chart.plot(self.diastolic.dates, self.diastolic.data, 'r.-')
-            bp_chart.set_ylabel('Blood Pressure\n(mmHg)', fontsize='9')
+            bp_chart.set_ylabel('Blood Pressure\n(mmHg)')
 
             pulse_chart = bp_chart.twinx()
             pulse_chart.plot(self.pulse.dates, self.pulse.data, 'c.-')
@@ -110,9 +110,8 @@ class StatsChart(object):
                 plt.xticks(rotation=45)
                 ax.tick_params(direction='out', top='off',
                                labelsize='8')
-                start, end = ax.get_xlim()
                 ax.spines['top'].set_visible(False)
-
+                ax.set_ylabel(fontsize='9')
             fig.tight_layout()
             fig.savefig('StatsCharts.png', dpi=100)
 
