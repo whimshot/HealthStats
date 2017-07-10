@@ -13,7 +13,7 @@ class FileMonkey(object):
     """A monkey that watches files."""
 
     def __init__(self, filename):
-        """Make that monkey."""
+        """Set up file watching monkey."""
         self.logger = logging.getLogger('HealthStats.FileMonkey.FileMonkey')
         self.logger.addFilter(HostnameFilter())
         self.logger.info('New FileMonkey watching {0}.'.format(filename))
@@ -21,7 +21,7 @@ class FileMonkey(object):
         self.filename = filename
 
     def ook(self):
-        """Train that monkey."""
+        """Check if the file been changed."""
         try:
             stamp = os.stat(self.filename).st_mtime
             if stamp != self._cached_stamp:

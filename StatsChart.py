@@ -26,31 +26,37 @@ class StatsChart(object):
         Sets up initial containers for data from io.adafruit.com to
         compare against for changes later.
         """
-        self.logger = logging.getLogger('HealthStats.StatsChart.StatsChart')
-        self.logger.addFilter(HostnameFilter())
-        self.logger.info('creating an instance of StatsChart')
-        self.client = MQTTClient(AIO_ID, AIO_KEY)
-        self.client.on_connect = self.connected
-        self.client.on_disconnect = self.disconnected
-        self.client.on_message = self.message
-        self.client.connect()
+        try:
+            self.logger = logging.getLogger('HealthStats.StatsChart.StatsChart')
+            self.logger.addFilter(HostnameFilter())
+            self.logger.info('creating an instance of StatsChart')
+            self.client = MQTTClient(AIO_ID, AIO_KEY)
+            self.client.on_connect = self.connected
+            self.client.on_disconnect = self.disconnected
+            self.client.on_message = self.message
+            self.client.connect()
 
-        self.weight = AdaData('weight')
-        self.systolic = AdaData('systolic')
-        self.diastolic = AdaData('diastolic')
-        self.pulse = AdaData('pulse')
+            self.weight = AdaData('weight')
+            self.systolic = AdaData('systolic')
+            self.diastolic = AdaData('diastolic')
+            self.pulse = AdaData('pulse')
 
-        self.logger.info('Getting StatsChart instance up and running.')
-        self.client.loop_background()
-        self.draw_chart()
+            self.logger.info('Getting StatsChart instance up and running.')
+            self.client.loop_background()
+            self.draw_chart()
+        except Exception:
+            self.logger.exception('StatsChart instantiation failed.')
 
     def connected(self, client):
         """Called when connection to io.adafruit.com is successful."""
         # Subscribe to changes for the feeds listed.
         self.logger.info('Connected to Adafruit, subscribing to feeds.')
-        for feed in self.feeds:
-            self.logger.info('Subscribing to {0} feed.'.format(feed))
-            self.client.subscribe(feed)
+        try:
+            for feed in self.feeds:
+                self.logger.debug('Subscribing to {0} feed.'.format(feed))
+                self.client.subscribe(feed)
+        except Exception:
+            self.logger.exception('Failed to subscribe to feed.')
 
     def disconnected(self, client):
         """Called when disconnected from io.adafruit.com."""
@@ -98,4 +104,4 @@ class StatsChart(object):
             plt.clf()
 
         except Exception:
-            self.logger.exception('Caught exception.')
+            self.logger.exception('Failed to draw new charts.')
