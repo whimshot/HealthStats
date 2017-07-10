@@ -41,6 +41,7 @@ class StatsChart(object):
             self.systolic = AdaData('systolic')
             self.diastolic = AdaData('diastolic')
             self.pulse = AdaData('pulse')
+            self.bmi = AdaData('bmi')
 
             self.logger.info('Getting StatsChart instance up and running.')
             self.client.loop_background()
@@ -77,6 +78,7 @@ class StatsChart(object):
             self.systolic.get_data()
             self.diastolic.get_data()
             self.pulse.get_data()
+            self.bmi.get_data()
             self.logger.debug('Got new data from Adafruit.')
 
             fig, (weight_chart, bp_chart) = plt.subplots(2, figsize=(4, 4.8))
@@ -85,19 +87,31 @@ class StatsChart(object):
             bp_chart.plot(self.diastolic.dates, self.diastolic.data, 'r.-')
             bp_chart.set_ylabel('Blood Pressure\n(mmHg)', fontsize='9')
 
+            pulse_chart = bp_chart.twinx()
+            pulse_chart.plot(self.pulse.dates, self.pulse.data, 'c.-')
+            pulse_chart.tick_params('y', color='c')
+            pulse_chart.set_ylabel('Pulse', color='c')
+            pulse_chart.set_ylim(0, 120)
+            pulse_chart.tick_params(colors='c')
+
             weight_chart.plot(self.weight.dates, self.weight.data, 'g.-')
-            weight_chart.set_ylabel('Weight (Kg)', fontsize='9')
-            weight_chart.set_ylim(120, 145)
+            weight_chart.set_ylabel('Weight (Kg)', fontsize='9', color='g')
+            weight_chart.set_ylim(75, 145)
+            weight_chart.tick_params(axis='y', colors='g')
+
+            bmi_chart = weight_chart.twinx()
+            bmi_chart.plot(self.bmi.dates, self.bmi.data, 'm.-')
+            bmi_chart.set_ylabel('BMI', fontsize='9', color='m')
+            bmi_chart.set_ylim(24, 50)
+            bmi_chart.tick_params(axis='y', colors='m')
 
             for ax in fig.axes:
                 matplotlib.pyplot.sca(ax)
                 plt.xticks(rotation=45)
-                ax.tick_params(direction='out', top='off', right='off',
+                ax.tick_params(direction='out', top='off',
                                labelsize='8')
                 start, end = ax.get_xlim()
-                ax.spines['right'].set_visible(False)
                 ax.spines['top'].set_visible(False)
-                ax.grid(axis='y', linestyle='-.')
 
             fig.tight_layout()
             fig.savefig('StatsCharts.png', dpi=100)
