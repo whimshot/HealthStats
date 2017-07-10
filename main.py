@@ -10,8 +10,9 @@ from StatsChart import StatsChart
 from FileMonkey import FileMonkey
 from AdafruitIOKey import AIO_KEY
 
-#
+# A couple of constants.
 MAXLOGSIZE = 1000000
+BMI_CONSTANT = 3.161284
 # create logger
 logger = logging.getLogger('HealthStats')
 logger.setLevel(logging.INFO)
@@ -81,7 +82,7 @@ class HealthStats(BoxLayout):
         try:
             vital_stat = float(vital_text)
             if (name == "weight"):
-                bmi = int(vital_stat/3.161284)
+                bmi = int(vital_stat/BMI_CONSTANT)
                 self.aio.send('bmi', bmi)
                 logger.debug('BMI of {0} calculated and sent.'.format(bmi))
             self.aio.send(name, vital_stat)

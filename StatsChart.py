@@ -16,6 +16,7 @@ module_logger.addFilter(HostnameFilter())
 # Set matplotlib global linewidth
 matplotlib.rcParams['axes.linewidth'] = 0.5
 
+
 class StatsChart(object):
     """Stats charts object."""
 
