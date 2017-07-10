@@ -14,13 +14,13 @@ from AdafruitIOKey import AIO_KEY
 MAXLOGSIZE = 1000000
 # create logger
 logger = logging.getLogger('HealthStats')
-logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.INFO)
 logger.addFilter(HostnameFilter())
 # create file handler which logs even debug messages
 logger_fh = logging.handlers.RotatingFileHandler('HealthStats.log',
                                                  maxBytes=MAXLOGSIZE,
                                                  backupCount=8)
-logger_fh.setLevel(logging.INFO)
+logger_fh.setLevel(logging.DEBUG)
 # create console handler with a higher log level
 logger_ch = logging.StreamHandler()
 logger_ch.setLevel(logging.ERROR)

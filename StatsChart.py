@@ -83,9 +83,11 @@ class StatsChart(object):
 
             fig, (weight_chart, bp_chart) = plt.subplots(2, figsize=(4, 4.8))
 
-            bp_chart.plot(self.systolic.dates, self.systolic.data, 'b.-')
-            bp_chart.plot(self.diastolic.dates, self.diastolic.data, 'r.-')
-            bp_chart.set_ylabel('Blood Pressure\n(mmHg)', fontsize='9')
+            bp_chart.plot(self.systolic.dates, self.systolic.data, 'm.-')
+            bp_chart.plot(self.diastolic.dates, self.diastolic.data, 'm.-')
+            bp_chart.set_ylabel('Blood Pressure\n(mmHg)',
+                                fontsize='9', color='m')
+            bp_chart.tick_params(colors='m')
 
             pulse_chart = bp_chart.twinx()
             pulse_chart.plot(self.pulse.dates, self.pulse.data, 'c.-')
