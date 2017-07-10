@@ -83,29 +83,32 @@ class StatsChart(object):
 
             fig, (weight_chart, bp_chart) = plt.subplots(2, figsize=(4, 4.8))
 
-            bp_chart.plot(self.systolic.dates, self.systolic.data, 'm.-')
-            bp_chart.plot(self.diastolic.dates, self.diastolic.data, 'm.-')
-            bp_chart.set_ylabel('Blood Pressure\n(mmHg)',
-                                fontsize='9', color='m')
-            bp_chart.tick_params(colors='m')
+            bp_chart.plot(self.systolic.dates, self.systolic.data, 'b.-')
+            bp_chart.plot(self.diastolic.dates, self.diastolic.data, 'b.-')
+            bp_chart.set_ylabel('Blood Pressure (mmHg)',
+                                fontsize='9', color='blue')
+            bp_chart.set_ylim(40, 140)
+            bp_chart.tick_params(axis='y', colors='blue')
 
             pulse_chart = bp_chart.twinx()
             pulse_chart.plot(self.pulse.dates, self.pulse.data, 'c.-')
-            pulse_chart.tick_params('y', color='c')
-            pulse_chart.set_ylabel('Pulse', color='c', fontsize='9')
-            pulse_chart.set_ylim(0, 120)
-            pulse_chart.tick_params(colors='c')
+            pulse_chart.set_ylabel('Pulse (BPM)',
+                                   fontsize='9', color='cyan')
+            pulse_chart.set_ylim(40, 120)
+            pulse_chart.tick_params(axis='y', colors='cyan')
 
-            weight_chart.plot(self.weight.dates, self.weight.data, 'g.-')
-            weight_chart.set_ylabel('Weight (Kg)', color='g', fontsize='9')
+            weight_chart.plot(self.weight.dates, self.weight.data, 'm.-')
+            weight_chart.set_ylabel('Weight (Kg)',
+                                    fontsize='9', color='magenta')
             weight_chart.set_ylim(75, 145)
-            weight_chart.tick_params(axis='y', colors='g')
+            weight_chart.tick_params(axis='y', colors='magenta')
 
             bmi_chart = weight_chart.twinx()
-            bmi_chart.plot(self.bmi.dates, self.bmi.data, 'm.-')
-            bmi_chart.set_ylabel('BMI', color='m', fontsize='9')
+            bmi_chart.plot(self.bmi.dates, self.bmi.data, 'r.-')
+            bmi_chart.set_ylabel('BMI',
+                                 fontsize='9', color='red')
             bmi_chart.set_ylim(24, 50)
-            bmi_chart.tick_params(axis='y', colors='m')
+            bmi_chart.tick_params(axis='y', colors='red')
 
             for ax in fig.axes:
                 matplotlib.pyplot.sca(ax)
