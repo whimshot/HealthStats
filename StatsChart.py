@@ -13,6 +13,8 @@ import matplotlib.pyplot as plt
 module_logger = logging.getLogger('HealthStats.StatsChart')
 module_logger.addFilter(HostnameFilter())
 
+# Set matplotlib global linewidth
+matplotlib.rcParams['axes.linewidth'] = 0.5
 
 class StatsChart(object):
     """Stats charts object."""
