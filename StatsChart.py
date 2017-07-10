@@ -111,7 +111,6 @@ class StatsChart(object):
                 ax.tick_params(direction='out', top='off',
                                labelsize='8')
                 ax.spines['top'].set_visible(False)
-                ax.set_ylabel(fontsize='9')
             fig.tight_layout()
             fig.savefig('StatsCharts.png', dpi=100)
 
