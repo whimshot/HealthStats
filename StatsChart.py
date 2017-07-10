@@ -3,6 +3,7 @@ from AdaData import AdaData
 from AdafruitIOKey import AIO_KEY, AIO_ID
 import matplotlib
 from Adafruit_IO import MQTTClient
+from LogFilters import HostnameFilter
 import logging
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
@@ -10,6 +11,7 @@ import matplotlib.pyplot as plt
 
 # create logger
 module_logger = logging.getLogger('HealthStats.StatsChart')
+module_logger.addFilter(HostnameFilter())
 
 
 class StatsChart(object):
@@ -25,6 +27,7 @@ class StatsChart(object):
         compare against for changes later.
         """
         self.logger = logging.getLogger('HealthStats.StatsChart.StatsChart')
+        self.logger.addFilter(HostnameFilter())
         self.logger.info('creating an instance of StatsChart')
         self.client = MQTTClient(AIO_ID, AIO_KEY)
         self.client.on_connect = self.connected

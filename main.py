@@ -4,6 +4,7 @@ from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.clock import Clock
 import logging
+from LogFilters import HostnameFilter
 from StatsChart import StatsChart
 from FileMonkey import FileMonkey
 from AdafruitIOKey import AIO_KEY
@@ -12,6 +13,7 @@ from AdafruitIOKey import AIO_KEY
 # create logger
 logger = logging.getLogger('HealthStats')
 logger.setLevel(logging.DEBUG)
+logger.addFilter(HostnameFilter())
 # create file handler which logs even debug messages
 logger_fh = logging.FileHandler('HealthStats.log')
 logger_fh.setLevel(logging.INFO)
@@ -20,9 +22,11 @@ logger_ch = logging.StreamHandler()
 logger_ch.setLevel(logging.ERROR)
 # create formatter and add it to the handlers
 logger_formatter = logging.Formatter('%(asctime)s'
-                                     + ' - %(name)s'
-                                     + ' - %(levelname)s'
-                                     + ' - %(message)s')
+                                     + ' %(hostname)s'
+                                     + ' %(levelname)s'
+                                     + ' %(name)s'
+                                     + ' [%(process)d]'
+                                     + ' %(message)s')
 logger_fh.setFormatter(logger_formatter)
 logger_ch.setFormatter(logger_formatter)
 # add the handlers to the logger
