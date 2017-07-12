@@ -1,0 +1,10 @@
+
+[Adafruit]
+AIO_KEY: <Adafruit IO Key Goes Here>
+AIO_ID: <Adafruit IO User ID Goes Here>
+
+[Logging]
+MAXLOGSIZE: <Maximum logsize in bytes>
+
+[Constants]
+BMI_CONSTANT: <Height in meters squared>

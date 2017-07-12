@@ -9,3 +9,4 @@ bin/
 envs/
 .env
 *.log
+*.conf

@@ -2,14 +2,13 @@
 from datetime import datetime
 from dateutil import tz
 from Adafruit_IO import Client
-from AdafruitIOKey import AIO_KEY
 import logging
-from LogFilters import HostnameFilter
+import logging.handlers
+from HSConfig import config
+from HSLogger import HostnameFilter
 
 
-# create logger
-module_logger = logging.getLogger('HealthStats.AdaData')
-module_logger.addFilter(HostnameFilter())
+AIO_KEY = config.get('Adafruit', 'AIO_KEY')
 
 
 class AdaData(object):
@@ -22,7 +21,7 @@ class AdaData(object):
     def __init__(self, feed):
         """Create new AdaData instance."""
         try:
-            self.logger = logging.getLogger('HealthStats.AdaData.AdaData')
+            self.logger = logging.getLogger('HealthStats.AdaData')
             self.logger.addFilter(HostnameFilter())
             self.feed = feed
             self.data = []
