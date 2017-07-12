@@ -1,41 +1,17 @@
 """Health Stats app in kivy."""
 from Adafruit_IO import Client
+from HSConfig import config
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.clock import Clock
-import logging
-import logging.handlers
-from LogFilters import HostnameFilter
+from HSLogger import logger
 from StatsChart import StatsChart
 from FileMonkey import FileMonkey
-from AdafruitIOKey import AIO_KEY
 
-# A couple of constants.
-MAXLOGSIZE = 1000000
-BMI_CONSTANT = 3.161284
-# create logger
-logger = logging.getLogger('HealthStats')
-logger.setLevel(logging.INFO)
-logger.addFilter(HostnameFilter())
-# create file handler which logs even debug messages
-logger_fh = logging.handlers.RotatingFileHandler('HealthStats.log',
-                                                 maxBytes=MAXLOGSIZE,
-                                                 backupCount=8)
-logger_fh.setLevel(logging.DEBUG)
-# create console handler with a higher log level
-logger_ch = logging.StreamHandler()
-logger_ch.setLevel(logging.ERROR)
-# create formatter and add it to the handlers
-logger_formatter = logging.Formatter('%(asctime)s'
-                                     + ' %(hostname)s'
-                                     + ' %(levelname)s'
-                                     + ' %(name)s[%(process)d]'
-                                     + ' %(message)s')
-logger_fh.setFormatter(logger_formatter)
-logger_ch.setFormatter(logger_formatter)
-# add the handlers to the logger
-logger.addHandler(logger_fh)
-logger.addHandler(logger_ch)
+
+BMI_CONSTANT = config.getfloat('Constants', 'BMI_CONSTANT')
+AIO_KEY = config.get('Adafruit', 'AIO_KEY')
+
 
 logger.info('Setting up HealthStatsApp.')
 feeds = ['weight', 'diastolic', 'systolic', 'pulse', 'bmi']
@@ -47,7 +23,7 @@ class HealthStats(BoxLayout):
 
     screen_text = "Health Stats"
     aio = Client(AIO_KEY)
-    fm = FileMonkey('StatsCharts.png')
+    fm = FileMonkey('ChartImage.png')
 
     def update(self, dt):
         """Update the display and charts."""
