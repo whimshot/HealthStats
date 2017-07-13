@@ -12,6 +12,9 @@
 
 <StatisticButton@Button>
     font_size: '24sp'
+    text_size: self.size
+    halign: 'center'
+    valign: 'middle'
     on_press: self.parent.parent.parent.statistic_key(self.text)
     background_color: [0, 1, 0, 1]
 
@@ -25,14 +28,15 @@
 
 <FunctionPad@GridLayout>
     cols: 4
+    StatisticButton
+        text: "Weight\n(Kg)"
+        id: weight
     StatisticButton:
-        text: "weight"
+        text: "Systolic"
     StatisticButton:
-        text: "systolic"
+        text: "Diastolic"
     StatisticButton:
-        text: "diastolic"
-    StatisticButton:
-        text: "pulse"
+        text: "Pulse"
 
 <NumberPad@GridLayout>
     cols: 3
@@ -73,6 +77,8 @@
             size_hint: (1,.5)
             source: 'ChartImage.png'
             id: stats_image
+            allow_stretch: True
+            keep_ratio: False
     BoxLayout:
         numscreen: number_screen
         text: ""
