@@ -1,17 +1,17 @@
 """StatsChart class."""
 from AdaData import AdaData
-from AdafruitIOKey import AIO_KEY, AIO_ID
-import matplotlib
 from Adafruit_IO import MQTTClient
-from LogFilters import HostnameFilter
 import logging
+import logging.handlers
+from HSConfig import config
+from HSLogger import HostnameFilter
+import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 
-# create logger
-module_logger = logging.getLogger('HealthStats.StatsChart')
-module_logger.addFilter(HostnameFilter())
+AIO_KEY = config.get('Adafruit', 'AIO_KEY')
+AIO_ID = config.get('Adafruit', 'AIO_ID')
 
 # Set matplotlib global linewidth
 matplotlib.rcParams['axes.linewidth'] = 0.5
@@ -31,7 +31,7 @@ class StatsChart(object):
         """
         try:
             self.logger = \
-                logging.getLogger('HealthStats.StatsChart.StatsChart')
+                logging.getLogger('HealthStats.StatsChart')
             self.logger.addFilter(HostnameFilter())
             self.logger.info('creating an instance of StatsChart')
             self.client = MQTTClient(AIO_ID, AIO_KEY)
@@ -120,7 +120,7 @@ class StatsChart(object):
                                labelsize='8')
                 ax.spines['top'].set_visible(False)
             fig.tight_layout()
-            fig.savefig('StatsCharts.png', dpi=100)
+            fig.savefig('ChartImage.png', dpi=100)
 
             plt.clf()
 
