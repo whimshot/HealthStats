@@ -4,10 +4,14 @@ from HSConfig import config
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.clock import Clock
+from kivy.config import Config
 from HSLogger import logger
 from StatsChart import StatsChart
 from FileMonkey import FileMonkey
 
+
+Config.set('graphics', 'width', '800')
+Config.set('graphics', 'height', '480')
 
 BMI_CONSTANT = config.getfloat('Constants', 'BMI_CONSTANT')
 AIO_KEY = config.get('Adafruit', 'AIO_KEY')
@@ -51,18 +55,19 @@ class HealthStats(BoxLayout):
         else:
             self.screen_text = self.screen_text + text
 
-    def statistic_key(self, name):
+    def statistic_key(self, btn_text):
         """Handle the statistic keys."""
-        logger.debug('{0} key pressed'.format(name))
+        btn_id = (btn_text.split('\n')[0]).lower()
+        logger.debug('{0} key pressed'.format(btn_id))
         vital_text = self.screen_text
         try:
             vital_stat = float(vital_text)
-            if (name == "weight"):
+            if (btn_id == 'weight'):
                 bmi = int(vital_stat/BMI_CONSTANT)
                 self.aio.send('bmi', bmi)
                 logger.debug('BMI of {0} calculated and sent.'.format(bmi))
-            self.aio.send(name, vital_stat)
-            logger.debug('{0} updated with {1}'.format(name, vital_stat))
+            self.aio.send(btn_id, vital_stat)
+            logger.debug('{0} updated with {1}'.format(btn_id, vital_stat))
         except (ValueError, OSError) as error:
             logger.debug('Caught: {0}'.format(error))
             self.screen_text = "Health Stats"
