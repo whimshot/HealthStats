@@ -13,13 +13,14 @@ from FileMonkey import FileMonkey
 Config.set('graphics', 'width', '800')
 Config.set('graphics', 'height', '480')
 
-BMI_CONSTANT = config.getfloat('Constants', 'BMI_CONSTANT')
-AIO_KEY = config.get('Adafruit', 'AIO_KEY')
+BMI_CONSTANT = config.getfloat('Constants', 'bmi_constant')
+AIO_KEY = config.get('Adafruit', 'aio_key')
 
 
 logger.info('Setting up HealthStatsApp.')
 feeds = ['weight', 'diastolic', 'systolic', 'pulse', 'bmi']
 statschart = StatsChart()
+statschart.draw_chart()
 
 
 class HealthStats(BoxLayout):

@@ -8,7 +8,7 @@ from HSConfig import config
 from HSLogger import HostnameFilter
 
 
-AIO_KEY = config.get('Adafruit', 'AIO_KEY')
+AIO_KEY = config.get('Adafruit', 'aio_key')
 
 
 class AdaData(object):
