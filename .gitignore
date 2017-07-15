@@ -8,5 +8,5 @@ bin/
 *.png
 envs/
 .env
-*.log
+*.log*
 *.conf
