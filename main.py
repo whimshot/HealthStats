@@ -3,6 +3,8 @@ from Adafruit_IO import Client
 from HSConfig import config
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.carousel import Carousel
+from kivy.uix.image import Image
 from kivy.clock import Clock
 from kivy.config import Config
 from HSLogger import logger
@@ -13,13 +15,34 @@ from FileMonkey import FileMonkey
 Config.set('graphics', 'width', '800')
 Config.set('graphics', 'height', '480')
 
-BMI_CONSTANT = config.getfloat('Constants', 'BMI_CONSTANT')
-AIO_KEY = config.get('Adafruit', 'AIO_KEY')
+BMI_CONSTANT = config.getfloat('Constants', 'bmi_constant')
+AIO_KEY = config.get('Adafruit', 'aio_key')
 
 
 logger.info('Setting up HealthStatsApp.')
 feeds = ['weight', 'diastolic', 'systolic', 'pulse', 'bmi']
 statschart = StatsChart()
+statschart.draw_chart()
+
+
+class Chart(Image):
+    """The charts that we display."""
+
+    def __init__(self, **kwargs):
+        """Chart object instance."""
+        super(Chart, self).__init__(**kwargs)
+        self.fm = FileMonkey(self.source)
+
+    def update(self, dt):
+        """Check and reload image if source has changed."""
+        try:
+            if (self.fm.ook()):
+                logger.debug('{0} has changed, reloading'.format(self.source))
+                self.reload()
+        except Exception:
+            logger.exception('Caught exception.')
+        finally:
+            pass
 
 
 class HealthStats(BoxLayout):
@@ -89,16 +112,22 @@ class HealthStats(BoxLayout):
     pass
 
 
+class HealthCarousel(Carousel):
+    """A carousel of health, renew, renew, renew."""
+
+
 class HealthStatsApp(App):
     """Kivy App Class for Health Stats."""
 
     def build(self):
         """Build function for Health Stats kivy app."""
         logger.info('Starting HealthStatsApp.')
-        hs = HealthStats()
-        Clock.schedule_interval(hs.update, 1.0 / 10.0)
-        Clock.schedule_interval(hs.update_chart, 5.0)
-        return hs
+        hc = HealthCarousel(direction='top', loop=True)
+        Clock.schedule_interval(hc.healthstats.update, 1.0 / 10.0)
+        Clock.schedule_interval(hc.healthstats.update_chart, 5.0)
+        Clock.schedule_interval(hc.weightchart.update, 5.0)
+        Clock.schedule_interval(hc.bpchart.update, 5.0)
+        return hc
 
 
 if __name__ == '__main__':

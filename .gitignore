@@ -10,3 +10,4 @@ envs/
 .env
 *.log*
 *.conf
+*.ini

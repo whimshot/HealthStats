@@ -65,32 +65,57 @@
     NumberButton:
         text: "."
 
+<Charts@Image>
+    source: 'ChartImage.png'
+    allow_stretch: True
+    keep_ratio: False
+
+<InputPad@BoxLayout>
+    numscreen: number_screen
+    funcpad: function_pad
+    numpad: number_pad
+    text: ""
+    orientation: 'vertical'
+    size_hint: (.5,1)
+    NumberDisplay:
+        id: number_screen
+        size_hint: (1, .2)
+    FunctionPad:
+        id: function_pad
+        size_hint: (1, .2)
+    NumberPad:
+        id: number_pad
+        size_hint: (1,.6)
+
+<Chart>
+    keep_ratio: False
+    allow_stretch: True
+
+<WeightChart@Chart>
+    source: 'WeightChart.png'
+
+<BPChart@Chart>
+    source: 'BPChart.png'
+
 <HealthStats>:
     inputpad: input_pad
     statsimage: stats_image
     size: self.size
     orientation: 'horizontal'
-    BoxLayout:
-        orientation: 'vertical'
+    Charts:
+        id: stats_image
         size_hint: (.5,1)
-        Image:
-            size_hint: (1,.5)
-            source: 'ChartImage.png'
-            id: stats_image
-            allow_stretch: True
-            keep_ratio: False
-    BoxLayout:
-        numscreen: number_screen
-        text: ""
-        orientation: 'vertical'
+    InputPad:
         id: input_pad
         size_hint: (.5,1)
-        NumberDisplay:
-            id: number_screen
-            size_hint: (1, .2)
-        FunctionPad:
-            id: function_pad
-            size_hint: (1, .2)
-        NumberPad:
-            id: number_pad
-            size_hint: (1,.6)
+
+<HealthCarousel>
+    healthstats: health_stats
+    weightchart: weight_chart
+    bpchart: bp_chart
+    HealthStats:
+        id: health_stats
+    WeightChart:
+        id: weight_chart
+    BPChart:
+        id: bp_chart
