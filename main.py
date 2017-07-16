@@ -31,13 +31,13 @@ class Chart(Image):
     def __init__(self, **kwargs):
         """Chart object instance."""
         super(Chart, self).__init__(**kwargs)
-        self.fm = FileMonkey(self.filename)
+        self.fm = FileMonkey(self.source)
 
     def update(self, dt):
         """Check and reload image if source has changed."""
         try:
             if (self.fm.ook()):
-                logger.debug('{0} has changed, reloading'.format(self.filename))
+                logger.debug('{0} has changed, reloading'.format(self.source))
                 self.reload()
         except Exception:
             logger.exception('Caught exception.')
@@ -123,16 +123,10 @@ class HealthStatsApp(App):
         """Build function for Health Stats kivy app."""
         logger.info('Starting HealthStatsApp.')
         hc = HealthCarousel(direction='top', loop=True)
-        hs = HealthStats()
-        Clock.schedule_interval(hs.update, 1.0 / 10.0)
-        Clock.schedule_interval(hs.update_chart, 5.0)
-        wc = Image(source='WeightChart.png', keep_ratio=False,
-                   allow_stretch=True)
-        bpc = Image(source='BPChart.png', keep_ratio=False,
-                    allow_stretch=True)
-        hc.add_widget(hs)
-        hc.add_widget(wc)
-        hc.add_widget(bpc)
+        Clock.schedule_interval(hc.healthstats.update, 1.0 / 10.0)
+        Clock.schedule_interval(hc.healthstats.update_chart, 5.0)
+        Clock.schedule_interval(hc.weightchart.update, 5.0)
+        Clock.schedule_interval(hc.bpchart.update, 5.0)
         return hc
 
 

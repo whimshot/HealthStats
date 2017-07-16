@@ -87,6 +87,16 @@
         id: number_pad
         size_hint: (1,.6)
 
+<Chart>
+    keep_ratio: False
+    allow_stretch: True
+
+<WeightChart@Chart>
+    source: 'WeightChart.png'
+
+<BPChart@Chart>
+    source: 'BPChart.png'
+
 <HealthStats>:
     inputpad: input_pad
     statsimage: stats_image
@@ -98,3 +108,14 @@
     InputPad:
         id: input_pad
         size_hint: (.5,1)
+
+<HealthCarousel>
+    healthstats: health_stats
+    weightchart: weight_chart
+    bpchart: bp_chart
+    HealthStats:
+        id: health_stats
+    WeightChart:
+        id: weight_chart
+    BPChart:
+        id: bp_chart

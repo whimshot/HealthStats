@@ -110,12 +110,12 @@ class StatsChart(object):
             pulse_chart.set_ylim(PULSE_MIN, PULSE_MAX)
             pulse_chart.tick_params(axis='y', colors='magenta')
 
-            weight_chart.plot(self.weight.dates, self.weight.data, 'g.-')
+            weight_chart.plot(self.weight.dates, self.weight.data, 'b.-')
             weight_chart.set_ylabel('Weight (Kg)',
-                                    fontsize='9', color='green')
+                                    fontsize='9', color='blue')
             weight_chart.set_ylim(WEIGHT_MIN, WEIGHT_MAX)
-            weight_chart.tick_params(axis='y', colors='green')
-            weight_chart.yaxis.grid(color='green', linestyle='-.',
+            weight_chart.tick_params(axis='y', colors='blue')
+            weight_chart.yaxis.grid(color='blue', linestyle='-.',
                                     linewidth=.5)
 
             bmi_chart = weight_chart.twinx()
