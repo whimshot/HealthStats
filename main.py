@@ -25,6 +25,26 @@ statschart = StatsChart()
 statschart.draw_chart()
 
 
+class Chart(Image):
+    """The charts that we display."""
+
+    def __init__(self, **kwargs):
+        """Chart object instance."""
+        super(Chart, self).__init__(**kwargs)
+        self.fm = FileMonkey(self.filename)
+
+    def update(self, dt):
+        """Check and reload image if source has changed."""
+        try:
+            if (self.fm.ook()):
+                logger.debug('{0} has changed, reloading'.format(self.filename))
+                self.reload()
+        except Exception:
+            logger.exception('Caught exception.')
+        finally:
+            pass
+
+
 class HealthStats(BoxLayout):
     """A simple class for a Health Stats app in kivy."""
 
@@ -92,13 +112,17 @@ class HealthStats(BoxLayout):
     pass
 
 
+class HealthCarousel(Carousel):
+    """A carousel of health, renew, renew, renew."""
+
+
 class HealthStatsApp(App):
     """Kivy App Class for Health Stats."""
 
     def build(self):
         """Build function for Health Stats kivy app."""
         logger.info('Starting HealthStatsApp.')
-        hc = Carousel(direction='right', loop=True)
+        hc = HealthCarousel(direction='top', loop=True)
         hs = HealthStats()
         Clock.schedule_interval(hs.update, 1.0 / 10.0)
         Clock.schedule_interval(hs.update_chart, 5.0)
