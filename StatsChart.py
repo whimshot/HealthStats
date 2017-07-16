@@ -104,11 +104,17 @@ class StatsChart(object):
             bp_chart.tick_params(axis='y', colors='blue')
 
             pulse_chart = bp_chart.twinx()
-            pulse_chart.plot(self.pulse.dates, self.pulse.data, 'c.-')
+            pulse_chart.plot(self.pulse.dates, self.pulse.data, 'm.-')
             pulse_chart.set_ylabel('Pulse (BPM)',
+<<<<<<< HEAD
                                    fontsize='9', color='cyan')
             pulse_chart.set_ylim(PULSE_MIN, PULSE_MAX)
             pulse_chart.tick_params(axis='y', colors='cyan')
+=======
+                                   fontsize='9', color='magenta')
+            pulse_chart.set_ylim(PULSE_MIN, PULSE_MAX)
+            pulse_chart.tick_params(axis='y', colors='magenta')
+>>>>>>> in_progress
 
             weight_chart.plot(self.weight.dates, self.weight.data, 'g.-')
             weight_chart.set_ylabel('Weight (Kg)',
