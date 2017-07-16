@@ -3,6 +3,8 @@ from Adafruit_IO import Client
 from HSConfig import config
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.carousel import Carousel
+from kivy.uix.image import Image
 from kivy.clock import Clock
 from kivy.config import Config
 from HSLogger import logger
@@ -96,10 +98,18 @@ class HealthStatsApp(App):
     def build(self):
         """Build function for Health Stats kivy app."""
         logger.info('Starting HealthStatsApp.')
+        hc = Carousel(direction='right', loop=True)
         hs = HealthStats()
         Clock.schedule_interval(hs.update, 1.0 / 10.0)
         Clock.schedule_interval(hs.update_chart, 5.0)
-        return hs
+        wc = Image(source='WeightChart.png', keep_ratio=False,
+                   allow_stretch=True)
+        bpc = Image(source='BPChart.png', keep_ratio=False,
+                    allow_stretch=True)
+        hc.add_widget(hs)
+        hc.add_widget(wc)
+        hc.add_widget(bpc)
+        return hc
 
 
 if __name__ == '__main__':
