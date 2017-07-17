@@ -145,6 +145,8 @@ class StatsChart(object):
                                 fontsize='9', color='blue')
             bp_chart.set_ylim(BP_MIN, BP_MAX)
             bp_chart.tick_params(axis='y', colors='blue')
+            bp_chart.yaxis.grid(color='blue', linestyle='-.',
+                                linewidth=.5)
 
             pulse_chart = bp_chart.twinx()
             pulse_chart.plot(self.pulse.dates, self.pulse.data, 'm.-')
@@ -152,6 +154,8 @@ class StatsChart(object):
                                    fontsize='9', color='magenta')
             pulse_chart.set_ylim(PULSE_MIN, PULSE_MAX)
             pulse_chart.tick_params(axis='y', colors='magenta')
+            pulse_chart.yaxis.grid(color='magenta', linestyle='-.',
+                                   linewidth=.5)
 
             for ax in fig.axes:
                 matplotlib.pyplot.sca(ax)
