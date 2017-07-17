@@ -5,6 +5,7 @@ import logging
 import logging.handlers
 from HSConfig import config
 from HSLogger import HostnameFilter
+import numpy
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
@@ -115,8 +116,6 @@ class StatsChart(object):
                                     fontsize='9', color='blue')
             weight_chart.set_ylim(WEIGHT_MIN, WEIGHT_MAX)
             weight_chart.tick_params(axis='y', colors='blue')
-            weight_chart.yaxis.grid(color='blue', linestyle='-.',
-                                    linewidth=.5)
 
             bmi_chart = weight_chart.twinx()
             bmi_chart.plot(self.bmi.dates, self.bmi.data, 'r.-')
@@ -135,6 +134,8 @@ class StatsChart(object):
             fig.savefig('ChartImage.png', dpi=100)
 
             plt.clf()
+
+            # Larger version of the BP Chart.
 
             fig, bp_chart = plt.subplots(1, figsize=(8, 4.8))
 
@@ -165,12 +166,12 @@ class StatsChart(object):
 
             fig, weight_chart = plt.subplots(1, figsize=(8, 4.8))
 
-            weight_chart.plot(self.weight.dates, self.weight.data, 'g.-')
+            weight_chart.plot(self.weight.dates, self.weight.data, 'b.-')
             weight_chart.set_ylabel('Weight (Kg)',
-                                    fontsize='9', color='green')
+                                    fontsize='9', color='blue')
             weight_chart.set_ylim(WEIGHT_MIN, WEIGHT_MAX)
-            weight_chart.tick_params(axis='y', colors='green')
-            weight_chart.yaxis.grid(color='green', linestyle='-.',
+            weight_chart.tick_params(axis='y', colors='blue')
+            weight_chart.yaxis.grid(color='blue', linestyle='-.',
                                     linewidth=.5)
 
             bmi_chart = weight_chart.twinx()
@@ -179,6 +180,8 @@ class StatsChart(object):
                                  fontsize='9', color='red')
             bmi_chart.set_ylim(BMI_MIN, BMI_MAX)
             bmi_chart.tick_params(axis='y', colors='red')
+            bmi_chart.yaxis.grid(color='red', linestyle='-.',
+                                 linewidth=.5)
 
             for ax in fig.axes:
                 matplotlib.pyplot.sca(ax)

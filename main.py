@@ -31,13 +31,25 @@ class Chart(Image):
     def __init__(self, **kwargs):
         """Chart object instance."""
         super(Chart, self).__init__(**kwargs)
-        self.fm = FileMonkey(self.source)
+
+    def build(self):
+        """Builder for chart object."""
+        try:
+            logger.debug("Building new chart{0}.".format(self.source))
+            filename = str(self.source)
+            self.fm = FileMonkey(filename)
+        except Exception:
+            logger.exception("Caught exception.")
+        finally:
+            pass
 
     def update(self, dt):
         """Check and reload image if source has changed."""
         try:
+            logger.debug("Updating {0}.".format(self.source))
             if (self.fm.ook()):
-                logger.debug('{0} has changed, reloading'.format(self.source))
+                filename = str(self.source)
+                logger.debug('{0} has changed, reloading'.format(filename))
                 self.reload()
         except Exception:
             logger.exception('Caught exception.')
@@ -123,6 +135,8 @@ class HealthStatsApp(App):
         """Build function for Health Stats kivy app."""
         logger.info('Starting HealthStatsApp.')
         hc = HealthCarousel(direction='top', loop=True)
+        hc.weightchart.build()
+        hc.bpchart.build()
         Clock.schedule_interval(hc.healthstats.update, 1.0 / 10.0)
         Clock.schedule_interval(hc.healthstats.update_chart, 5.0)
         Clock.schedule_interval(hc.weightchart.update, 5.0)
