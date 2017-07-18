@@ -123,6 +123,7 @@ class StatsChart(object):
                                      colors='C0')
 
             bmi_chart = weight_chart.twinx()
+            bmi_chart.yaxis.set_major_locator(bmi_major_locator)
             bmi_chart.plot(self.bmi.dates,
                            self.bmi.data,
                            'C1.-')
