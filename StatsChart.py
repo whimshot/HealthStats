@@ -140,7 +140,7 @@ class StatsChart(object):
                                labelsize='8')
                 ax.spines['top'].set_visible(False)
             fig.tight_layout()
-            fig.savefig('ChartImage.png', dpi=100)
+            fig.savefig('SmallCharts.png', dpi=100)
 
             plt.clf()
 

@@ -35,8 +35,8 @@ class Chart(Image):
     def build(self):
         """Builder for chart object."""
         try:
-            logger.debug("Building new chart{0}.".format(self.source))
             filename = str(self.source)
+            logger.debug("BUILD: Building new chart {0}.".format(filename))
             self.fm = FileMonkey(filename)
         except Exception:
             logger.exception("Caught exception.")
@@ -62,39 +62,23 @@ class HealthStats(BoxLayout):
 
     screen_text = "Health Stats"
     aio = Client(AIO_KEY)
-    fm = FileMonkey('ChartImage.png')
-
-    def update(self, dt):
-        """Update the display and charts."""
-        try:
-            self.inputpad.numscreen.text = self.screen_text
-            logger.debug('Updated the input display.')
-        except Exception:
-            logger.exception('Failed to update input display.')
-
-    def update_chart(self, dt):
-        """Reload the chart image if it has changed."""
-        try:
-            if (self.fm.ook()):
-                logger.debug('Stats chart image has changed, reloading.')
-                self.statsimage.reload()
-                logger.debug('Stats chart image reloaded.')
-        except Exception:
-            logger.exception('Failed to update chart.')
 
     def new_digit(self, text):
         """Add a digit or decimal point to the input display."""
         logger.debug('{0} key pressed'.format(text))
-        if (self.screen_text == "Health Stats"):
-            self.screen_text = text
-        else:
-            self.screen_text = self.screen_text + text
+        try:
+            float("0" + self.inputpad.numscreen.text)
+            self.inputpad.numscreen.text = self.inputpad.numscreen.text + text
+        except Exception:
+            self.inputpad.numscreen.text = text
+        finally:
+            pass
 
     def statistic_key(self, btn_text):
         """Handle the statistic keys."""
         btn_id = (btn_text.split('\n')[0]).lower()
         logger.debug('{0} key pressed'.format(btn_id))
-        vital_text = self.screen_text
+        vital_text = self.inputpad.numscreen.text
         try:
             vital_stat = float(vital_text)
             if (btn_id == 'weight'):
@@ -105,21 +89,20 @@ class HealthStats(BoxLayout):
             logger.debug('{0} updated with {1}'.format(btn_id, vital_stat))
         except (ValueError, OSError) as error:
             logger.debug('Caught: {0}'.format(error))
-            self.screen_text = "Health Stats"
+            self.inputpad.numscreen.text = "Health Stats"
         finally:
-            self.screen_text = "Health Stats"
+            self.inputpad.numscreen.text = "Health Stats"
 
     def delete_key(self, name):
         """Handle the function keys."""
         logger.debug('{0} key pressed.'.format(name))
         try:
-            if (self.screen_text != "Health Stats"):
-                self.screen_text = self.screen_text[:-1]
-            elif (self.screen_text == ''):
-                self.screen_text = "Health Stats"
+            float(self.inputpad.numscreen.text)
+            self.inputpad.numscreen.text = self.inputpad.numscreen.text[:-1]
         except Exception:
-            self.screen_text = "Health Stats"
-            self.logger.exception('Delete key failed.')
+            self.inputpad.numscreen.text = "Health Stats"
+        finally:
+            pass
 
     pass
 
@@ -137,10 +120,10 @@ class HealthStatsApp(App):
         hc = HealthCarousel(direction='top', loop=True)
         hc.weightchart.build()
         hc.bpchart.build()
-        Clock.schedule_interval(hc.healthstats.update, 1.0 / 10.0)
-        Clock.schedule_interval(hc.healthstats.update_chart, 5.0)
+        hc.healthstats.statsimage.build()
         Clock.schedule_interval(hc.weightchart.update, 5.0)
         Clock.schedule_interval(hc.bpchart.update, 5.0)
+        Clock.schedule_interval(hc.healthstats.statsimage.update, 5.0)
         return hc
 
 
