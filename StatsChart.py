@@ -156,6 +156,12 @@ class StatsChart(object):
             bp_chart.plot(self.pulse.dates,
                           self.pulse.data, '.-',
                           label='Pulse')
+            bp_chart.grid(linestyle='-.',
+                          linewidth=.25,
+                          which='major')
+            bp_chart.yaxis.grid(linestyle='-.',
+                                linewidth=.25,
+                                which='minor')
             bp_chart.set_ylabel('Blood Pressure (mmHg)\nPulse (BPM)')
             bp_chart.tick_params(axis='y', which='both')
             bp_chart.legend()
