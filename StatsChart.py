@@ -103,19 +103,21 @@ class StatsChart(object):
 
             bp_chart.plot(self.systolic.dates,
                           self.systolic.data, '.-',
-                          label='Systolic')
+                          label='Systolic',
+                          linewidth=.5)
             bp_chart.plot(self.diastolic.dates,
                           self.diastolic.data, '.-',
-                          label='Diastolic')
+                          label='Diastolic',
+                          linewidth=.5)
             bp_chart.plot(self.pulse.dates,
                           self.pulse.data, '.-',
-                          label='Pulse')
+                          label='Pulse',
+                          linewidth=.5)
             bp_chart.set_ylabel('Blood Pressure (mmHg)\nPulse (BPM)')
             bp_chart.tick_params(axis='y')
 
-            weight_chart.plot(self.weight.dates,
-                              self.weight.data,
-                              'C0.-')
+            weight_chart.plot(self.weight.dates, self.weight.data,
+                              'C0.-', linewidth=.5)
             weight_chart.set_ylabel('Weight (Kg)',
                                     fontsize='9',
                                     color='C0')
@@ -124,9 +126,8 @@ class StatsChart(object):
 
             bmi_chart = weight_chart.twinx()
             bmi_chart.yaxis.set_major_locator(bmi_major_locator)
-            bmi_chart.plot(self.bmi.dates,
-                           self.bmi.data,
-                           'C1.-')
+            bmi_chart.plot(self.bmi.dates, self.bmi.data,
+                           'C1.-', linewidth=.5)
             bmi_chart.set_ylabel('BMI',
                                  fontsize='9',
                                  color='C1')
@@ -150,13 +151,13 @@ class StatsChart(object):
             bp_chart.yaxis.set_minor_locator(bp_minor_locator)
             bp_chart.plot(self.systolic.dates,
                           self.systolic.data, '.-',
-                          label='Systolic')
+                          label='Systolic', linewidth=.5)
             bp_chart.plot(self.diastolic.dates,
                           self.diastolic.data, '.-',
-                          label='Diastolic')
+                          label='Diastolic', linewidth=.5)
             bp_chart.plot(self.pulse.dates,
                           self.pulse.data, '.-',
-                          label='Pulse')
+                          label='Pulse', linewidth=.5)
             bp_chart.grid(linestyle='-.',
                           linewidth=.25,
                           which='major')
@@ -182,7 +183,8 @@ class StatsChart(object):
             weight_chart.yaxis.set_minor_locator(weight_minor_locator)
             weight_chart.plot(self.weight.dates,
                               self.weight.data,
-                              'C0.-', label='Weight (Kg)')
+                              'C0.-', label='Weight (Kg)',
+                              linewidth=.5)
             weight_chart.set_ylabel('Weight (Kg)',
                                     fontsize='9',
                                     color='C0')
@@ -199,9 +201,8 @@ class StatsChart(object):
 
             bmi_chart = weight_chart.twinx()
             bmi_chart.yaxis.set_major_locator(bmi_major_locator)
-            bmi_chart.plot(self.bmi.dates,
-                           self.bmi.data,
-                           'C1.-', label='BMI')
+            bmi_chart.plot(self.bmi.dates, self.bmi.data,
+                           'C1.-', label='BMI', linewidth=.5)
             bmi_chart.set_ylabel('BMI',
                                  fontsize='9',
                                  color='C1')
