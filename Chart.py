@@ -15,12 +15,14 @@ from HSLogger import logger, HostnameFilter
 from HSConfig import config
 import matplotlib
 matplotlib.use('Agg')
-import matplotlib.pyplot as plt
-from matplotlib.ticker import MultipleLocator
-
+from matplotlib import ticker as tckr
+from matplotlib import pyplot as plt
 
 AIO_KEY = config.get('Adafruit', 'aio_key')
 AIO_ID = config.get('Adafruit', 'aio_id')
+matplotlib.rc('lines', linewidth=0.75, markersize=4,
+              linestyle='-', marker='.')
+matplotlib.rc('grid', linestyle='-.', linewidth=0.25)
 
 
 class Chart(Image):
@@ -112,32 +114,28 @@ class WeightChart(Chart):
         """Make the stats chart image."""
         try:
             self.logger.debug("Drawing chart for {0}.".format(self.filename))
-            weight_minor_locator = MultipleLocator(.2)
-            bmi_major_locator = MultipleLocator(1)
+            weight_minor_locator = tckr.MultipleLocator(.2)
+            bmi_major_locator = tckr.MultipleLocator(1)
             fig, weight_chart = plt.subplots(1, figsize=(8, 4.8))
             weight_chart.yaxis.set_minor_locator(weight_minor_locator)
             weight_chart.plot(self.feeds_data['weight'].dates,
-                              self.feeds_data['weight'].data,
-                              'C0.-', label='Weight (Kg)', linewidth=.75)
+                              self.feeds_data['weight'].data, color='C0',
+                              label='Weight (Kg)')
             weight_chart.set_ylabel('Weight (Kg)',
                                     fontsize='9',
                                     color='C0')
             weight_chart.tick_params(axis='y',
                                      colors='C0',
                                      which='both')
-            weight_chart.grid(linestyle='-.',
-                              linewidth=.25,
-                              which='major')
-            weight_chart.yaxis.grid(linestyle='-.',
-                                    linewidth=.25,
-                                    which='minor')
+            weight_chart.grid(which='major')
+            weight_chart.yaxis.grid(which='minor')
             weight_chart.legend(loc='lower left')
 
             bmi_chart = weight_chart.twinx()
             bmi_chart.yaxis.set_major_locator(bmi_major_locator)
             bmi_chart.plot(self.feeds_data['bmi'].dates,
-                           self.feeds_data['bmi'].data,
-                           'C1.-', label='BMI', linewidth=.75)
+                           self.feeds_data['bmi'].data, color='C1',
+                           label='BMI')
             bmi_chart.set_ylabel('BMI',
                                  fontsize='9',
                                  color='C1')
@@ -146,7 +144,7 @@ class WeightChart(Chart):
             bmi_chart.legend(loc='upper right')
 
             for ax in fig.axes:
-                matplotlib.pyplot.sca(ax)
+                plt.sca(ax)
                 plt.xticks(rotation=45)
                 ax.tick_params(direction='out', top='off',
                                labelsize='8')
@@ -169,30 +167,26 @@ class BPChart(Chart):
         """Draw the chart image."""
         try:
             self.logger.debug("Drawing chart for {0}.".format(self.filename))
-            bp_minor_locator = MultipleLocator(2)
+            bp_minor_locator = tckr.MultipleLocator(2)
             fig, bp_chart = plt.subplots(1, figsize=(8, 4.8))
             bp_chart.yaxis.set_minor_locator(bp_minor_locator)
             bp_chart.plot(self.feeds_data['systolic'].dates,
-                          self.feeds_data['systolic'].data, '.-',
-                          label='Systolic', linewidth=.75)
+                          self.feeds_data['systolic'].data,
+                          label='Systolic', alpha=0.5)
             bp_chart.plot(self.feeds_data['diastolic'].dates,
-                          self.feeds_data['diastolic'].data, '.-',
-                          label='Diastolic', linewidth=.75)
+                          self.feeds_data['diastolic'].data,
+                          label='Diastolic', alpha=0.5)
             bp_chart.plot(self.feeds_data['pulse'].dates,
-                          self.feeds_data['pulse'].data, '.-',
-                          label='Pulse', linewidth=.75)
-            bp_chart.grid(linestyle='-.',
-                          linewidth=.25,
-                          which='major')
-            bp_chart.yaxis.grid(linestyle='-.',
-                                linewidth=.25,
-                                which='minor')
+                          self.feeds_data['pulse'].data,
+                          label='Pulse', alpha=0.5)
+            bp_chart.grid(which='major')
+            bp_chart.yaxis.grid(which='minor')
             bp_chart.set_ylabel('Blood Pressure (mmHg)\nPulse (BPM)')
             bp_chart.tick_params(axis='y', which='both')
             bp_chart.legend()
 
             for ax in fig.axes:
-                matplotlib.pyplot.sca(ax)
+                plt.sca(ax)
                 plt.xticks(rotation=45)
                 ax.tick_params(direction='out', top='off',
                                labelsize='8')
@@ -216,24 +210,25 @@ class SmallCharts(Chart):
         """Draw the chart image."""
         try:
             self.logger.debug("Drawing chart for {0}.".format(self.filename))
-            bmi_major_locator = MultipleLocator(1)
-            fig, (weight_chart, bp_chart) = plt.subplots(2, figsize=(4, 4.8))
+            bmi_major_locator = tckr.MultipleLocator(1)
+            fig, (weight_chart,
+                  bp_chart) = plt.subplots(2, figsize=(4, 4.8))
 
             bp_chart.plot(self.feeds_data['systolic'].dates,
-                          self.feeds_data['systolic'].data, '.-',
-                          label='Systolic', linewidth=.75)
+                          self.feeds_data['systolic'].data,
+                          label='Systolic', alpha=0.5)
             bp_chart.plot(self.feeds_data['diastolic'].dates,
-                          self.feeds_data['diastolic'].data, '.-',
-                          label='Diastolic', linewidth=.75)
+                          self.feeds_data['diastolic'].data,
+                          label='Diastolic', alpha=0.5)
             bp_chart.plot(self.feeds_data['pulse'].dates,
-                          self.feeds_data['pulse'].data, '.-',
-                          label='Pulse', linewidth=.75)
+                          self.feeds_data['pulse'].data,
+                          label='Pulse', alpha=0.5)
             bp_chart.set_ylabel('Blood Pressure (mmHg)\nPulse (BPM)')
             bp_chart.tick_params(axis='y')
 
             weight_chart.plot(self.feeds_data['weight'].dates,
                               self.feeds_data['weight'].data,
-                              'C0.-', linewidth=.75)
+                              color='C0', alpha=0.5)
             weight_chart.set_ylabel('Weight (Kg)',
                                     fontsize='9',
                                     color='C0')
@@ -244,7 +239,7 @@ class SmallCharts(Chart):
             bmi_chart.yaxis.set_major_locator(bmi_major_locator)
             bmi_chart.plot(self.feeds_data['bmi'].dates,
                            self.feeds_data['bmi'].data,
-                           'C1.-', linewidth=.75)
+                           color='C1', alpha=0.5)
             bmi_chart.set_ylabel('BMI',
                                  fontsize='9',
                                  color='C1')
@@ -252,7 +247,7 @@ class SmallCharts(Chart):
                                   colors='C1')
 
             for ax in fig.axes:
-                matplotlib.pyplot.sca(ax)
+                plt.sca(ax)
                 plt.xticks(rotation=45)
                 ax.tick_params(direction='out', top='off',
                                labelsize='8')
