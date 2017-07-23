@@ -22,7 +22,7 @@ AIO_KEY = config.get('Adafruit', 'aio_key')
 AIO_ID = config.get('Adafruit', 'aio_id')
 matplotlib.rc('lines', linewidth=0.75, markersize=4,
               linestyle='-', marker='.')
-matplotlib.rc('grid', linestyle='-.', linewidth=0.25)
+matplotlib.rc('grid', linestyle='-.', linewidth=0.5, alpha=0.5)
 
 
 class Chart(Image):
@@ -167,7 +167,7 @@ class BPChart(Chart):
         """Draw the chart image."""
         try:
             self.logger.debug("Drawing chart for {0}.".format(self.filename))
-            bp_minor_locator = tckr.MultipleLocator(2)
+            bp_minor_locator = tckr.MultipleLocator(4)
             fig, bp_chart = plt.subplots(1, figsize=(8, 4.8))
             bp_chart.yaxis.set_minor_locator(bp_minor_locator)
             bp_chart.plot(self.feeds_data['systolic'].dates,
