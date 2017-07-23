@@ -1,6 +1,5 @@
 """"An Input Pad."""
-from Adafruit_IO import MQTTClient, Client
-from AdaData import AdaData
+from Adafruit_IO import Client
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.gridlayout import GridLayout
@@ -96,8 +95,10 @@ class InputDisplay(Label):
         try:
             float(self.text)
             self.text = self.text[:-1]
+            self.logger.debug("Display now reads {0}.".format(self.text))
         except Exception:
             self.text = "Health Stats"
+            self.logger.debug("Display now reads {0}.".format(self.text))
         finally:
             pass
 
