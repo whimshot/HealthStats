@@ -11,6 +11,7 @@ from HSLogger import logger
 from StatsChart import StatsChart
 from FileMonkey import FileMonkey
 import Chart
+import InputPad
 
 
 Config.set('graphics', 'width', '800')
@@ -26,50 +27,6 @@ feeds = ['weight', 'diastolic', 'systolic', 'pulse', 'bmi']
 
 class HealthStats(BoxLayout):
     """A simple class for a Health Stats app in kivy."""
-
-    screen_text = "Health Stats"
-    aio = Client(AIO_KEY)
-
-    def new_digit(self, text):
-        """Add a digit or decimal point to the input display."""
-        logger.debug('{0} key pressed'.format(text))
-        try:
-            float("0" + self.inputpad.numscreen.text)
-            self.inputpad.numscreen.text = self.inputpad.numscreen.text + text
-        except Exception:
-            self.inputpad.numscreen.text = text
-        finally:
-            pass
-
-    def statistic_key(self, btn_text):
-        """Handle the statistic keys."""
-        btn_id = (btn_text.split('\n')[0]).lower()
-        logger.debug('{0} key pressed'.format(btn_id))
-        vital_text = self.inputpad.numscreen.text
-        try:
-            vital_stat = float(vital_text)
-            if (btn_id == 'weight'):
-                bmi = int(vital_stat/BMI_CONSTANT)
-                self.aio.send('bmi', bmi)
-                logger.debug('BMI of {0} calculated and sent.'.format(bmi))
-            self.aio.send(btn_id, vital_stat)
-            logger.debug('{0} updated with {1}'.format(btn_id, vital_stat))
-        except (ValueError, OSError) as error:
-            logger.debug('Caught: {0}'.format(error))
-            self.inputpad.numscreen.text = "Health Stats"
-        finally:
-            self.inputpad.numscreen.text = "Health Stats"
-
-    def delete_key(self, name):
-        """Handle the function keys."""
-        logger.debug('{0} key pressed.'.format(name))
-        try:
-            float(self.inputpad.numscreen.text)
-            self.inputpad.numscreen.text = self.inputpad.numscreen.text[:-1]
-        except Exception:
-            self.inputpad.numscreen.text = "Health Stats"
-        finally:
-            pass
 
     pass
 
