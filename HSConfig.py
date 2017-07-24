@@ -1,6 +1,6 @@
 """Configuration parser module for HealthStats."""
-import ConfigParser
+import configparser
 
 
-config = ConfigParser.ConfigParser()
+config = configparser.ConfigParser()
 config.readfp(open('HealthStats.conf'))
