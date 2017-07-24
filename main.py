@@ -1,5 +1,4 @@
 """Health Stats app in kivy."""
-from Adafruit_IO import Client
 from HSConfig import config
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
