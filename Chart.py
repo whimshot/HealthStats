@@ -163,7 +163,7 @@ class WeightChart(Chart):
             self.logger.exception("Something went wrong with"
                                   + " {0}.".format(self.filename))
         finally:
-            pass
+            self.reload()
 
 
 class BPChart(Chart):
@@ -206,7 +206,7 @@ class BPChart(Chart):
             self.logger.exception("Something went wrong with"
                                   + " {0}.".format(self.filename))
         finally:
-            pass
+            self.reload()
 
 
 class SmallCharts(Chart):
@@ -267,7 +267,7 @@ class SmallCharts(Chart):
             self.logger.exception("Something went wrong with"
                                   + " {0}.".format(self.filename))
         finally:
-            pass
+            self.reload()
 
 
 class ChartDemo(Widget):
