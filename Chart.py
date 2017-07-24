@@ -26,7 +26,6 @@ matplotlib.rc('grid', linestyle='-.', linewidth=0.5, alpha=0.5)
 matplotlib.rc('legend', framealpha=0.5, numpoints=2, loc='upper right')
 
 
-
 class Chart(Image):
     """The basic Chart class we will build off from here."""
 
