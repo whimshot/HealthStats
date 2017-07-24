@@ -23,7 +23,7 @@ AIO_ID = config.get('Adafruit', 'aio_id')
 matplotlib.rc('lines', linewidth=0.75, markersize=4,
               linestyle='-', marker='.')
 matplotlib.rc('grid', linestyle='-.', linewidth=0.5, alpha=0.5)
-matplotlib.rc('legend', framealpha=0.5, numpoints=2, loc='upper right')
+matplotlib.rc('legend', framealpha=0.5, loc='upper right')
 
 
 class Chart(Image):
