@@ -23,6 +23,8 @@ AIO_ID = config.get('Adafruit', 'aio_id')
 matplotlib.rc('lines', linewidth=0.75, markersize=4,
               linestyle='-', marker='.')
 matplotlib.rc('grid', linestyle='-.', linewidth=0.5, alpha=0.5)
+matplotlib.rc('legend', framealpha=0.5, numpoints=2, loc='upper right')
+
 
 
 class Chart(Image):
@@ -118,9 +120,9 @@ class WeightChart(Chart):
             bmi_major_locator = tckr.MultipleLocator(1)
             fig, weight_chart = plt.subplots(1, figsize=(8, 4.8))
             weight_chart.yaxis.set_minor_locator(weight_minor_locator)
-            weight_chart.plot(self.feeds_data['weight'].dates,
-                              self.feeds_data['weight'].data, color='C0',
-                              label='Weight (Kg)')
+            wc = weight_chart.plot(self.feeds_data['weight'].dates,
+                                   self.feeds_data['weight'].data, color='C0',
+                                   label='Weight (Kg)')
             weight_chart.set_ylabel('Weight (Kg)',
                                     fontsize='9',
                                     color='C0')
@@ -129,19 +131,22 @@ class WeightChart(Chart):
                                      which='both')
             weight_chart.grid(which='major')
             weight_chart.yaxis.grid(which='minor')
-            weight_chart.legend(loc='lower left')
+            # weight_chart.legend(loc='lower left')
 
             bmi_chart = weight_chart.twinx()
             bmi_chart.yaxis.set_major_locator(bmi_major_locator)
-            bmi_chart.plot(self.feeds_data['bmi'].dates,
-                           self.feeds_data['bmi'].data, color='C1',
-                           label='BMI')
+            bc = bmi_chart.plot(self.feeds_data['bmi'].dates,
+                                self.feeds_data['bmi'].data, color='C1',
+                                label='BMI')
             bmi_chart.set_ylabel('BMI',
                                  fontsize='9',
                                  color='C1')
             bmi_chart.tick_params(axis='y',
                                   colors='C1')
-            bmi_chart.legend(loc='upper right')
+            # bmi_chart.legend(loc='upper right')
+
+            charts = wc + bc
+            labels = [chart.get_label() for chart in charts]
 
             for ax in fig.axes:
                 plt.sca(ax)
@@ -149,6 +154,8 @@ class WeightChart(Chart):
                 ax.tick_params(direction='out', top='off',
                                labelsize='8')
                 ax.spines['top'].set_visible(False)
+
+            fig.legend(charts, labels, bbox_to_anchor=(0.93, 0.97))
             fig.tight_layout()
             fig.savefig(self.filename, dpi=100)
 
