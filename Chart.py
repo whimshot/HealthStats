@@ -31,6 +31,7 @@ class Chart(Image):
 
     feeds = []          # The list of feeds the chart is subscribed to.
     feeds_data = {}     # The data last retrieved from the feeds.
+    feeds_changed = []  # Truthiness to record when feeds are updated.
     filename = ""
 
     def __init__(self, **kwargs):
@@ -158,12 +159,13 @@ class WeightChart(Chart):
             fig.tight_layout()
             fig.savefig(self.filename, dpi=100)
 
-            plt.clf()
+            plt.clf
+            self.reload()
         except Exception:
             self.logger.exception("Something went wrong with"
                                   + " {0}.".format(self.filename))
         finally:
-            self.reload()
+            pass
 
 
 class BPChart(Chart):
@@ -201,12 +203,12 @@ class BPChart(Chart):
             fig.savefig(self.filename, dpi=100)
 
             plt.clf()
-
+            self.reload()
         except Exception:
             self.logger.exception("Something went wrong with"
                                   + " {0}.".format(self.filename))
         finally:
-            self.reload()
+            pass
 
 
 class SmallCharts(Chart):
@@ -262,12 +264,12 @@ class SmallCharts(Chart):
             fig.savefig(self.filename, dpi=100)
 
             plt.clf()
-
+            self.reload()
         except Exception:
             self.logger.exception("Something went wrong with"
                                   + " {0}.".format(self.filename))
         finally:
-            self.reload()
+            pass
 
 
 class ChartDemo(Widget):
