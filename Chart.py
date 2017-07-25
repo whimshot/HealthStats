@@ -4,19 +4,21 @@ The chart class is an extension of the kivy image class with the ability
 to subscribe to data feeds, redraw itself and reload once a new image
 has been generated.
 """
+import logging
+import logging.handlers
+import threading
+
+import matplotlib
 from Adafruit_IO import MQTTClient
+from HSConfig import config
+from HSLogger import HostnameFilter, logger
 from kivy.app import App
 from kivy.uix.image import Image
 from kivy.uix.widget import Widget
-import logging
-import logging.handlers
-import time
-from HSLogger import logger, HostnameFilter
-from HSConfig import config
-import matplotlib
 matplotlib.use('Agg')
-from matplotlib import ticker as tckr
 from matplotlib import pyplot as plt
+from matplotlib import ticker as tckr
+
 
 AIO_KEY = config.get('Adafruit', 'aio_key')
 AIO_ID = config.get('Adafruit', 'aio_id')
@@ -84,7 +86,8 @@ class Chart(Image):
         try:
             self.logger.debug("Feed: {0} received new data: ".format(feed_id)
                               + "{0}".format(payload))
-            time.sleep(5)
+            dummy_event = threading.Event()
+            dummy_event.wait(timeout=1)
             self.reload()
         except Exception:
             raise
