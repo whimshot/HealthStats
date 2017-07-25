@@ -9,9 +9,8 @@ from HSConfig import config
 from HSLogger import HostnameFilter
 
 matplotlib.use('Agg')
-from matplotlib.ticker import MultipleLocator
-import matplotlib.pyplot as plt
-
+import matplotlib.pyplot as plt                 # noqa
+from matplotlib.ticker import MultipleLocator   # noqa
 
 AIO_KEY = config.get('Adafruit', 'aio_key')
 AIO_ID = config.get('Adafruit', 'aio_id')
