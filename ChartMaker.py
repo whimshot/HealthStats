@@ -8,11 +8,10 @@ from AdaData import AdaData
 from Adafruit_IO import MQTTClient
 from HSConfig import config
 from HSLogger import HostnameFilter
-from matplotlib.ticker import MultipleLocator
 
 matplotlib.use('Agg')
-import matplotlib.pyplot as plt
-
+import matplotlib.pyplot as plt                 # noqa
+from matplotlib.ticker import MultipleLocator   # noqa
 
 AIO_KEY = config.get('Adafruit', 'aio_key')
 AIO_ID = config.get('Adafruit', 'aio_id')
