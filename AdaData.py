@@ -1,12 +1,12 @@
 """Get data from io.adafruit.com."""
-from datetime import datetime
-from dateutil import tz
-from Adafruit_IO import Client
 import logging
 import logging.handlers
+from datetime import datetime
+
+from Adafruit_IO import Client
+from dateutil import tz
 from HSConfig import config
 from HSLogger import HostnameFilter
-
 
 AIO_KEY = config.get('Adafruit', 'aio_key')
 
