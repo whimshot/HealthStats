@@ -1,16 +1,17 @@
 """ChartMaker class."""
-from AdaData import AdaData
-from Adafruit_IO import MQTTClient
-import time
 import logging
 import logging.handlers
+import time
+
+import matplotlib
+from AdaData import AdaData
+from Adafruit_IO import MQTTClient
 from HSConfig import config
 from HSLogger import HostnameFilter
-import numpy
-import matplotlib
+from matplotlib.ticker import MultipleLocator
+
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-from matplotlib.ticker import MultipleLocator
 
 
 AIO_KEY = config.get('Adafruit', 'aio_key')
