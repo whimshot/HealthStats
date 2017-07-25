@@ -1,18 +1,13 @@
 """Health Stats app in kivy."""
-from HSConfig import config
-from kivy.app import App
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.carousel import Carousel
-from kivy.uix.image import Image
-from kivy.clock import Clock
-from kivy.config import Config
-from HSLogger import logger
-from StatsChart import StatsChart
-from FileMonkey import FileMonkey
 import Chart
 import InputPad
 from ChartMaker import ChartMaker
-
+from HSConfig import config
+from HSLogger import logger
+from kivy.app import App
+from kivy.config import Config
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.carousel import Carousel
 
 Config.set('graphics', 'width', '800')
 Config.set('graphics', 'height', '480')
