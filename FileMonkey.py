@@ -1,7 +1,8 @@
 """A monkey that watches a file."""
-import os
 import logging
 import logging.handlers
+import os
+
 from HSLogger import HostnameFilter
 
 
