@@ -1,7 +1,8 @@
 """A monkey that watches a file."""
-import os
 import logging
 import logging.handlers
+import os
+
 from HSLogger import HostnameFilter
 
 
@@ -10,7 +11,7 @@ class FileMonkey(object):
 
     def __init__(self, filename):
         """Set up file watching monkey."""
-        self.logger = logging.getLogger('HealthStats.FileMonkey')
+        self.logger = logging.getLogger("HealthStats." + __name__)
         self.logger.addFilter(HostnameFilter())
         self.logger.info('New FileMonkey watching {0}.'.format(filename))
         self._cached_stamp = 0

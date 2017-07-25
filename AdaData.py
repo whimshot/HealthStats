@@ -1,12 +1,12 @@
 """Get data from io.adafruit.com."""
-from datetime import datetime
-from dateutil import tz
-from Adafruit_IO import Client
 import logging
 import logging.handlers
+from datetime import datetime
+
+from Adafruit_IO import Client
+from dateutil import tz
 from HSConfig import config
 from HSLogger import HostnameFilter
-
 
 AIO_KEY = config.get('Adafruit', 'aio_key')
 
@@ -21,7 +21,7 @@ class AdaData(object):
     def __init__(self, feed):
         """Create new AdaData instance."""
         try:
-            self.logger = logging.getLogger('HealthStats.AdaData')
+            self.logger = logging.getLogger("HealthStats." + __name__)
             self.logger.addFilter(HostnameFilter())
             self.feed = feed
             self.data = []

@@ -1,14 +1,15 @@
 """"An Input Pad."""
-from Adafruit_IO import Client
-from kivy.app import App
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.gridlayout import GridLayout
-from kivy.uix.button import Button
-from kivy.uix.label import Label
 import logging
 import logging.handlers
-from HSLogger import logger, HostnameFilter
+
+from Adafruit_IO import Client
 from HSConfig import config
+from HSLogger import HostnameFilter, logger
+from kivy.app import App
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.button import Button
+from kivy.uix.gridlayout import GridLayout
+from kivy.uix.label import Label
 
 AIO_KEY = config.get('Adafruit', 'aio_key')
 AIO_ID = config.get('Adafruit', 'aio_id')
