@@ -21,7 +21,7 @@ class AdaData(object):
     def __init__(self, feed):
         """Create new AdaData instance."""
         try:
-            self.logger = logging.getLogger('HealthStats.AdaData')
+            self.logger = logging.getLogger("HealthStats." + __name__)
             self.logger.addFilter(HostnameFilter())
             self.feed = feed
             self.data = []
