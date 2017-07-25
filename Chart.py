@@ -5,7 +5,6 @@ to subscribe to data feeds, redraw itself and reload once a new image
 has been generated.
 """
 from Adafruit_IO import MQTTClient
-from AdaData import AdaData
 from kivy.app import App
 from kivy.uix.image import Image
 from kivy.uix.widget import Widget
@@ -31,8 +30,6 @@ class Chart(Image):
     """The basic Chart class we will build off from here."""
 
     feeds = []          # The list of feeds the chart is subscribed to.
-    feeds_data = {}     # The data last retrieved from the feeds.
-    feeds_changed = []  # Truthiness to record when feeds are updated.
     filename = ""
 
     def __init__(self, **kwargs):
@@ -87,8 +84,7 @@ class Chart(Image):
         try:
             self.logger.debug("Feed: {0} received new data: ".format(feed_id)
                               + "{0}".format(payload))
-            self.feeds_data[feed_id].get_data()
-            time.sleep(3)
+            time.sleep(5)
             self.reload()
         except Exception:
             raise
