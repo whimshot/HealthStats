@@ -11,6 +11,7 @@ from StatsChart import StatsChart
 from FileMonkey import FileMonkey
 import Chart
 import InputPad
+from ChartMaker import ChartMaker
 
 
 Config.set('graphics', 'width', '800')
@@ -41,6 +42,10 @@ class HealthStatsApp(App):
         """Build function for Health Stats kivy app."""
         logger.info('Starting HealthStatsApp.')
         hc = HealthCarousel(direction='top', loop=True)
+        cm = ChartMaker()
+        cm.weight_chart()
+        cm.bp_chart()
+        cm.small_charts()
         hc.weightchart.build()
         hc.bpchart.build()
         hc.healthstats.statsimage.build()

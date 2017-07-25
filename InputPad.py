@@ -136,7 +136,7 @@ class FunctionPad(BoxLayout):
                                   + " calculated and sent.")
             self.aio.send(btn_id, vital_stat)
             self.logger.debug("{0} updated with".format(btn_id)
-                              + " {1}".format(vital_stat))
+                              + " {0}".format(vital_text))
         except Exception:
             self.logger.exception("Problem sending data.")
             self.parent.numscreen.text = "Failed Sending"
