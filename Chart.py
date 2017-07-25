@@ -78,7 +78,7 @@ class Chart(Image):
             self.logger.debug("Feed: {0} received new data: ".format(feed_id)
                               + "{0}".format(payload))
             dummy_event = threading.Event()
-            dummy_event.wait(timeout=1)
+            dummy_event.wait(timeout=5)
             self.reload()
         except Exception:
             raise
