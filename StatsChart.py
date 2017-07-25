@@ -1,15 +1,16 @@
 """StatsChart class."""
-from AdaData import AdaData
-from Adafruit_IO import MQTTClient
 import logging
 import logging.handlers
+
+import matplotlib
+from AdaData import AdaData
+from Adafruit_IO import MQTTClient
 from HSConfig import config
 from HSLogger import HostnameFilter
-import numpy
-import matplotlib
+
 matplotlib.use('Agg')
-import matplotlib.pyplot as plt
 from matplotlib.ticker import MultipleLocator
+import matplotlib.pyplot as plt
 
 
 AIO_KEY = config.get('Adafruit', 'aio_key')
