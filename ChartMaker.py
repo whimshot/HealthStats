@@ -82,6 +82,13 @@ class ChartMaker():
             self.logger.info("Feed: {0} received".format(feed_id)
                              + " new data: {0}".format(payload))
             self.feeds_data[feed_id].get_data()
+            if (feed_id in ('weight', 'bmi')):
+                self.weight_chart()
+            if (feed_id in ('systolic', 'diastolic', 'pulse')):
+                self.bp_chart()
+            if (feed_id in ('systolic', 'diastolic', 'pulse',
+                            'weight', 'bmi')):
+                self.small_charts()
         except Exception:
             raise
         finally:
