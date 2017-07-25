@@ -8,24 +8,15 @@ import logging
 import logging.handlers
 import threading
 
-import matplotlib
 from Adafruit_IO import MQTTClient
 from HSConfig import config
 from HSLogger import HostnameFilter, logger
 from kivy.app import App
 from kivy.uix.image import Image
 from kivy.uix.widget import Widget
-matplotlib.use('Agg')
-from matplotlib import pyplot as plt
-from matplotlib import ticker as tckr
-
 
 AIO_KEY = config.get('Adafruit', 'aio_key')
 AIO_ID = config.get('Adafruit', 'aio_id')
-matplotlib.rc('lines', linewidth=0.75, markersize=4,
-              linestyle='-', marker='.')
-matplotlib.rc('grid', linestyle='-.', linewidth=0.5, alpha=0.5)
-matplotlib.rc('legend', framealpha=0.5, loc='upper right')
 
 
 class Chart(Image):
