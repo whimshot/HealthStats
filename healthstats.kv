@@ -1,23 +1,6 @@
 #:kivy 1.10.0
+#:include chart.kv
 #:include inputpad.kv
-
-<Charts@Image>
-    source: 'ChartImage.png'
-    allow_stretch: True
-    keep_ratio: False
-
-<Chart>
-    keep_ratio: False
-    allow_stretch: True
-
-<WeightChart@Chart>
-    source: 'WeightChart.png'
-
-<BPChart@Chart>
-    source: 'BPChart.png'
-
-<SmallCharts@Chart>
-    source: 'SmallCharts.png'
 
 <HealthStats>:
     inputpad: input_pad

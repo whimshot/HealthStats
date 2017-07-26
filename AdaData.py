@@ -26,7 +26,7 @@ class AdaData(object):
             self.feed = feed
             self.data = []
             self.dates = []
-            self.logger.info('AdaData instance for {0} feed.'.format(feed))
+            self.logger.info('AdaData instance for {0}.'.format(feed))
         except Exception:
             self.logger.exception('Failed to instantiate AdaData.')
 
@@ -38,7 +38,7 @@ class AdaData(object):
     def get_data(self):
         """Get data from io.adatruit.com."""
         try:
-            self.logger.debug('Querying {0} feed.'.format(self.feed))
+            self.logger.debug('Querying {0}.'.format(self.feed))
             self.data = []
             self.dates = []
             feed_data = self.aio.data(self.feed)
@@ -51,6 +51,6 @@ class AdaData(object):
                 local = utc.astimezone(self.to_zone)
                 self.dates.append(local)
                 self.logger.debug('Appended {0}'.format(local))
-            self.logger.info('Retrieved data from {0} feed.'.format(self.feed))
+            self.logger.info('Retrieved data from {0}.'.format(self.feed))
         except Exception:
             self.logger.exception('Caught exception.')
