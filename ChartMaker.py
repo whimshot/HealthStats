@@ -31,6 +31,7 @@ class ChartMaker():
 
     feeds = ['weight', 'diastolic', 'systolic', 'pulse', 'bmi']
     feeds_data = {}     # The data last retrieved from the feeds.
+    filename = ""
 
     def __init__(self):
         """
@@ -226,20 +227,14 @@ class ChartMaker():
         except Exception:
             self.logger.exception('Failed to draw new charts.')
 
-
-class ChartMakerApp(object):
-    """Kivy App Class for ChartDemo."""
-
-    def build(self):
-        """Build function for ChartDemo kivy app."""
-        cm = ChartMaker()
+    def test(self):
+        """Test ChartMaker by building each of the charts."""
         print("Start : %s" % time.ctime())
-        cm.small_charts()
-        cm.bp_chart()
-        cm.weight_chart()
+        self.weight_chart()
+        self.bp_chart()
+        self.small_charts()
         print("Finish : %s" % time.ctime())
-        return cm
 
 
 if __name__ == '__main__':
-    ChartMakerApp().build()
+    ChartMaker().test()
