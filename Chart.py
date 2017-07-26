@@ -8,10 +8,11 @@ import logging
 import logging.handlers
 import threading
 
-from Adafruit_IO import MQTTClient
+from FileMonkey import FileMonkey
 from HSConfig import config
 from HSLogger import HostnameFilter, logger
 from kivy.app import App
+from kivy.clock import Clock
 from kivy.uix.image import Image
 from kivy.uix.widget import Widget
 
@@ -32,26 +33,29 @@ class Chart(Image):
             self.logger = \
                 logging.getLogger('HealthStats.' + __name__)
             self.logger.addFilter(HostnameFilter())
-            self.logger.info('creating an instance of StatsChart')
-            self.client = MQTTClient(AIO_ID, AIO_KEY)
-            self.client.on_connect = self.connected
-            self.client.on_disconnect = self.disconnected
-            self.client.on_message = self.message
-            self.client.connect()
-            self.client.loop_background()
+            self.logger.info("Creating an instance of " + __name__)
         except Exception:
             self.logger.exception('Chart instantiation failed.')
         finally:
             pass
 
+    def check_chart(self, dt):
+        """Check to see if the image has changed and needs to be reloaded."""
+        try:
+            if (self.fm.ook()):
+                self.reload()
+        except Exception:
+            logger.exception("Caught exception.")
+        finally:
+            pass
+
     def build(self):
         """Builder for chart object."""
-        self.filename = str(self.source)
         try:
+            self.filename = str(self.source)
+            self.fm = FileMonkey(self.filename)
+            Clock.schedule_interval(self.check_chart, 5)
             logger.debug("Building new chart {0}.".format(self.filename))
-            for feed in self.feeds:
-                self.client.subscribe(feed)
-                self.logger.debug("Subscribed to {0}.".format(feed))
         except Exception:
             logger.exception("Caught exception.")
         finally:
