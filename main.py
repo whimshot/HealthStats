@@ -1,6 +1,6 @@
 """Health Stats app in kivy."""
-import Chart
-import InputPad
+import Chart        # noqa
+import InputPad     # noqa
 from ChartMaker import ChartMaker
 from HSConfig import config
 from HSLogger import logger

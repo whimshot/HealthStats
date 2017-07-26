@@ -42,7 +42,8 @@ class ChartMaker():
         """
         try:
             self.logger = \
-                logging.getLogger('HealthStats.'+__name__)
+                logging.getLogger('HealthStats.'
+                                  + self.__class__.__name__)
             self.logger.addFilter(HostnameFilter())
             self.logger.info('creating an instance of ChartMaker')
             self.client = MQTTClient(AIO_ID, AIO_KEY)
