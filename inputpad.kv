@@ -1,16 +1,16 @@
 #:kivy 1.10.0
 
-<NumberKey>
+<NumberKey>:
     font_size: '24sp'
     background_color: [0, 0, 1, 1]
     on_press: self.keypress()
 
-<DeleteKey>
+<DeleteKey>:
     font_size: '24sp'
     background_color: [1, 0, 0, 1]
     on_press: self.parent.deletekey()
 
-<StatisticKey>
+<StatisticKey>:
     font_size: '24sp'
     text_size: self.size
     halign: 'center'
@@ -18,11 +18,11 @@
     background_color: [0, 1, 0, 1]
     on_press: self.parent.send_data(self.text)
 
-<InputDisplay>
+<InputDisplay>:
     text: "Health Stats"
     font_size: '32sp'
 
-<FunctionPad>
+<FunctionPad>:
     orientation: 'horizontal'
     StatisticKey
         text: "Weight\n(Kg)"
@@ -34,7 +34,7 @@
     StatisticKey:
         text: "Pulse"
 
-<NumberPad>
+<NumberPad>:
     text: ""
     on_text: self.numberkey()
     cols: 3
@@ -63,7 +63,7 @@
     NumberKey:
         text: "."
 
-<InputPad>
+<InputPad>:
     numscreen: number_screen
     funcpad: function_pad
     numpad: number_pad

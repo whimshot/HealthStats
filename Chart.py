@@ -31,7 +31,8 @@ class Chart(Image):
         super(Chart, self).__init__(**kwargs)
         try:
             self.logger = \
-                logging.getLogger('HealthStats.' + __name__)
+                logging.getLogger('HealthStats.'
+                                  + self.__class__.__name__)
             self.logger.addFilter(HostnameFilter())
             self.logger.info("Creating an instance of " + __name__)
         except Exception:

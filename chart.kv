@@ -1,22 +1,22 @@
 #:kivy 1.10.0
 
-<Chart>
+<Chart>:
     keep_ratio: False
     allow_stretch: True
 
-<WeightChart>
+<WeightChart>:
     feeds: ['weight', 'bmi']
     source: 'WeightChart.png'
 
-<BPChart>
+<BPChart>:
     feeds: ['systolic', 'diastolic', 'pulse']
     source: 'BPChart.png'
 
-<SmallCharts>
+<SmallCharts>:
     feeds: ['weight', 'bmi', 'systolic', 'diastolic', 'pulse']
     source: 'SmallCharts.png'
 
-<ChartDemo>
+<ChartDemo>:
     weightchart: weight_chart
     bpchart: bp_chart
     smallcharts: small_charts

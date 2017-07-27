@@ -19,7 +19,7 @@ AIO_ID = config.get('Adafruit', 'aio_id')
 matplotlib.rc('lines', linewidth=0.75, markersize=4,
               linestyle='-', marker='.')
 matplotlib.rc('grid', linestyle='-.', linewidth=0.5, alpha=0.5)
-matplotlib.rc('legend', framealpha=0.5, loc='upper right')
+matplotlib.rc('legend', framealpha=0.5, loc='best')
 
 
 # Set matplotlib global linewidth
@@ -42,7 +42,8 @@ class ChartMaker():
         """
         try:
             self.logger = \
-                logging.getLogger('HealthStats.'+__name__)
+                logging.getLogger('HealthStats.'
+                                  + self.__class__.__name__)
             self.logger.addFilter(HostnameFilter())
             self.logger.info('creating an instance of ChartMaker')
             self.client = MQTTClient(AIO_ID, AIO_KEY)
@@ -164,7 +165,7 @@ class ChartMaker():
             bp_chart.yaxis.grid(which='minor')
             bp_chart.set_ylabel('Blood Pressure (mmHg)\nPulse (BPM)')
             bp_chart.tick_params(axis='y', which='both')
-            bp_chart.legend()
+            bp_chart.legend(ncol=2)
 
             for ax in fig.axes:
                 matplotlib.pyplot.sca(ax)
@@ -229,11 +230,11 @@ class ChartMaker():
 
     def test(self):
         """Test ChartMaker by building each of the charts."""
-        print("Start : %s" % time.ctime())
+        print("Start:\t%s" % time.ctime())
         self.weight_chart()
         self.bp_chart()
         self.small_charts()
-        print("Finish : %s" % time.ctime())
+        print("Finish:\t%s" % time.ctime())
 
 
 if __name__ == '__main__':
