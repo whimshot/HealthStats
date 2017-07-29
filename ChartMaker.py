@@ -4,7 +4,7 @@ import logging.handlers
 import time
 
 import matplotlib
-from AdaData import AdaData
+from AdaData import AdaData, AdaFeed
 from Adafruit_IO import MQTTClient
 from HSConfig import config
 from HSLogger import HostnameFilter
@@ -52,7 +52,7 @@ class ChartMaker():
             self.client.on_message = self.message
 
             for feed in self.feeds:
-                self.feeds_data[feed] = AdaData(feed)
+                self.feeds_data[feed] = AdaFeed(feed)
                 self.logger.debug("Getting data from io.adatfruit.com"
                                   + " for {0}.".format(feed))
                 self.feeds_data[feed].get_data()

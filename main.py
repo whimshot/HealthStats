@@ -1,11 +1,11 @@
 """Health Stats app in kivy."""
-import Chart        # noqa
+import newchart        # noqa
 import InputPad     # noqa
-from ChartMaker import ChartMaker
 from HSConfig import config
 from HSLogger import logger
 from kivy.app import App
 from kivy.config import Config
+from kivy.clock import Clock
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.carousel import Carousel
 
@@ -37,13 +37,9 @@ class HealthStatsApp(App):
         """Build function for Health Stats kivy app."""
         logger.info('Starting HealthStatsApp.')
         hc = HealthCarousel(direction='top', loop=True)
-        cm = ChartMaker()
-        cm.weight_chart()
-        cm.bp_chart()
-        cm.small_charts()
-        hc.weightchart.build()
-        hc.bpchart.build()
-        hc.healthstats.statsimage.build()
+        Clock.schedule_interval(hc.weightchart.redraw, 15)
+        Clock.schedule_interval(hc.bpchart.redraw, 15)
+        Clock.schedule_interval(hc.healthstats.statsimage.redraw, 15)
         return hc
 
 

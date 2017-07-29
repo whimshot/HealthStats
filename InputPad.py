@@ -75,7 +75,7 @@ class InputDisplay(Label):
                 logging.getLogger('HealthStats.'
                                   + self.__class__.__name__)
             self.logger.addFilter(HostnameFilter())
-            self.logger.info('Creating an instance of Key.')
+            self.logger.info('Creating an instance of display.')
         except Exception:
             self.logger.exception("Failed to create instance of InputDisplay.")
         finally:
@@ -134,11 +134,15 @@ class FunctionPad(BoxLayout):
             vital_text = self.parent.numscreen.text
             vital_stat = float(vital_text)
             if (btn_id == 'weight'):
-                bmi = int(vital_stat/BMI_CONSTANT)
+                bmi = int(vital_stat / BMI_CONSTANT)
                 self.aio.send('bmi', bmi)
                 self.logger.debug("BMI of {0}".format(bmi)
                                   + " calculated and sent.")
+                self.parent.parent.parent.parent.weightchart.redraw()
             self.aio.send(btn_id, vital_stat)
+            if btn_id in ('systolic', 'diastolic', 'pulse'):
+                self.parent.parent.parent.parent.bpchart.redraw()
+            self.parent.parent.parent.smallcharts.redraw()
             self.logger.debug("{0} updated with".format(btn_id)
                               + " {0}".format(vital_text))
         except Exception:
