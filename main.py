@@ -1,7 +1,6 @@
 """Health Stats app in kivy."""
-import Chart        # noqa
+import newchart        # noqa
 import InputPad     # noqa
-from ChartMaker import ChartMaker
 from HSConfig import config
 from HSLogger import logger
 from kivy.app import App
@@ -37,13 +36,9 @@ class HealthStatsApp(App):
         """Build function for Health Stats kivy app."""
         logger.info('Starting HealthStatsApp.')
         hc = HealthCarousel(direction='top', loop=True)
-        cm = ChartMaker()
-        cm.weight_chart()
-        cm.bp_chart()
-        cm.small_charts()
-        hc.weightchart.build()
-        hc.bpchart.build()
-        hc.healthstats.statsimage.build()
+        hc.weightchart.draw_chart()
+        hc.bpchart.draw_chart()
+        hc.healthstats.statsimage.draw_chart()
         return hc
 
 
