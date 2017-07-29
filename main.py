@@ -5,6 +5,7 @@ from HSConfig import config
 from HSLogger import logger
 from kivy.app import App
 from kivy.config import Config
+from kivy.clock import Clock
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.carousel import Carousel
 
@@ -36,9 +37,9 @@ class HealthStatsApp(App):
         """Build function for Health Stats kivy app."""
         logger.info('Starting HealthStatsApp.')
         hc = HealthCarousel(direction='top', loop=True)
-        hc.weightchart.draw_chart()
-        hc.bpchart.draw_chart()
-        hc.healthstats.statsimage.draw_chart()
+        Clock.schedule_interval(hc.weightchart.redraw, 15)
+        Clock.schedule_interval(hc.bpchart.redraw, 15)
+        Clock.schedule_interval(hc.healthstats.statsimage.redraw, 15)
         return hc
 
 

@@ -4,8 +4,9 @@ from kivy.config import Config
 from kivy.uix.boxlayout import BoxLayout
 from kivy.clock import Clock
 from kivy.uix.carousel import Carousel
-from kivy.uix.image import Image
-
+from HSLogger import HostnameFilter
+import logging
+import logging.handlers
 from AdaData import AdaFeed
 
 import matplotlib
@@ -29,6 +30,11 @@ weight = AdaFeed('weight')
 systolic = AdaFeed('systolic')
 diastolic = AdaFeed('diastolic')
 pulse = AdaFeed('pulse')
+bmi.get_data()
+weight.get_data()
+systolic.get_data()
+diastolic.get_data()
+pulse.get_data()
 
 
 class WeightChart(BoxLayout):
@@ -38,17 +44,35 @@ class WeightChart(BoxLayout):
         """Put together weight chart."""
         super(WeightChart, self).__init__(**kwargs)
         try:
-            pass
+            self.logger = \
+                logging.getLogger('HealthStats.'
+                                  + self.__class__.__name__)
+            self.logger.addFilter(HostnameFilter())
+            self.logger.debug('Setting up weight chart.')
+            # self.redraw_clock = Clock.schedule_once(self.draw_chart, 5.0)
+            self.logger.debug('Set trigger for redrawing.')
         except Exception:
             raise
+        finally:
+            pass
+
+    def redraw(self, dt):
+        """Start the clock on redrawing the chart."""
+        try:
+            # Clock.unschedule(self.redraw_clock)
+            # self.redraw_clock = Clock.schedule_once(self.draw_chart, 5.0)
+            self.draw_chart()
+        except Exception:
+            self.logger.exception(
+                "Failed draw_chart for {0}".format(self.__class__.__name__))
         finally:
             pass
 
     def draw_chart(self):
         """Draw the chart."""
         try:
-            bmi.get_data()
-            weight.get_data()
+            self.logger.debug('Redrawing the weight chart.')
+            plt.close()
             fig, weight_chart = plt.subplots(1, figsize=(8, 4.8))
             plt.title('Weight and BMI')
             weight_minor_locator = MultipleLocator(.2)
@@ -110,18 +134,35 @@ class BPChart(BoxLayout):
         """Put together weight chart."""
         super(BPChart, self).__init__(**kwargs)
         try:
-            pass
+            self.logger = \
+                logging.getLogger('HealthStats.'
+                                  + self.__class__.__name__)
+            self.logger.addFilter(HostnameFilter())
+            self.logger.debug('Setting up weight chart.')
+            # self.redraw_clock = Clock.schedule_once(self.draw_chart, 5.0)
+            self.logger.debug('Set trigger for redrawing.')
         except Exception:
             raise
+        finally:
+            pass
+
+    def redraw(self, dt):
+        """Start the clock on redrawing the chart."""
+        try:
+            # Clock.unschedule(self.redraw_clock)
+            # self.redraw_clock = Clock.schedule_once(self.draw_chart, 5.0)
+            self.draw_chart()
+        except Exception:
+            self.logger.exception(
+                "Failed draw_chart for {0}".format(self.__class__.__name__))
         finally:
             pass
 
     def draw_chart(self):
         """Draw the chart."""
         try:
-            systolic.get_data()
-            diastolic.get_data()
-            pulse.get_data()
+            self.logger.debug('Redrawing the BP chart.')
+            plt.close()
             bp_minor_locator = MultipleLocator(2)
             fig, bp_chart = plt.subplots(1, figsize=(8, 4.8))
             plt.title('Blood Pressure and Pulse')
@@ -164,20 +205,36 @@ class SmallCharts(BoxLayout):
         """Put together weight chart."""
         super(SmallCharts, self).__init__(**kwargs)
         try:
-            pass
+            self.logger = \
+                logging.getLogger('HealthStats.'
+                                  + self.__class__.__name__)
+            self.logger.addFilter(HostnameFilter())
+            self.logger.debug('Setting up weight chart.')
+            # self.redraw_clock = Clock.schedule_once(self.draw_chart, 5.0)
+            self.logger.debug('Set trigger for redrawing.')
         except Exception:
             raise
+        finally:
+            pass
+
+    def redraw(self, dt):
+        """Start the clock on redrawing the chart."""
+        try:
+            # Clock.unschedule(self.redraw_clock)
+            # self.redraw_clock = Clock.schedule_once(self.draw_chart, 5.0)
+            self.draw_chart()
+        except Exception:
+            self.logger.exception(
+                "Failed draw_chart for {0}".format(self.__class__.__name__))
         finally:
             pass
 
     def draw_chart(self):
         """Draw the chart."""
         try:
-            bmi.get_data()
-            weight.get_data()
-            systolic.get_data()
-            diastolic.get_data()
-            pulse.get_data()
+            self.logger.debug('Redrawing the small charts.')
+            self.clear_widgets()
+            plt.close()
             fig, (weight_chart, bp_chart) = plt.subplots(2, figsize=(4, 4.8))
             bmi_major_locator = MultipleLocator(1)
 
