@@ -11,3 +11,4 @@ envs/
 *.log*
 *.conf
 *.ini
+tags
