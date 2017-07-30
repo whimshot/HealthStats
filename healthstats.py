@@ -27,17 +27,25 @@ class HealthCarousel(Carousel):
     pass
 
 
+class HealthBox(BoxLayout):
+    """A carousel of health, renew, renew, renew."""
+
+    pass
+
+
 class HealthStatsApp(App):
     """Kivy App Class for Health Stats."""
 
     def build(self):
         """Build function for Health Stats kivy app."""
         logger.info('Starting HealthStatsApp.')
-        hc = HealthCarousel(direction='top', loop=True)
-        Clock.schedule_interval(hc.weightchart.redraw, 15)
-        Clock.schedule_interval(hc.bpchart.redraw, 15)
-        Clock.schedule_interval(hc.healthstats.statsimage.redraw, 15)
-        return hc
+        hb = HealthBox()
+        hb.hc.direction = 'top'
+        hb.hc.loop = True
+        Clock.schedule_interval(hb.hc.weightchart.redraw, 15)
+        Clock.schedule_interval(hb.hc.bpchart.redraw, 15)
+        Clock.schedule_interval(hb.hc.healthstats.statsimage.redraw, 15)
+        return hb
 
 
 if __name__ == '__main__':

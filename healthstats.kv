@@ -2,6 +2,18 @@
 #:include inputpad.kv
 #:include chart.kv
 
+<Toolbar@BoxLayout>:
+    size_hint_y: None
+    height: '48dp'
+    padding: '4dp'
+    spacing: '4dp'
+    canvas:
+        Color:
+            rgba: .2, .2, .2, .6
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
 <HealthStats>:
     inputpad: input_pad
     statsimage: stats_image
@@ -25,3 +37,12 @@
         id: weight_chart
     BPChart:
         id: bp_chart
+
+<HealthBox>
+    hc: hc
+    tb: tb
+    orientation: 'vertical'
+    HealthCarousel:
+        id: hc
+    Toolbar:
+        id: tb
