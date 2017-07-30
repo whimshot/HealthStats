@@ -1,18 +1,53 @@
 """Health Stats app in kivy."""
-import chart        # noqa
-import inputpad     # noqa
-from hslogger import logger
+import logging
+import logging.handlers
+
+import chart  # noqa
+import inputpad  # noqa
+from hslogger import logger, HostnameFilter
 from kivy.app import App
-from kivy.config import Config
 from kivy.clock import Clock
+from kivy.config import Config
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.carousel import Carousel
+from kivy.uix.togglebutton import ToggleButton
 
 Config.set('graphics', 'width', '800')
 Config.set('graphics', 'height', '480')
 
 logger.info('Setting up HealthStatsApp.')
 feeds = ['weight', 'diastolic', 'systolic', 'pulse', 'bmi']
+
+
+class TglBtn(ToggleButton):
+    """The Carousel to hold our information slides."""
+
+    def __init__(self, **kwargs):
+        """Build that Weather Slide."""
+        super(TglBtn, self).__init__(**kwargs)
+        try:
+            self.logger = \
+                logging.getLogger('HealthStats.'
+                                  + self.__class__.__name__)
+            self.logger.addFilter(HostnameFilter())
+            self.logger.debug("Creating an instance of " + __name__)
+            self.text = 'Scroll Off'
+        except Exception:
+            self.logger.exception("Caught exception.")
+        finally:
+            pass
+
+    def toggle(self):
+        """Toggle that button."""
+        try:
+            if self.state == 'normal':
+                self.text = 'Scroll Off'
+            else:
+                self.text = 'Scroll On'
+        except Exception:
+            raise
+        finally:
+            pass
 
 
 class HealthStats(BoxLayout):
@@ -23,6 +58,16 @@ class HealthStats(BoxLayout):
 
 class HealthCarousel(Carousel):
     """A carousel of health, renew, renew, renew."""
+
+    def next_slide_please(self, dt):
+        """Go to the next slide in the carousel."""
+        try:
+            if self.parent.toolbar.toggle.state == 'down':
+                self.load_next(mode='next')
+        except Exception:
+            logger.exception("Failed to load next slide.")
+        finally:
+            pass
 
     pass
 
@@ -40,11 +85,12 @@ class HealthStatsApp(App):
         """Build function for Health Stats kivy app."""
         logger.info('Starting HealthStatsApp.')
         hb = HealthBox()
-        hb.hc.direction = 'top'
-        hb.hc.loop = True
+        # hb.hc.direction = 'top'
+        # hb.hc.loop = True
         Clock.schedule_interval(hb.hc.weightchart.redraw, 15)
         Clock.schedule_interval(hb.hc.bpchart.redraw, 15)
         Clock.schedule_interval(hb.hc.healthstats.statsimage.redraw, 15)
+        Clock.schedule_interval(hb.hc.next_slide_please, 10)
         return hb
 
 
