@@ -5,8 +5,8 @@ from datetime import datetime
 
 from Adafruit_IO import Client, MQTTClient
 from dateutil import tz
-from HSConfig import config
-from HSLogger import HostnameFilter
+from hsconfig import config
+from hslogger import HostnameFilter
 
 AIO_KEY = config.get('Adafruit', 'aio_key')
 AIO_ID = config.get('Adafruit', 'aio_id')
@@ -14,10 +14,6 @@ AIO_ID = config.get('Adafruit', 'aio_id')
 
 class AdaFeed(object):
     """AdaData object."""
-
-    aio = Client(AIO_KEY)
-    from_zone = tz.tzutc()
-    to_zone = tz.tzlocal()
 
     def __init__(self, feed):
         """Create new AdaData instance."""
@@ -28,6 +24,9 @@ class AdaFeed(object):
             self.feed = feed
             self.data = []
             self.dates = []
+            self.aio = Client(AIO_KEY)
+            self.from_zone = tz.tzutc()
+            self.to_zone = tz.tzlocal()
             self.client = MQTTClient(AIO_ID, AIO_KEY)
             self.client.on_connect = self.connected
             self.client.on_disconnect = self.disconnected
@@ -126,6 +125,7 @@ class AdaData():
             self.logger.exception('AdaData instantiation failed.')
 
     def get_data(self):
+        """Retrieve data from io.adafruit.com."""
         try:
             for feed in self.feeds:
                 self.feeds_data[feed].get_data()

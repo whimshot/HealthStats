@@ -1,6 +1,22 @@
 #:kivy 1.10.0
 #:include inputpad.kv
-#:include newchart.kv
+#:include chart.kv
+
+<TglBtn>
+    on_press: self.toggle()
+    background_color: [0, 0, 1, 1]
+
+<Toolbar@BoxLayout>:
+    size_hint_y: None
+    height: '48dp'
+    padding: '4dp'
+    spacing: '4dp'
+    canvas:
+        Color:
+            rgba: .2, .2, .2, .6
+        Rectangle:
+            pos: self.pos
+            size: self.size
 
 <HealthStats>:
     inputpad: input_pad
@@ -19,9 +35,42 @@
     weightchart: weight_chart
     bpchart: bp_chart
     min_move: 0.05
+    direction: 'right'
+    loop: True
     HealthStats:
         id: health_stats
     WeightChart:
         id: weight_chart
     BPChart:
         id: bp_chart
+
+<HealthBox>
+    hc: hc
+    toolbar: toolbar
+    orientation: 'vertical'
+    HealthCarousel:
+        id: hc
+    Toolbar:
+        toggle: toggle
+        id: toolbar
+        TglBtn:
+            id: toggle
+            text: 'Scroll Off'
+            background_color: [0, 0, 1, 1]
+            on_press: root.hc.load_slide(root.hc.healthstats)
+        Label:
+            text: ''
+        Label:
+            text: ''
+        Button:
+            text: 'Weight Chart'
+            background_color: [0, 1, 1, 1]
+            on_press: root.hc.load_slide(root.hc.weightchart)
+        Button:
+            text: 'BP Chart'
+            background_color: [0, 1, 1, 1]
+            on_press: root.hc.load_slide(root.hc.bpchart)
+        Button:
+            text: 'Input Screen'
+            background_color: [0, 1, 1, 1]
+            on_press: root.hc.load_slide(root.hc.healthstats)

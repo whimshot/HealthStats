@@ -1,28 +1,25 @@
 #:kivy 1.10.0
+#:import MatPlotLib kivy.garden.matplotlib
 
-<Chart>:
-    keep_ratio: False
-    allow_stretch: True
+<Chart>
 
-<WeightChart>:
-    feeds: ['weight', 'bmi']
-    source: 'WeightChart.png'
+<BMIChart>
 
-<BPChart>:
-    feeds: ['systolic', 'diastolic', 'pulse']
-    source: 'BPChart.png'
+<WeightChart>
 
-<SmallCharts>:
-    feeds: ['weight', 'bmi', 'systolic', 'diastolic', 'pulse']
-    source: 'SmallCharts.png'
+<BPChart>
 
-<ChartDemo>:
-    weightchart: weight_chart
-    bpchart: bp_chart
-    smallcharts: small_charts
+<SmallCharts>
+
+<Chartsel>
+    loop: True
+    direction: 'top'
+    wc: wc
+    bp: bp
+    sc: sc
     WeightChart:
-        id: weight_chart
+        id: wc
     BPChart:
-        id: bp_chart
+        id: bp
     SmallCharts:
-        id: small_charts
+        id: sc
