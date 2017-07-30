@@ -72,6 +72,7 @@ class WeightChart(BoxLayout):
         """Draw the chart."""
         try:
             self.logger.debug('Redrawing the weight chart.')
+            self.clear_widgets()
             plt.close()
             fig, weight_chart = plt.subplots(1, figsize=(8, 4.8))
             plt.title('Weight and BMI')
@@ -162,6 +163,7 @@ class BPChart(BoxLayout):
         """Draw the chart."""
         try:
             self.logger.debug('Redrawing the BP chart.')
+            self.clear_widgets()
             plt.close()
             bp_minor_locator = MultipleLocator(2)
             fig, bp_chart = plt.subplots(1, figsize=(8, 4.8))
