@@ -51,7 +51,7 @@ class AdaFeed(object):
             feed_data = self.aio.data(self.feed)
             self.logger.debug('Parsing dates from {0}'.format(self.feed))
             for entry in feed_data:
-                self.data.append(entry.value)
+                self.data.append(float(entry.value))
                 self.logger.debug('Appended {0}'.format(entry.value))
                 utc = datetime.strptime(entry.created_at, '%Y-%m-%dT%H:%M:%SZ')
                 utc = utc.replace(tzinfo=self.from_zone)
