@@ -1,8 +1,7 @@
 """Health Stats app in kivy."""
-import newchart        # noqa
-import InputPad     # noqa
-from HSConfig import config
-from HSLogger import logger
+import chart        # noqa
+import inputpad     # noqa
+from hslogger import logger
 from kivy.app import App
 from kivy.config import Config
 from kivy.clock import Clock
@@ -11,10 +10,6 @@ from kivy.uix.carousel import Carousel
 
 Config.set('graphics', 'width', '800')
 Config.set('graphics', 'height', '480')
-
-BMI_CONSTANT = config.getfloat('Constants', 'bmi_constant')
-AIO_KEY = config.get('Adafruit', 'aio_key')
-
 
 logger.info('Setting up HealthStatsApp.')
 feeds = ['weight', 'diastolic', 'systolic', 'pulse', 'bmi']
@@ -28,6 +23,8 @@ class HealthStats(BoxLayout):
 
 class HealthCarousel(Carousel):
     """A carousel of health, renew, renew, renew."""
+
+    pass
 
 
 class HealthStatsApp(App):

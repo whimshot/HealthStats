@@ -3,8 +3,8 @@ import logging
 import logging.handlers
 
 from Adafruit_IO import Client
-from HSConfig import config
-from HSLogger import HostnameFilter, logger
+from hsconfig import config
+from hslogger import HostnameFilter, logger
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button

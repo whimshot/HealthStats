@@ -4,10 +4,10 @@ from kivy.config import Config
 from kivy.uix.boxlayout import BoxLayout
 from kivy.clock import Clock
 from kivy.uix.carousel import Carousel
-from HSLogger import HostnameFilter
+from hslogger import HostnameFilter
 import logging
 import logging.handlers
-from AdaData import AdaFeed
+from adadata import AdaFeed
 
 import matplotlib
 
@@ -312,7 +312,7 @@ class Chartsel(Carousel):
             pass
 
 
-class NewChartApp(App):
+class ChartApp(App):
     """The Apps the thing."""
 
     def build(self):
@@ -326,4 +326,4 @@ class NewChartApp(App):
 
 
 if __name__ == '__main__':
-    NewChartApp().run()
+    ChartApp().run()

@@ -5,8 +5,8 @@ from datetime import datetime
 
 from Adafruit_IO import Client, MQTTClient
 from dateutil import tz
-from HSConfig import config
-from HSLogger import HostnameFilter
+from hsconfig import config
+from hslogger import HostnameFilter
 
 AIO_KEY = config.get('Adafruit', 'aio_key')
 AIO_ID = config.get('Adafruit', 'aio_id')
