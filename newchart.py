@@ -51,6 +51,7 @@ class WeightChart(BoxLayout):
             self.logger.debug('Setting up weight chart.')
             # self.redraw_clock = Clock.schedule_once(self.draw_chart, 5.0)
             self.logger.debug('Set trigger for redrawing.')
+            self.draw_chart()
         except Exception:
             raise
         finally:
@@ -142,6 +143,7 @@ class BPChart(BoxLayout):
             self.logger.debug('Setting up weight chart.')
             # self.redraw_clock = Clock.schedule_once(self.draw_chart, 5.0)
             self.logger.debug('Set trigger for redrawing.')
+            self.draw_chart()
         except Exception:
             raise
         finally:
@@ -214,6 +216,7 @@ class SmallCharts(BoxLayout):
             self.logger.debug('Setting up weight chart.')
             # self.redraw_clock = Clock.schedule_once(self.draw_chart, 5.0)
             self.logger.debug('Set trigger for redrawing.')
+            self.draw_chart()
         except Exception:
             raise
         finally:
