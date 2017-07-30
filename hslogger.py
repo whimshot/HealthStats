@@ -21,7 +21,7 @@ MAXLOGSIZE = config.getint('Logging', 'MAXLOGSIZE')
 # create logger
 logger = logging.getLogger('HealthStats')
 # logger.setLevel(logging.INFO)
-logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.INFO)
 logger.addFilter(HostnameFilter())
 # create file handler which logs even debug messages
 logger_fh = logging.handlers.RotatingFileHandler('HealthStats.log',
