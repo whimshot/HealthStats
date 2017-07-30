@@ -7,6 +7,7 @@ from kivy.uix.carousel import Carousel
 from hslogger import HostnameFilter
 import logging
 import logging.handlers
+import pandas as pd
 from adadata import AdaFeed
 
 import matplotlib
@@ -179,6 +180,87 @@ class BPChart(BoxLayout):
                           label='Diastolic')
             bp_chart.plot(pulse.dates,
                           pulse.data,
+                          label='Pulse')
+            bp_chart.grid(which='major')
+            bp_chart.yaxis.grid(which='minor')
+            bp_chart.set_ylabel('Blood Pressure (mmHg)\nPulse (BPM)')
+            bp_chart.tick_params(axis='y', which='both')
+            bp_chart.legend(ncol=2)
+
+            for ax in fig.axes:
+                matplotlib.pyplot.sca(ax)
+                plt.xticks(rotation=45)
+                ax.tick_params(direction='out', top='off',
+                               labelsize='8')
+                ax.spines['top'].set_visible(False)
+            fig.tight_layout()
+            canvas = fig.canvas
+            canvas.draw()
+            self.add_widget(canvas)
+        except Exception:
+            raise
+        finally:
+            pass
+
+
+class SmootBPChart(BoxLayout):
+    """Our basic widget."""
+
+    def __init__(self, **kwargs):
+        """Put together weight chart."""
+        super(SmootBPChart, self).__init__(**kwargs)
+        try:
+            self.logger = \
+                logging.getLogger('HealthStats.'
+                                  + self.__class__.__name__)
+            self.logger.addFilter(HostnameFilter())
+            self.logger.debug('Setting up weight chart.')
+            dates = pd.to_datetime(systolic.dates, utc=True)
+            bp_dataframe = pd.DataFrame(
+                {'systolic': systolic.data,
+                 'diastolic': diastolic.data,
+                 'pulse': pulse.data},
+                index=dates,)
+            print(bp_dataframe)
+            bp_upsampled = bp_dataframe.resample('H')
+            self.interpolated = bp_upsampled.interpolate(method='polynomial',
+                                                         order=5)
+            self.draw_chart()
+        except Exception:
+            raise
+        finally:
+            pass
+
+    def redraw(self, dt):
+        """Start the clock on redrawing the chart."""
+        try:
+            # Clock.unschedule(self.redraw_clock)
+            # self.redraw_clock = Clock.schedule_once(self.draw_chart, 5.0)
+            self.draw_chart()
+        except Exception:
+            self.logger.exception(
+                "Failed draw_chart for {0}".format(self.__class__.__name__))
+        finally:
+            pass
+
+    def draw_chart(self):
+        """Draw the chart."""
+        try:
+            self.logger.debug('Redrawing the BP chart.')
+            self.clear_widgets()
+            plt.close()
+            bp_minor_locator = MultipleLocator(2)
+            fig, bp_chart = plt.subplots(1, figsize=(8, 4.8))
+            plt.title('Blood Pressure and Pulse')
+            bp_chart.yaxis.set_minor_locator(bp_minor_locator)
+            bp_chart.plot(self.interpolated.index,
+                          self.interpolated['systolic'],
+                          label='Systolic')
+            bp_chart.plot(self.interpolated.index,
+                          self.interpolated['diastolic'],
+                          label='Diastolic')
+            bp_chart.plot(self.interpolated.index,
+                          self.interpolated['pulse'],
                           label='Pulse')
             bp_chart.grid(which='major')
             bp_chart.yaxis.grid(which='minor')
