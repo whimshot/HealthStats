@@ -40,40 +40,23 @@
 
 <HealthBox>
     hc: hc
-    ab: ab
+    tb: tb
     orientation: 'vertical'
     HealthCarousel:
         id: hc
-    ActionBar:
-        id: ab
-        ActionView:
-            use_separator: False
-            ActionPrevious:
-                title: 'Health Stats'
-                with_previous: False
-            ActionOverflow:
-            ActionButton:
-                text: 'Weight Chart'
-                on_press: root.hc.load_slide(root.hc.weightchart)
-            ActionButton:
-                text: 'BP Chart'
-                on_press: root.hc.load_slide(root.hc.bpchart)
-            ActionButton:
-                text: 'Input Screen'
-                on_press: root.hc.load_slide(root.hc.healthstats)
-    # Toolbar:
-    #     id: tb
-    #     Label:
-    #     Label:
-    #     Button
-    #         text: 'Weight Chart'
-    #         background_color: [0, 1, 1, 1]
-    #         on_press: root.hc.load_slide(root.hc.weightchart)
-    #     Button:
-    #         text: 'BP Chart'
-    #         background_color: [0, 1, 1, 1]
-    #         on_press: root.hc.load_slide(root.hc.bpchart)
-    #     Button
-    #         text: 'Input Screen'
-    #         background_color: [0, 1, 1, 1]
-    #         on_press: root.hc.load_slide(root.hc.healthstats)
+    Toolbar:
+        id: tb
+        Label:
+        Label:
+        Button
+            text: 'Weight Chart'
+            background_color: [0, 1, 1, 1]
+            on_press: root.hc.load_slide(root.hc.weightchart)
+        Button:
+            text: 'BP Chart'
+            background_color: [0, 1, 1, 1]
+            on_press: root.hc.load_slide(root.hc.bpchart)
+        Button
+            text: 'Input Screen'
+            background_color: [0, 1, 1, 1]
+            on_press: root.hc.load_slide(root.hc.healthstats)
