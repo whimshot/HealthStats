@@ -126,6 +126,7 @@ class AdaData():
             self.logger.exception('AdaData instantiation failed.')
 
     def get_data(self):
+        """Retrieve data from io.adafruit.com."""
         try:
             for feed in self.feeds:
                 self.feeds_data[feed].get_data()
