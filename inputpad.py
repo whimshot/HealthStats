@@ -139,7 +139,6 @@ class FunctionPad(BoxLayout):
                 self.logger.debug("BMI of {0}".format(bmi)
                                   + " calculated and sent.")
             self.aio.send(btn_id, vital_stat)
-            if btn_id in ('systolic', 'diastolic', 'pulse'):
             self.logger.debug("{0} updated with".format(btn_id)
                               + " {0}".format(vital_text))
         except Exception:
