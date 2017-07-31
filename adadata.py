@@ -35,6 +35,7 @@ class AdaFeed(object):
             self.client.connect()
             self.logger.debug('Data instance for {0}.'.format(feed))
             self.client.loop_background()
+            self.get_data()
         except Exception:
             self.logger.exception('Failed to instantiate AdaFeed.')
 
@@ -61,6 +62,7 @@ class AdaFeed(object):
                 self.dates.append(local)
                 self.logger.debug('Appended {0}'.format(local))
             self.logger.debug('Retrieved data from {0}.'.format(self.feed))
+            self.updated = [True, True]
         except Exception:
             self.logger.exception('Caught exception.')
 
