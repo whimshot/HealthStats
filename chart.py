@@ -1,21 +1,26 @@
 """Health Stats app in kivy."""
-from kivy.app import App
-from kivy.config import Config
-from kivy.uix.boxlayout import BoxLayout
-from kivy.clock import Clock
-from kivy.uix.carousel import Carousel
-from hslogger import HostnameFilter
 import logging
 import logging.handlers
-import pandas as pd
-from adadata import AdaFeed
 
 import matplotlib
+import pandas as pd
+from adadata import AdaFeed
+from hsconfig import config
+from hslogger import HostnameFilter
+from kivy.app import App
+from kivy.clock import Clock
+from kivy.config import Config
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.carousel import Carousel
+from matplotlib.ticker import MultipleLocator  # noqa
+from scipy.interpolate import spline
 
 matplotlib.use('module://kivy.garden.matplotlib.backend_kivyagg')
-import matplotlib.pyplot as plt  # noqa
-from matplotlib.ticker import MultipleLocator   # noqa
 from kivy.garden.matplotlib.backend_kivyagg import FigureCanvas  # noqa
+import matplotlib.pyplot as plt  # noqa
+
+AIO_KEY = config.get('Adafruit', 'aio_key')
+AIO_ID = config.get('Adafruit', 'aio_id')
 
 Config.set('graphics', 'width', '800')
 Config.set('graphics', 'height', '480')
@@ -50,7 +55,6 @@ class WeightChart(BoxLayout):
                                   + self.__class__.__name__)
             self.logger.addFilter(HostnameFilter())
             self.logger.debug('Setting up weight chart.')
-            # self.redraw_clock = Clock.schedule_once(self.draw_chart, 5.0)
             self.logger.debug('Set trigger for redrawing.')
             self.draw_chart()
         except Exception:
@@ -61,8 +65,6 @@ class WeightChart(BoxLayout):
     def redraw(self, dt):
         """Start the clock on redrawing the chart."""
         try:
-            # Clock.unschedule(self.redraw_clock)
-            # self.redraw_clock = Clock.schedule_once(self.draw_chart, 5.0)
             self.draw_chart()
         except Exception:
             self.logger.exception(
@@ -142,7 +144,6 @@ class BPChart(BoxLayout):
                                   + self.__class__.__name__)
             self.logger.addFilter(HostnameFilter())
             self.logger.debug('Setting up weight chart.')
-            # self.redraw_clock = Clock.schedule_once(self.draw_chart, 5.0)
             self.logger.debug('Set trigger for redrawing.')
             self.draw_chart()
         except Exception:
@@ -153,8 +154,6 @@ class BPChart(BoxLayout):
     def redraw(self, dt):
         """Start the clock on redrawing the chart."""
         try:
-            # Clock.unschedule(self.redraw_clock)
-            # self.redraw_clock = Clock.schedule_once(self.draw_chart, 5.0)
             self.draw_chart()
         except Exception:
             self.logger.exception(
@@ -203,29 +202,25 @@ class BPChart(BoxLayout):
             pass
 
 
-class SmootBPChart(BoxLayout):
+class SmoothWeight(BoxLayout):
     """Our basic widget."""
 
     def __init__(self, **kwargs):
         """Put together weight chart."""
-        super(SmootBPChart, self).__init__(**kwargs)
+        super(SmoothWeight, self).__init__(**kwargs)
         try:
             self.logger = \
                 logging.getLogger('HealthStats.'
                                   + self.__class__.__name__)
             self.logger.addFilter(HostnameFilter())
             self.logger.debug('Setting up weight chart.')
-            dates = pd.to_datetime(systolic.dates, utc=True)
-            bp_dataframe = pd.DataFrame(
-                {'systolic': systolic.data,
-                 'diastolic': diastolic.data,
-                 'pulse': pulse.data},
-                index=dates,)
-            print(bp_dataframe)
-            bp_upsampled = bp_dataframe.resample('H')
-            self.interpolated = bp_upsampled.interpolate(method='polynomial',
-                                                         order=5)
-            self.draw_chart()
+            ma_dates = pd.to_datetime(weight.dates_utc, utc=True)
+            _weights = []
+            for _weight in weight.data:
+                _weights.append(float(_weight))
+            self.df = pd.DataFrame(
+                {'Weight': _weights},
+                index=ma_dates)
         except Exception:
             raise
         finally:
@@ -234,8 +229,6 @@ class SmootBPChart(BoxLayout):
     def redraw(self, dt):
         """Start the clock on redrawing the chart."""
         try:
-            # Clock.unschedule(self.redraw_clock)
-            # self.redraw_clock = Clock.schedule_once(self.draw_chart, 5.0)
             self.draw_chart()
         except Exception:
             self.logger.exception(
@@ -248,25 +241,117 @@ class SmootBPChart(BoxLayout):
         try:
             self.logger.debug('Redrawing the BP chart.')
             self.clear_widgets()
-            plt.close()
-            bp_minor_locator = MultipleLocator(2)
-            fig, bp_chart = plt.subplots(1, figsize=(8, 4.8))
-            plt.title('Blood Pressure and Pulse')
-            bp_chart.yaxis.set_minor_locator(bp_minor_locator)
-            bp_chart.plot(self.interpolated.index,
-                          self.interpolated['systolic'],
-                          label='Systolic')
-            bp_chart.plot(self.interpolated.index,
-                          self.interpolated['diastolic'],
-                          label='Diastolic')
-            bp_chart.plot(self.interpolated.index,
-                          self.interpolated['pulse'],
-                          label='Pulse')
-            bp_chart.grid(which='major')
-            bp_chart.yaxis.grid(which='minor')
-            bp_chart.set_ylabel('Blood Pressure (mmHg)\nPulse (BPM)')
-            bp_chart.tick_params(axis='y', which='both')
-            bp_chart.legend(ncol=2)
+            print(self.df)
+            upsampled = self.df.resample('H').mean()
+            print(upsampled)
+            interpolated = upsampled.interpolate(method='polynomial', order=3)
+            print(interpolated)
+            fig, _weight = plt.subplots(1, figsize=(8, 4.8))
+            plt.title('Weight')
+            _weight.plot(weight.dates,
+                         weight.data,
+                         label='Weight')
+            _weight.plot(interpolated.index,
+                         interpolated['Weight'], '-',
+                         label='Weight Smoothed')
+            _weight.grid(which='major')
+            _weight.yaxis.grid(which='minor')
+            _weight.set_ylabel('Weight')
+            _weight.tick_params(axis='y', which='both')
+            _weight.legend()
+
+            for ax in fig.axes:
+                matplotlib.pyplot.sca(ax)
+                plt.xticks(rotation=45)
+                ax.tick_params(direction='out', top='off',
+                               labelsize='8')
+                ax.spines['top'].set_visible(False)
+            fig.tight_layout()
+            canvas = fig.canvas
+            canvas.draw()
+            self.add_widget(canvas)
+        except Exception:
+            raise
+        finally:
+            pass
+
+
+class SmoothBP(BoxLayout):
+    """Our basic widget."""
+
+    def __init__(self, **kwargs):
+        """Put together weight chart."""
+        super(SmoothBP, self).__init__(**kwargs)
+        try:
+            self.logger = \
+                logging.getLogger('HealthStats.'
+                                  + self.__class__.__name__)
+            self.logger.addFilter(HostnameFilter())
+            self.logger.debug('Setting up BP chart.')
+            sys_dates = pd.to_datetime(systolic.dates_utc, utc=True)
+            _systolic = []
+            for _sys in systolic.data:
+                _systolic.append(float(_sys))
+            _diastolic = []
+            for _dia in diastolic.data:
+                _diastolic.append(float(_dia))
+            _pulse = []
+            for _pls in pulse.data:
+                _pulse.append(float(_pls))
+            self.df = pd.DataFrame(
+                {'Systolic': _systolic,
+                 'Diastolic': _diastolic,
+                 'Pulse': _pulse},
+                index=sys_dates)
+        except Exception:
+            raise
+        finally:
+            pass
+
+    def redraw(self, dt):
+        """Start the clock on redrawing the chart."""
+        try:
+            self.draw_chart()
+        except Exception:
+            self.logger.exception(
+                "Failed draw_chart for {0}".format(self.__class__.__name__))
+        finally:
+            pass
+
+    def draw_chart(self):
+        """Draw the chart."""
+        try:
+            self.logger.debug('Redrawing the BP chart.')
+            self.clear_widgets()
+            downsampled = self.df.resample('D').mean()
+            ds_interpolated = downsampled.interpolate(
+                method='polynomial', order=3)
+            upsampled = ds_interpolated.resample('H').mean()
+            interpolated = upsampled.interpolate(
+                method='polynomial', order=3)
+            print(interpolated)
+            fig, _bp = plt.subplots(1, figsize=(8, 4.8))
+            plt.title('Systolic')
+            _bp.plot(systolic.dates,
+                     systolic.data,
+                     label='Systolic')
+            _bp.plot(diastolic.dates,
+                     diastolic.data,
+                     label='Diastolic')
+            _bp.plot(pulse.dates,
+                     pulse.data,
+                     label='Pulse')
+            _bp.plot(interpolated.index,
+                     interpolated['Systolic'], '-',
+                     label='Systolic Smoothed')
+            _bp.plot(interpolated.index,
+                     interpolated['Pulse'], '-',
+                     label='Pulse Smoothed')
+            _bp.grid(which='major')
+            _bp.yaxis.grid(which='minor')
+            _bp.set_ylabel('Weight')
+            _bp.tick_params(axis='y', which='both')
+            _bp.legend(ncol=2)
 
             for ax in fig.axes:
                 matplotlib.pyplot.sca(ax)
@@ -291,12 +376,10 @@ class SmallCharts(BoxLayout):
         """Put together weight chart."""
         super(SmallCharts, self).__init__(**kwargs)
         try:
-            self.logger = \
-                logging.getLogger('HealthStats.'
-                                  + self.__class__.__name__)
+            self.logger = logging.getLogger('HealthStats.'
+                                            + self.__class__.__name__)
             self.logger.addFilter(HostnameFilter())
             self.logger.debug('Setting up weight chart.')
-            # self.redraw_clock = Clock.schedule_once(self.draw_chart, 5.0)
             self.logger.debug('Set trigger for redrawing.')
             self.draw_chart()
         except Exception:
@@ -307,8 +390,6 @@ class SmallCharts(BoxLayout):
     def redraw(self, dt):
         """Start the clock on redrawing the chart."""
         try:
-            # Clock.unschedule(self.redraw_clock)
-            # self.redraw_clock = Clock.schedule_once(self.draw_chart, 5.0)
             self.draw_chart()
         except Exception:
             self.logger.exception(
@@ -403,6 +484,8 @@ class ChartApp(App):
         cs.wc.draw_chart()
         cs.bp.draw_chart()
         cs.sc.draw_chart()
+        cs.sw.draw_chart()
+        cs.sbp.draw_chart()
         Clock.schedule_interval(cs.next_slide_please, 5.0)
         return cs
 
