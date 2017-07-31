@@ -184,7 +184,7 @@ class BPChart(BoxLayout):
             plt.close()
             bp_minor_locator = MultipleLocator(2)
             fig, bp_chart = plt.subplots(1, figsize=(8, 4.8))
-            plt.title('Blood Pressure and Pulse')
+            plt.title('Blood Presure (mmHg) & Pulse (BPM) Measurements')
             bp_chart.yaxis.set_minor_locator(bp_minor_locator)
             bp_chart.plot(systolic.dates,
                           systolic.data,
@@ -260,23 +260,39 @@ class SmoothWeight(BoxLayout):
     def draw_chart(self):
         """Draw the chart."""
         try:
-            self.logger.debug('Redrawing the BP chart.')
+            self.logger.debug('Redrawing the Smooth Weight chart.')
             self.clear_widgets()
             upsampled = self.df.resample('H').mean()
             interpolated = upsampled.interpolate(method='polynomial', order=3)
             fig, _weight = plt.subplots(1, figsize=(8, 4.8))
-            plt.title('Weight')
-            _weight.plot(weight.dates,
-                         weight.data,
-                         label='Weight')
-            _weight.plot(interpolated.index,
-                         interpolated['Weight'], '-',
-                         label='Weight Smoothed')
+            plt.title('Weight and BMI')
+            weight_minor_locator = MultipleLocator(.2)
+            bmi_major_locator = MultipleLocator(1)
+            _weight.yaxis.set_minor_locator(weight_minor_locator)
+            wc1 = _weight.plot(weight.dates,
+                               weight.data,
+                               label='Weight (Kg)')
+            wc2 = _weight.plot(interpolated.index,
+                               interpolated['Weight'], '-',
+                               label='Weight (Kg) Smoothed')
             _weight.grid(which='major')
             _weight.yaxis.grid(which='minor')
             _weight.set_ylabel('Weight')
             _weight.tick_params(axis='y', which='both')
-            _weight.legend()
+
+            _bmi = _weight.twinx()
+            _bmi.yaxis.set_major_locator(bmi_major_locator)
+            bc = _bmi.plot(bmi.dates,
+                           bmi.data,
+                           'C2', label='BMI')
+            _bmi.set_ylabel('BMI',
+                            fontsize='9',
+                            color='C2')
+            _bmi.tick_params(axis='y',
+                                  colors='C2')
+
+            charts = wc1 + wc2 + bc
+            labels = [chart.get_label() for chart in charts]
 
             for ax in fig.axes:
                 matplotlib.pyplot.sca(ax)
@@ -284,6 +300,8 @@ class SmoothWeight(BoxLayout):
                 ax.tick_params(direction='out', top='off',
                                labelsize='8')
                 ax.spines['top'].set_visible(False)
+
+            _weight.legend(charts, labels)
             fig.tight_layout()
             canvas = fig.canvas
             canvas.draw()
@@ -352,12 +370,14 @@ class SmoothBP(BoxLayout):
             self.clear_widgets()
             downsampled = self.df.resample('D').mean()
             ds_interpolated = downsampled.interpolate(
-                method='polynomial', order=3)
+                method='polynomial', order=2)
             upsampled = ds_interpolated.resample('H').mean()
             interpolated = upsampled.interpolate(
-                method='polynomial', order=3)
+                method='polynomial', order=2)
             fig, _bp = plt.subplots(1, figsize=(8, 4.8))
-            plt.title('Systolic')
+            bp_minor_locator = MultipleLocator(2)
+            plt.title('Blood Presure (mmHg) & Pulse (BPM) Measurements')
+            _bp.yaxis.set_minor_locator(bp_minor_locator)
             _bp.plot(systolic.dates,
                      systolic.data,
                      label='Systolic')
@@ -378,7 +398,7 @@ class SmoothBP(BoxLayout):
                      label='Pulse Smoothed')
             _bp.grid(which='major')
             _bp.yaxis.grid(which='minor')
-            _bp.set_ylabel('Weight')
+            _bp.set_ylabel('Blood Presure (mmHg)\n&Pulse (BPM)')
             _bp.tick_params(axis='y', which='both')
             _bp.legend(ncol=2)
 
