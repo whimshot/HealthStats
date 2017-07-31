@@ -12,3 +12,4 @@ envs/
 *.conf
 *.ini
 tags
+.tags

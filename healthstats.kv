@@ -34,6 +34,8 @@
     healthstats: health_stats
     weightchart: weight_chart
     bpchart: bp_chart
+    sw: sw
+    sbp: sbp
     min_move: 0.05
     direction: 'right'
     loop: True
@@ -43,6 +45,10 @@
         id: weight_chart
     BPChart:
         id: bp_chart
+    SmoothWeight
+        id: sw
+    SmoothBP:
+        id: sbp
 
 <HealthBox>
     hc: hc
