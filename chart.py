@@ -36,11 +36,11 @@ weight = AdaFeed('weight')
 systolic = AdaFeed('systolic')
 diastolic = AdaFeed('diastolic')
 pulse = AdaFeed('pulse')
-bmi.get_data()
-weight.get_data()
-systolic.get_data()
-diastolic.get_data()
-pulse.get_data()
+# bmi.get_data()
+# weight.get_data()
+# systolic.get_data()
+# diastolic.get_data()
+# pulse.get_data()
 
 
 class WeightChart(BoxLayout):
@@ -65,7 +65,13 @@ class WeightChart(BoxLayout):
     def redraw(self, dt):
         """Start the clock on redrawing the chart."""
         try:
-            self.draw_chart()
+            if (any(weight.updated)
+                    or any(bmi.updated)):
+                self.draw_chart()
+                weight.updated.pop(0)
+                weight.updated.append(False)
+                bmi.updated.pop(0)
+                bmi.updated.append(False)
         except Exception:
             self.logger.exception(
                 "Failed draw_chart for {0}".format(self.__class__.__name__))
@@ -154,7 +160,16 @@ class BPChart(BoxLayout):
     def redraw(self, dt):
         """Start the clock on redrawing the chart."""
         try:
-            self.draw_chart()
+            if (any(systolic.updated)
+                or any(diastolic.updated)
+                    or any(pulse.updated)):
+                self.draw_chart()
+                systolic.updated.pop(0)
+                systolic.updated.append(False)
+                diastolic.updated.pop(0)
+                diastolic.updated.append(False)
+                pulse.updated.pop(0)
+                pulse.updated.append(False)
         except Exception:
             self.logger.exception(
                 "Failed draw_chart for {0}".format(self.__class__.__name__))
@@ -229,7 +244,13 @@ class SmoothWeight(BoxLayout):
     def redraw(self, dt):
         """Start the clock on redrawing the chart."""
         try:
-            self.draw_chart()
+            if (any(weight.updated)
+                    or any(bmi.updated)):
+                self.draw_chart()
+                weight.updated.pop(0)
+                weight.updated.append(False)
+                bmi.updated.pop(0)
+                bmi.updated.append(False)
         except Exception:
             self.logger.exception(
                 "Failed draw_chart for {0}".format(self.__class__.__name__))
@@ -308,7 +329,16 @@ class SmoothBP(BoxLayout):
     def redraw(self, dt):
         """Start the clock on redrawing the chart."""
         try:
-            self.draw_chart()
+            if (any(systolic.updated)
+                or any(diastolic.updated)
+                    or any(pulse.updated)):
+                self.draw_chart()
+                systolic.updated.pop(0)
+                systolic.updated.append(False)
+                diastolic.updated.pop(0)
+                diastolic.updated.append(False)
+                pulse.updated.pop(0)
+                pulse.updated.append(False)
         except Exception:
             self.logger.exception(
                 "Failed draw_chart for {0}".format(self.__class__.__name__))
@@ -389,7 +419,22 @@ class SmallCharts(BoxLayout):
     def redraw(self, dt):
         """Start the clock on redrawing the chart."""
         try:
-            self.draw_chart()
+            if (any(systolic.updated)
+                or any(diastolic.updated)
+                    or any(pulse.updated)
+                    or any(weight.updated)
+                    or any(bmi.updated)):
+                self.draw_chart()
+                systolic.updated.pop(0)
+                systolic.updated.append(False)
+                diastolic.updated.pop(0)
+                diastolic.updated.append(False)
+                pulse.updated.pop(0)
+                pulse.updated.append(False)
+                weight.updated.pop(0)
+                weight.updated.append(False)
+                bmi.updated.pop(0)
+                bmi.updated.append(False)
         except Exception:
             self.logger.exception(
                 "Failed draw_chart for {0}".format(self.__class__.__name__))
