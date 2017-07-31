@@ -241,11 +241,8 @@ class SmoothWeight(BoxLayout):
         try:
             self.logger.debug('Redrawing the BP chart.')
             self.clear_widgets()
-            print(self.df)
             upsampled = self.df.resample('H').mean()
-            print(upsampled)
             interpolated = upsampled.interpolate(method='polynomial', order=3)
-            print(interpolated)
             fig, _weight = plt.subplots(1, figsize=(8, 4.8))
             plt.title('Weight')
             _weight.plot(weight.dates,
@@ -329,7 +326,6 @@ class SmoothBP(BoxLayout):
             upsampled = ds_interpolated.resample('H').mean()
             interpolated = upsampled.interpolate(
                 method='polynomial', order=3)
-            print(interpolated)
             fig, _bp = plt.subplots(1, figsize=(8, 4.8))
             plt.title('Systolic')
             _bp.plot(systolic.dates,
@@ -344,6 +340,9 @@ class SmoothBP(BoxLayout):
             _bp.plot(interpolated.index,
                      interpolated['Systolic'], '-',
                      label='Systolic Smoothed')
+            _bp.plot(interpolated.index,
+                     interpolated['Diastolic'], '-',
+                     label='Diastolic Smoothed')
             _bp.plot(interpolated.index,
                      interpolated['Pulse'], '-',
                      label='Pulse Smoothed')

@@ -87,6 +87,8 @@ class HealthStatsApp(App):
         hb = HealthBox()
         Clock.schedule_interval(hb.hc.weightchart.redraw, 30)
         Clock.schedule_interval(hb.hc.bpchart.redraw, 30)
+        Clock.schedule_interval(hb.hc.sw.redraw, 30)
+        Clock.schedule_interval(hb.hc.sbp.redraw, 30)
         Clock.schedule_interval(hb.hc.healthstats.statsimage.redraw, 30)
         Clock.schedule_interval(hb.hc.next_slide_please, 10)
         return hb
