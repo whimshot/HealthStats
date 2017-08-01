@@ -262,7 +262,7 @@ class SmoothWeight(BoxLayout):
         try:
             self.logger.debug('Redrawing the Smooth Weight chart.')
             self.clear_widgets()
-            upsampled = self.df.resample('2H').mean()
+            upsampled = self.df.resample('H').mean()
             interpolated = upsampled.interpolate(method='polynomial', order=3)
             fig, _weight = plt.subplots(1, figsize=(8, 4.8))
             plt.title('Weight and BMI')
@@ -368,7 +368,7 @@ class SmoothBP(BoxLayout):
         try:
             self.logger.debug('Redrawing the BP chart.')
             self.clear_widgets()
-            downsampled = self.df.resample('6H').mean()
+            downsampled = self.df.resample('D').mean()
             ds_interpolated = downsampled.interpolate(
                 method='polynomial', order=2)
             upsampled = ds_interpolated.resample('H').mean()
