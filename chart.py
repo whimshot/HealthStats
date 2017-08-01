@@ -262,7 +262,7 @@ class SmoothWeight(BoxLayout):
         try:
             self.logger.debug('Redrawing the Smooth Weight chart.')
             self.clear_widgets()
-            upsampled = self.df.resample('2H').mean()
+            upsampled = self.df.resample('H').mean()
             interpolated = upsampled.interpolate(method='polynomial', order=3)
             fig, _weight = plt.subplots(1, figsize=(8, 4.8))
             plt.title('Weight and BMI')
@@ -274,7 +274,7 @@ class SmoothWeight(BoxLayout):
                                label='Weight (Kg)')
             wc2 = _weight.plot(interpolated.index,
                                interpolated['Weight'], '-',
-                               label='Weight (Kg) Interpolated')
+                               label='Weight (Kg) Smoothed')
             _weight.grid(which='major')
             _weight.yaxis.grid(which='minor')
             _weight.set_ylabel('Weight')
@@ -301,7 +301,7 @@ class SmoothWeight(BoxLayout):
                                labelsize='8')
                 ax.spines['top'].set_visible(False)
 
-            _weight.legend(charts, labels, ncol=2)
+            _weight.legend(charts, labels)
             fig.tight_layout()
             canvas = fig.canvas
             canvas.draw()
@@ -368,7 +368,7 @@ class SmoothBP(BoxLayout):
         try:
             self.logger.debug('Redrawing the BP chart.')
             self.clear_widgets()
-            downsampled = self.df.resample('6H').mean()
+            downsampled = self.df.resample('D').mean()
             ds_interpolated = downsampled.interpolate(
                 method='polynomial', order=2)
             upsampled = ds_interpolated.resample('H').mean()
@@ -389,13 +389,13 @@ class SmoothBP(BoxLayout):
                      label='Pulse')
             _bp.plot(interpolated.index,
                      interpolated['Systolic'], '-',
-                     label='Systolic Interpolated')
+                     label='Systolic Smoothed')
             _bp.plot(interpolated.index,
                      interpolated['Diastolic'], '-',
-                     label='Diastolic Interpolated')
+                     label='Diastolic Smoothed')
             _bp.plot(interpolated.index,
                      interpolated['Pulse'], '-',
-                     label='Pulse Interpolated')
+                     label='Pulse Smoothed')
             _bp.grid(which='major')
             _bp.yaxis.grid(which='minor')
             _bp.set_ylabel('Blood Presure (mmHg)\n&Pulse (BPM)')
