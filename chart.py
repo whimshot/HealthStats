@@ -9,11 +9,9 @@ from hsconfig import config
 from hslogger import HostnameFilter
 from kivy.app import App
 from kivy.clock import Clock
-from kivy.config import Config
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.carousel import Carousel
 from matplotlib.ticker import MultipleLocator  # noqa
-from scipy.interpolate import spline
 
 matplotlib.use('module://kivy.garden.matplotlib.backend_kivyagg')
 from kivy.garden.matplotlib.backend_kivyagg import FigureCanvas  # noqa
@@ -22,8 +20,6 @@ import matplotlib.pyplot as plt  # noqa
 AIO_KEY = config.get('Adafruit', 'aio_key')
 AIO_ID = config.get('Adafruit', 'aio_id')
 
-Config.set('graphics', 'width', '800')
-Config.set('graphics', 'height', '480')
 matplotlib.rc('lines', linewidth=0.75, markersize=4,
               linestyle='-', marker='.')
 matplotlib.rc('grid', linestyle='-.', linewidth=0.5, alpha=0.5)
@@ -36,11 +32,6 @@ weight = AdaFeed('weight')
 systolic = AdaFeed('systolic')
 diastolic = AdaFeed('diastolic')
 pulse = AdaFeed('pulse')
-# bmi.get_data()
-# weight.get_data()
-# systolic.get_data()
-# diastolic.get_data()
-# pulse.get_data()
 
 
 class WeightChart(BoxLayout):
