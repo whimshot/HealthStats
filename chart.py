@@ -274,7 +274,7 @@ class SmoothWeight(BoxLayout):
                                label='Weight (Kg)')
             wc2 = _weight.plot(interpolated.index,
                                interpolated['Weight'], '-',
-                               label='Weight (Kg) Smoothed')
+                               label='Weight (Kg) Interpolated')
             _weight.grid(which='major')
             _weight.yaxis.grid(which='minor')
             _weight.set_ylabel('Weight')
@@ -301,7 +301,7 @@ class SmoothWeight(BoxLayout):
                                labelsize='8')
                 ax.spines['top'].set_visible(False)
 
-            _weight.legend(charts, labels)
+            _weight.legend(charts, labels, ncol=2)
             fig.tight_layout()
             canvas = fig.canvas
             canvas.draw()
@@ -389,13 +389,13 @@ class SmoothBP(BoxLayout):
                      label='Pulse')
             _bp.plot(interpolated.index,
                      interpolated['Systolic'], '-',
-                     label='Systolic Smoothed')
+                     label='Systolic Interpolated')
             _bp.plot(interpolated.index,
                      interpolated['Diastolic'], '-',
-                     label='Diastolic Smoothed')
+                     label='Diastolic Interpolated')
             _bp.plot(interpolated.index,
                      interpolated['Pulse'], '-',
-                     label='Pulse Smoothed')
+                     label='Pulse Interpolated')
             _bp.grid(which='major')
             _bp.yaxis.grid(which='minor')
             _bp.set_ylabel('Blood Presure (mmHg)\n&Pulse (BPM)')
