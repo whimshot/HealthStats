@@ -47,6 +47,7 @@ class AdaFeed(object):
     def get_data(self):
         """Get data from io.adatruit.com."""
         try:
+            old_data = self.data
             self.logger.debug('Querying {0}.'.format(self.feed))
             self.data = []
             self.dates = []
@@ -62,7 +63,8 @@ class AdaFeed(object):
                 self.dates.append(local)
                 self.logger.debug('Appended {0}'.format(local))
             self.logger.debug('Retrieved data from {0}.'.format(self.feed))
-            self.updated = [True, True]
+            if self.data != old_data:
+                self.updated = [True, True, True]
         except Exception:
             self.logger.exception('Caught exception.')
 
