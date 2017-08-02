@@ -1,0 +1,59 @@
+[{
+        "type": "title",
+        "title": "Adafruit"
+    },
+    {
+        "type": "string",
+        "title": "Adafruit IO API Key",
+        "desc": "API key for use with io.adafruit.com.",
+        "section": "Adafruit",
+        "key": "aio_key"
+    },
+    {
+        "type": "string",
+        "title": "Adafruit IO User ID",
+        "desc": "User ID for use with io.adafruit.com.",
+        "section": "Adafruit",
+        "key": "aio_id"
+    },
+    {
+        "type": "title",
+        "title": "OpenWeatherMap"
+    },
+    {
+        "type": "string",
+        "title": "Open Weather Map API Key",
+        "desc": "API key for use with openweathermap.org.",
+        "section": "OpenWeatherMap",
+        "key": "api_key"
+    },
+    {
+        "type": "title",
+        "title": "Logging"
+    },
+    {
+        "type": "numeric",
+        "title": "Maximum Log Size",
+        "desc": "How large can the log get before rotation (bytes).",
+        "section": "Logging",
+        "key": "maxlogsize"
+    },
+    {
+        "type": "numeric",
+        "title": "Rotation Count",
+        "desc": "How many times to rotate out the log before deleting.",
+        "section": "Logging",
+        "key": "rotationcount"
+    },
+    {
+        "type": "title",
+        "title": "Constants"
+    },
+    {
+        "type": "numeric",
+        "title": "BMI Constant (Height in Meters)[sup]2[/sup]",
+        "desc": "BMI = Weight (Kg)/(Height in Meters)[sup]2[/sup]",
+        "section": "Constants",
+        "key": "bmi_constant"
+    }
+]

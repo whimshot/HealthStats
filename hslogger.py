@@ -2,7 +2,8 @@
 import logging
 import logging.handlers
 import platform
-from HSConfig import config
+
+from hsconfig import config
 
 
 class HostnameFilter(logging.Filter):

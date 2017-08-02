@@ -1,0 +1,35 @@
+#:kivy 1.10.0
+#:import MatPlotLib kivy.garden.matplotlib
+
+<Chart>
+
+<BMIChart>
+
+<WeightChart>
+
+<BPChart>
+
+<SmallCharts>
+
+<SmootBPChart>
+
+<SmoothBP>
+
+<Chartsel>
+    loop: True
+    direction: 'top'
+    wc: wc
+    bp: bp
+    sc: sc
+    sw: sw
+    sbp: sbp
+    WeightChart:
+        id: wc
+    BPChart:
+        id: bp
+    SmallCharts:
+        id: sc
+    SmoothWeight
+        id: sw
+    SmoothBP:
+        id: sbp
