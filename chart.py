@@ -39,19 +39,18 @@ class WeightChart(BoxLayout):
 
     def __init__(self, **kwargs):
         """Put together weight chart."""
-        super(WeightChart, self).__init__(**kwargs)
+        super().__init__(**kwargs)
         try:
             self.logger = \
                 logging.getLogger('HealthStats.'
                                   + self.__class__.__name__)
             self.logger.addFilter(HostnameFilter())
-            self.logger.debug('Setting up weight chart.')
-            self.logger.debug('Set trigger for redrawing.')
+            self.logger.debug('Setting up {0}.'.format(
+                self.__class__.__name__))
             self.draw_chart()
-            self.logger.debug('Weight: {0}'.format(weight.updated))
-            self.logger.debug('BMI: {0}'.format(bmi.updated))
         except Exception:
-            raise
+            self.logger.exception(
+                'Failed to instantiate {}.'.format(self.__class__.__name__))
         finally:
             pass
 
@@ -140,17 +139,17 @@ class BPChart(BoxLayout):
 
     def __init__(self, **kwargs):
         """Put together weight chart."""
-        super(BPChart, self).__init__(**kwargs)
+        super().__init__(**kwargs)
         try:
-            self.logger = \
-                logging.getLogger('HealthStats.'
-                                  + self.__class__.__name__)
+            self.logger = logging.getLogger('HealthStats.'
+                                            + self.__class__.__name__)
             self.logger.addFilter(HostnameFilter())
-            self.logger.debug('Setting up weight chart.')
-            self.logger.debug('Set trigger for redrawing.')
+            self.logger.debug('Setting up {0}.'.format(
+                self.__class__.__name__))
             self.draw_chart()
         except Exception:
-            raise
+            self.logger.exception(
+                'Failed to instantiate {}.'.format(self.__class__.__name__))
         finally:
             pass
 
@@ -224,15 +223,17 @@ class SmoothWeight(BoxLayout):
 
     def __init__(self, **kwargs):
         """Put together weight chart."""
-        super(SmoothWeight, self).__init__(**kwargs)
+        super().__init__(**kwargs)
         try:
-            self.logger = \
-                logging.getLogger('HealthStats.'
-                                  + self.__class__.__name__)
+            self.logger = logging.getLogger('HealthStats.'
+                                            + self.__class__.__name__)
             self.logger.addFilter(HostnameFilter())
-            self.logger.debug('Setting up weight chart.')
+            self.logger.debug('Setting up {0}.'.format(
+                self.__class__.__name__))
+            self.draw_chart()
         except Exception:
-            raise
+            self.logger.exception(
+                'Failed to instantiate {}.'.format(self.__class__.__name__))
         finally:
             pass
 
@@ -254,6 +255,8 @@ class SmoothWeight(BoxLayout):
                 bmi.updated.append(False)
             self.logger.debug('Weight: {0}'.format(weight.updated))
             self.logger.debug('BMI: {0}'.format(bmi.updated))
+            self.logger.debug('Weight: {0}'.format(len(weight.data)))
+            self.logger.debug('BMI: {0}'.format(len(bmi.data)))
         except Exception:
             self.logger.exception(
                 "Failed draw_chart for {0}".format(self.__class__.__name__))
@@ -328,15 +331,18 @@ class SmoothBP(BoxLayout):
     """Our basic widget."""
 
     def __init__(self, **kwargs):
-        """Put together weight chart."""
-        super(SmoothBP, self).__init__(**kwargs)
+        """Put together SmoothBP."""
+        super().__init__(**kwargs)
         try:
             self.logger = logging.getLogger('HealthStats.'
                                             + self.__class__.__name__)
             self.logger.addFilter(HostnameFilter())
-            self.logger.debug('Setting up BP chart.')
+            self.logger.debug('Setting up {0}.'.format(
+                self.__class__.__name__))
+            self.draw_chart()
         except Exception:
-            raise
+            self.logger.exception(
+                'Failed to instantiate {}.'.format(self.__class__.__name__))
         finally:
             pass
 
@@ -449,17 +455,18 @@ class SmallCharts(BoxLayout):
     """Our basic widget."""
 
     def __init__(self, **kwargs):
-        """Put together weight chart."""
-        super(SmallCharts, self).__init__(**kwargs)
+        """Put together SmallCharts."""
+        super().__init__(**kwargs)
         try:
             self.logger = logging.getLogger('HealthStats.'
                                             + self.__class__.__name__)
             self.logger.addFilter(HostnameFilter())
-            self.logger.debug('Setting up weight chart.')
-            self.logger.debug('Set trigger for redrawing.')
+            self.logger.debug('Setting up {0}.'.format(
+                self.__class__.__name__))
             self.draw_chart()
         except Exception:
-            raise
+            self.logger.exception(
+                'Failed to instantiate {}.'.format(self.__class__.__name__))
         finally:
             pass
 
@@ -559,11 +566,17 @@ class Chartsel(Carousel):
 
     def __init__(self, **kwargs):
         """Put together weight chart."""
-        super(Chartsel, self).__init__(**kwargs)
+        super().__init__(**kwargs)
         try:
-            pass
+            self.logger = logging.getLogger('HealthStats.'
+                                            + self.__class__.__name__)
+            self.logger.addFilter(HostnameFilter())
+            self.logger.debug('Setting up {0}.'.format(
+                self.__class__.__name__))
+            self.draw_chart()
         except Exception:
-            raise
+            self.logger.exception(
+                'Failed to instantiate {}.'.format(self.__class__.__name__))
         finally:
             pass
 
@@ -579,6 +592,22 @@ class Chartsel(Carousel):
 
 class ChartApp(App):
     """The Apps the thing."""
+
+    def __init__(self, **kwargs):
+        """Put together ChartApp."""
+        super().__init__(**kwargs)
+        try:
+            self.logger = logging.getLogger('HealthStats.'
+                                            + self.__class__.__name__)
+            self.logger.addFilter(HostnameFilter())
+            self.logger.debug('Setting up {0}.'.format(
+                self.__class__.__name__))
+            self.draw_chart()
+        except Exception:
+            self.logger.exception(
+                'Failed to instantiate {}.'.format(self.__class__.__name__))
+        finally:
+            pass
 
     def build(self):
         """Build the app."""

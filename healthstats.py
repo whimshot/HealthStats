@@ -102,12 +102,12 @@ class HealthStatsApp(App):
         """Build function for Health Stats kivy app."""
         logger.info('Starting HealthStatsApp.')
         hb = HealthBox()
+        Clock.schedule_interval(hb.hc.next_slide_please, 5)
         Clock.schedule_interval(hb.hc.weightchart.redraw, 30)
         Clock.schedule_interval(hb.hc.bpchart.redraw, 30)
         Clock.schedule_interval(hb.hc.sw.redraw, 30)
         Clock.schedule_interval(hb.hc.sbp.redraw, 30)
         Clock.schedule_interval(hb.hc.healthstats.statsimage.redraw, 30)
-        Clock.schedule_interval(hb.hc.next_slide_please, 10)
         return hb
 
 

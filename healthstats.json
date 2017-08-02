@@ -29,6 +29,17 @@
     },
     {
         "type": "title",
+        "title": "Thunderforest"
+    },
+    {
+        "type": "string",
+        "title": "Thunderforest API Key",
+        "desc": "API key for thunderforest.org.",
+        "section": "Thunderforest",
+        "key": "apikey"
+    },
+    {
+        "type": "title",
         "title": "Logging"
     },
     {
@@ -55,5 +66,12 @@
         "desc": "BMI = Weight (Kg)/(Height in Meters)[sup]2[/sup]",
         "section": "Constants",
         "key": "bmi_constant"
+    },
+    {
+        "type": "numeric",
+        "title": "Scrolling Delay",
+        "desc": "Number of seconds to delay before the next slide.",
+        "section": "Constants",
+        "key": "scrolldelay"
     }
 ]
