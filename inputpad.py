@@ -1,14 +1,15 @@
 """"An Input Pad."""
-from Adafruit_IO import Client
-from kivy.app import App
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.gridlayout import GridLayout
-from kivy.uix.button import Button
-from kivy.uix.label import Label
 import logging
 import logging.handlers
-from HSLogger import logger, HostnameFilter
-from HSConfig import config
+
+from Adafruit_IO import Client
+from hsconfig import config
+from hslogger import HostnameFilter, logger
+from kivy.app import App
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.button import Button
+from kivy.uix.gridlayout import GridLayout
+from kivy.uix.label import Label
 
 AIO_KEY = config.get('Adafruit', 'aio_key')
 AIO_ID = config.get('Adafruit', 'aio_id')
@@ -23,7 +24,8 @@ class Key(Button):
         super(Key, self).__init__(**kwargs)
         try:
             self.logger = \
-                logging.getLogger('HealthStats.' + __name__)
+                logging.getLogger('HealthStats.'
+                                  + self.__class__.__name__)
             self.logger.addFilter(HostnameFilter())
             self.logger.info('Creating an instance of Key.')
         except Exception:
@@ -70,9 +72,10 @@ class InputDisplay(Label):
         super(InputDisplay, self).__init__(**kwargs)
         try:
             self.logger = \
-                logging.getLogger('HealthStats.' + __name__)
+                logging.getLogger('HealthStats.'
+                                  + self.__class__.__name__)
             self.logger.addFilter(HostnameFilter())
-            self.logger.info('Creating an instance of Key.')
+            self.logger.info('Creating an instance of display.')
         except Exception:
             self.logger.exception("Failed to create instance of InputDisplay.")
         finally:
@@ -113,7 +116,8 @@ class FunctionPad(BoxLayout):
         super(FunctionPad, self).__init__(**kwargs)
         try:
             self.logger = \
-                logging.getLogger('HealthStats.' + __name__)
+                logging.getLogger('HealthStats.'
+                                  + self.__class__.__name__)
             self.logger.addFilter(HostnameFilter())
             self.aio = Client(AIO_KEY)
             self.logger.debug('Creating an instance of FunctionPad.')
@@ -130,13 +134,13 @@ class FunctionPad(BoxLayout):
             vital_text = self.parent.numscreen.text
             vital_stat = float(vital_text)
             if (btn_id == 'weight'):
-                bmi = int(vital_stat/BMI_CONSTANT)
+                bmi = int(vital_stat / BMI_CONSTANT)
                 self.aio.send('bmi', bmi)
                 self.logger.debug("BMI of {0}".format(bmi)
                                   + " calculated and sent.")
             self.aio.send(btn_id, vital_stat)
             self.logger.debug("{0} updated with".format(btn_id)
-                              + " {1}".format(vital_stat))
+                              + " {0}".format(vital_text))
         except Exception:
             self.logger.exception("Problem sending data.")
             self.parent.numscreen.text = "Failed Sending"
@@ -154,7 +158,8 @@ class NumberPad(GridLayout):
         super(NumberPad, self).__init__(**kwargs)
         try:
             self.logger = \
-                logging.getLogger('HealthStats.' + __name__)
+                logging.getLogger('HealthStats.'
+                                  + self.__class__.__name__)
             self.logger.addFilter(HostnameFilter())
             self.logger.debug('Creating an instance of NumberPad.')
         except Exception:
