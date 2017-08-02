@@ -3,4 +3,4 @@ import configparser
 
 
 config = configparser.ConfigParser()
-config.readfp(open('HealthStats.conf'))
+config.readfp(open('healthstats.conf'))

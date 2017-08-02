@@ -81,6 +81,10 @@
             background_color: [0, 1, 1, 1]
             on_press: root.hc.load_slide(root.hc.healthstats)
         Button:
+            text: 'Settings'
+            on_press: app.open_settings()
+            background_color: [.75, 0, .75, 1]
+        Button:
             text: 'Exit'
             on_press: app.stop()
             background_color: [1, 0, 0, 1]

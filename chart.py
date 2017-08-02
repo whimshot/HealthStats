@@ -9,11 +9,9 @@ from hsconfig import config
 from hslogger import HostnameFilter
 from kivy.app import App
 from kivy.clock import Clock
-from kivy.config import Config
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.carousel import Carousel
 from matplotlib.ticker import MultipleLocator  # noqa
-from scipy.interpolate import spline
 
 matplotlib.use('module://kivy.garden.matplotlib.backend_kivyagg')
 from kivy.garden.matplotlib.backend_kivyagg import FigureCanvas  # noqa
@@ -22,8 +20,6 @@ import matplotlib.pyplot as plt  # noqa
 AIO_KEY = config.get('Adafruit', 'aio_key')
 AIO_ID = config.get('Adafruit', 'aio_id')
 
-Config.set('graphics', 'width', '800')
-Config.set('graphics', 'height', '480')
 matplotlib.rc('lines', linewidth=0.75, markersize=4,
               linestyle='-', marker='.')
 matplotlib.rc('grid', linestyle='-.', linewidth=0.5, alpha=0.5)
@@ -36,11 +32,6 @@ weight = AdaFeed('weight')
 systolic = AdaFeed('systolic')
 diastolic = AdaFeed('diastolic')
 pulse = AdaFeed('pulse')
-# bmi.get_data()
-# weight.get_data()
-# systolic.get_data()
-# diastolic.get_data()
-# pulse.get_data()
 
 
 class WeightChart(BoxLayout):
@@ -229,13 +220,6 @@ class SmoothWeight(BoxLayout):
                                   + self.__class__.__name__)
             self.logger.addFilter(HostnameFilter())
             self.logger.debug('Setting up weight chart.')
-            ma_dates = pd.to_datetime(weight.dates_utc, utc=True)
-            _weights = []
-            for _weight in weight.data:
-                _weights.append(float(_weight))
-            self.df = pd.DataFrame(
-                {'Weight': _weights},
-                index=ma_dates)
         except Exception:
             raise
         finally:
@@ -262,6 +246,13 @@ class SmoothWeight(BoxLayout):
         try:
             self.logger.debug('Redrawing the Smooth Weight chart.')
             self.clear_widgets()
+            ma_dates = pd.to_datetime(weight.dates_utc, utc=True)
+            _weights = []
+            for _w in weight.data:
+                _weights.append(float(_w))
+            self.df = pd.DataFrame(
+                {'Weight': _weights},
+                index=ma_dates)
             upsampled = self.df.resample('H').mean()
             interpolated = upsampled.interpolate(method='polynomial', order=3)
             fig, _weight = plt.subplots(1, figsize=(8, 4.8))
@@ -324,21 +315,6 @@ class SmoothBP(BoxLayout):
                                   + self.__class__.__name__)
             self.logger.addFilter(HostnameFilter())
             self.logger.debug('Setting up BP chart.')
-            sys_dates = pd.to_datetime(systolic.dates_utc, utc=True)
-            _systolic = []
-            for _sys in systolic.data:
-                _systolic.append(float(_sys))
-            _diastolic = []
-            for _dia in diastolic.data:
-                _diastolic.append(float(_dia))
-            _pulse = []
-            for _pls in pulse.data:
-                _pulse.append(float(_pls))
-            self.df = pd.DataFrame(
-                {'Systolic': _systolic,
-                 'Diastolic': _diastolic,
-                 'Pulse': _pulse},
-                index=sys_dates)
         except Exception:
             raise
         finally:
@@ -368,6 +344,21 @@ class SmoothBP(BoxLayout):
         try:
             self.logger.debug('Redrawing the BP chart.')
             self.clear_widgets()
+            sys_dates = pd.to_datetime(systolic.dates_utc, utc=True)
+            _systolic = []
+            for _sys in systolic.data:
+                _systolic.append(float(_sys))
+            _diastolic = []
+            for _dia in diastolic.data:
+                _diastolic.append(float(_dia))
+            _pulse = []
+            for _pls in pulse.data:
+                _pulse.append(float(_pls))
+            self.df = pd.DataFrame(
+                {'Systolic': _systolic,
+                 'Diastolic': _diastolic,
+                 'Pulse': _pulse},
+                index=sys_dates)
             downsampled = self.df.resample('D').mean()
             ds_interpolated = downsampled.interpolate(
                 method='polynomial', order=2)

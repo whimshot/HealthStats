@@ -13,3 +13,4 @@ envs/
 *.ini
 tags
 .tags
+*.profile
