@@ -30,7 +30,7 @@ logger_fh = logging.handlers.RotatingFileHandler('HealthStats.log',
 logger_fh.setLevel(logging.DEBUG)
 # create console handler with a higher log level
 logger_ch = logging.StreamHandler()
-logger_ch.setLevel(logging.ERROR)
+logger_ch.setLevel(logging.DEBUG)
 # create formatter and add it to the handlers
 logger_formatter = logging.Formatter('%(asctime)s'
                                      + ' %(hostname)s'

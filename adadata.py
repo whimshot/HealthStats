@@ -51,6 +51,7 @@ class AdaFeed(object):
             self.logger.debug('Querying {0}.'.format(self.feed))
             self.data = []
             self.dates = []
+            self.dates_utc = []
             feed_data = self.aio.data(self.feed)
             self.logger.debug('Parsing dates from {0}'.format(self.feed))
             for entry in feed_data:
@@ -64,7 +65,7 @@ class AdaFeed(object):
                 self.logger.debug('Appended {0}'.format(local))
             self.logger.debug('Retrieved data from {0}.'.format(self.feed))
             if self.data != old_data:
-                self.updated = [True, True, True]
+                self.updated = [True, True, True, True, True]
         except Exception:
             self.logger.exception('Caught exception.')
 

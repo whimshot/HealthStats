@@ -48,6 +48,8 @@ class WeightChart(BoxLayout):
             self.logger.debug('Setting up weight chart.')
             self.logger.debug('Set trigger for redrawing.')
             self.draw_chart()
+            self.logger.debug('Weight: {0}'.format(weight.updated))
+            self.logger.debug('BMI: {0}'.format(bmi.updated))
         except Exception:
             raise
         finally:
@@ -57,12 +59,16 @@ class WeightChart(BoxLayout):
         """Start the clock on redrawing the chart."""
         try:
             if (any(weight.updated)
-                    or any(bmi.updated)):
+                    and any(bmi.updated)):
+                self.logger.debug('Redrawing: {0}'.format(
+                    self.__class__.__name__))
                 self.draw_chart()
                 weight.updated.pop(0)
                 weight.updated.append(False)
                 bmi.updated.pop(0)
                 bmi.updated.append(False)
+            self.logger.debug('Weight: {0}'.format(weight.updated))
+            self.logger.debug('BMI: {0}'.format(bmi.updated))
         except Exception:
             self.logger.exception(
                 "Failed draw_chart for {0}".format(self.__class__.__name__))
@@ -152,8 +158,10 @@ class BPChart(BoxLayout):
         """Start the clock on redrawing the chart."""
         try:
             if (any(systolic.updated)
-                or any(diastolic.updated)
-                    or any(pulse.updated)):
+                and any(diastolic.updated)
+                    and any(pulse.updated)):
+                self.logger.debug('Redrawing: {0}'.format(
+                    self.__class__.__name__))
                 self.draw_chart()
                 systolic.updated.pop(0)
                 systolic.updated.append(False)
@@ -161,6 +169,9 @@ class BPChart(BoxLayout):
                 diastolic.updated.append(False)
                 pulse.updated.pop(0)
                 pulse.updated.append(False)
+            self.logger.debug('Systolic: {0}'.format(systolic.updated))
+            self.logger.debug('Diastolic: {0}'.format(diastolic.updated))
+            self.logger.debug('Pulse: {0}'.format(pulse.updated))
         except Exception:
             self.logger.exception(
                 "Failed draw_chart for {0}".format(self.__class__.__name__))
@@ -228,13 +239,21 @@ class SmoothWeight(BoxLayout):
     def redraw(self, dt):
         """Start the clock on redrawing the chart."""
         try:
+            safe_to_plot = (len(weight.data) == len(bmi.data))
             if (any(weight.updated)
-                    or any(bmi.updated)):
+                    and any(bmi.updated)
+                    and safe_to_plot):
+                self.logger.debug('Redrawing: {0}'.format(
+                    self.__class__.__name__))
+                self.logger.debug('Weight: {0}'.format(len(weight.data)))
+                self.logger.debug('BMI: {0}'.format(len(bmi.data)))
                 self.draw_chart()
                 weight.updated.pop(0)
                 weight.updated.append(False)
                 bmi.updated.pop(0)
                 bmi.updated.append(False)
+            self.logger.debug('Weight: {0}'.format(weight.updated))
+            self.logger.debug('BMI: {0}'.format(bmi.updated))
         except Exception:
             self.logger.exception(
                 "Failed draw_chart for {0}".format(self.__class__.__name__))
@@ -253,6 +272,8 @@ class SmoothWeight(BoxLayout):
             self.df = pd.DataFrame(
                 {'Weight': _weights},
                 index=ma_dates)
+            self.logger.debug('\n{0}'.format(self.df.values))
+            self.logger.debug('\n{0}'.format(self.df.index))
             upsampled = self.df.resample('H').mean()
             interpolated = upsampled.interpolate(method='polynomial', order=3)
             fig, _weight = plt.subplots(1, figsize=(8, 4.8))
@@ -310,9 +331,8 @@ class SmoothBP(BoxLayout):
         """Put together weight chart."""
         super(SmoothBP, self).__init__(**kwargs)
         try:
-            self.logger = \
-                logging.getLogger('HealthStats.'
-                                  + self.__class__.__name__)
+            self.logger = logging.getLogger('HealthStats.'
+                                            + self.__class__.__name__)
             self.logger.addFilter(HostnameFilter())
             self.logger.debug('Setting up BP chart.')
         except Exception:
@@ -323,9 +343,17 @@ class SmoothBP(BoxLayout):
     def redraw(self, dt):
         """Start the clock on redrawing the chart."""
         try:
+            safe_to_plot = (len(systolic.data) == len(diastolic.data)
+                            and len(diastolic.data) == len(pulse.data))
             if (any(systolic.updated)
-                or any(diastolic.updated)
-                    or any(pulse.updated)):
+                and any(diastolic.updated)
+                    and any(pulse.updated)
+                    and safe_to_plot):
+                self.logger.debug('Redrawing: {0}'.format(
+                    self.__class__.__name__))
+                self.logger.debug('systolic: {0}'.format(len(systolic.data)))
+                self.logger.debug('diastolic: {0}'.format(len(diastolic.data)))
+                self.logger.debug('pulse: {0}'.format(len(pulse.data)))
                 self.draw_chart()
                 systolic.updated.pop(0)
                 systolic.updated.append(False)
@@ -333,6 +361,9 @@ class SmoothBP(BoxLayout):
                 diastolic.updated.append(False)
                 pulse.updated.pop(0)
                 pulse.updated.append(False)
+            self.logger.debug('Systolic: {0}'.format(systolic.updated))
+            self.logger.debug('Diastolic: {0}'.format(diastolic.updated))
+            self.logger.debug('Pulse: {0}'.format(pulse.updated))
         except Exception:
             self.logger.exception(
                 "Failed draw_chart for {0}".format(self.__class__.__name__))
@@ -354,11 +385,16 @@ class SmoothBP(BoxLayout):
             _pulse = []
             for _pls in pulse.data:
                 _pulse.append(float(_pls))
+            self.logger.debug("Systolic: {0}".format(_systolic))
+            self.logger.debug("Diastolic: {0}".format(_diastolic))
+            self.logger.debug("Pulse: {0}".format(_pulse))
             self.df = pd.DataFrame(
                 {'Systolic': _systolic,
                  'Diastolic': _diastolic,
                  'Pulse': _pulse},
                 index=sys_dates)
+            self.logger.debug('\n{0}'.format(self.df.values))
+            self.logger.debug('\n{0}'.format(self.df.index))
             downsampled = self.df.resample('D').mean()
             ds_interpolated = downsampled.interpolate(
                 method='polynomial', order=2)
@@ -430,11 +466,17 @@ class SmallCharts(BoxLayout):
     def redraw(self, dt):
         """Start the clock on redrawing the chart."""
         try:
+            safe_to_plot = (len(systolic.data) == len(diastolic.data)
+                            and len(diastolic.data) == len(pulse.data)
+                            and len(weight.data) == len(bmi.data))
             if (any(systolic.updated)
-                or any(diastolic.updated)
-                    or any(pulse.updated)
-                    or any(weight.updated)
-                    or any(bmi.updated)):
+                and any(diastolic.updated)
+                    and any(pulse.updated)
+                    and any(weight.updated)
+                    and any(bmi.updated)
+                    and safe_to_plot):
+                self.logger.debug('Redrawing: {0}'.format(
+                    self.__class__.__name__))
                 self.draw_chart()
                 systolic.updated.pop(0)
                 systolic.updated.append(False)
@@ -446,6 +488,11 @@ class SmallCharts(BoxLayout):
                 weight.updated.append(False)
                 bmi.updated.pop(0)
                 bmi.updated.append(False)
+            self.logger.debug('Systolic: {0}'.format(systolic.updated))
+            self.logger.debug('Diastolic: {0}'.format(diastolic.updated))
+            self.logger.debug('Pulse: {0}'.format(pulse.updated))
+            self.logger.debug('Weight: {0}'.format(weight.updated))
+            self.logger.debug('BMI: {0}'.format(bmi.updated))
         except Exception:
             self.logger.exception(
                 "Failed draw_chart for {0}".format(self.__class__.__name__))
@@ -536,11 +583,11 @@ class ChartApp(App):
     def build(self):
         """Build the app."""
         cs = Chartsel()
-        cs.wc.draw_chart()
-        cs.bp.draw_chart()
-        cs.sc.draw_chart()
-        cs.sw.draw_chart()
-        cs.sbp.draw_chart()
+        cs.wc.redraw()
+        cs.bp.redraw()
+        cs.sc.redraw()
+        cs.sw.redraw()
+        cs.sbp.redraw()
         Clock.schedule_interval(cs.next_slide_please, 5.0)
         return cs
 
