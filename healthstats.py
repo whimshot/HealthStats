@@ -1,4 +1,5 @@
 """Health Stats app in kivy."""
+import cProfile
 import logging
 import logging.handlers
 
@@ -7,15 +8,16 @@ import inputpad  # noqa
 from hslogger import logger, HostnameFilter
 from kivy.app import App
 from kivy.clock import Clock
-from kivy.config import Config
+from kivy.config import Config, ConfigParser
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.carousel import Carousel
 from kivy.uix.togglebutton import ToggleButton
+import os
+cwd = os.getcwd()
 
 Config.set('graphics', 'width', '800')
 Config.set('graphics', 'height', '480')
 
-logger.info('Setting up HealthStatsApp.')
 feeds = ['weight', 'diastolic', 'systolic', 'pulse', 'bmi']
 
 
@@ -30,7 +32,7 @@ class TglBtn(ToggleButton):
                 logging.getLogger('HealthStats.'
                                   + self.__class__.__name__)
             self.logger.addFilter(HostnameFilter())
-            self.logger.debug("Creating an instance of " + __name__)
+            self.logger.debug(self.__class__.__name__ + ": Created")
             self.text = 'Scroll Off'
         except Exception:
             self.logger.exception("Caught exception.")
@@ -80,6 +82,23 @@ class HealthBox(BoxLayout):
 
 class HealthStatsApp(App):
     """Kivy App Class for Health Stats."""
+
+    def on_start(self):
+        """Task performed on start."""
+        self.profile = cProfile.Profile()
+        self.profile.enable()
+
+    def on_stop(self):
+        """Task performed on app stop."""
+        self.profile.disable()
+        self.profile.dump_stats('healthstats.profile')
+
+    def build_settings(self, settings):
+        """Set up the settings for this app."""
+        self.config = ConfigParser()
+        self.config.read('healthstats.conf')
+        settings.add_json_panel('The Health Statistitics',
+                                self.config, 'healthstats.json')
 
     def build(self):
         """Build function for Health Stats kivy app."""
