@@ -357,9 +357,9 @@ class SmoothBP(BoxLayout):
                     and safe_to_plot):
                 self.logger.debug('Redrawing: {0}'.format(
                     self.__class__.__name__))
-                self.logger.debug('systolic: {0}'.format(len(systolic.data)))
-                self.logger.debug('diastolic: {0}'.format(len(diastolic.data)))
-                self.logger.debug('pulse: {0}'.format(len(pulse.data)))
+                self.logger.debug('Systolic: {0}'.format(len(systolic.data)))
+                self.logger.debug('Diastolic: {0}'.format(len(diastolic.data)))
+                self.logger.debug('Pulse: {0}'.format(len(pulse.data)))
                 self.draw_chart()
                 systolic.updated.pop(0)
                 systolic.updated.append(False)
@@ -612,11 +612,11 @@ class ChartApp(App):
     def build(self):
         """Build the app."""
         cs = Chartsel()
-        cs.wc.redraw()
-        cs.bp.redraw()
-        cs.sc.redraw()
-        cs.sw.redraw()
-        cs.sbp.redraw()
+        cs.wc.redraw(2)
+        cs.bp.redraw(2)
+        cs.sc.redraw(2)
+        cs.sw.redraw(2)
+        cs.sbp.redraw(2)
         Clock.schedule_interval(cs.next_slide_please, 5.0)
         return cs
 

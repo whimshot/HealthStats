@@ -31,7 +31,7 @@ class TglBtn(ToggleButton):
                                   + self.__class__.__name__)
             self.logger.addFilter(HostnameFilter())
             self.logger.debug(self.__class__.__name__ + ": Created")
-            self.text = 'Scroll Off'
+            self.text = 'Scroll'
         except Exception:
             self.logger.exception("Caught exception.")
         finally:
@@ -41,9 +41,9 @@ class TglBtn(ToggleButton):
         """Toggle that button."""
         try:
             if self.state == 'normal':
-                self.text = 'Scroll Off'
+                self.text = 'Scroll'
             else:
-                self.text = 'Scroll On'
+                self.text = 'Scrolling'
         except Exception:
             raise
         finally:
@@ -105,8 +105,6 @@ class HealthStatsApp(App):
         Clock.schedule_interval(hb.hc.next_slide_please, 5)
         Clock.schedule_interval(hb.hc.weightchart.redraw, 30)
         Clock.schedule_interval(hb.hc.bpchart.redraw, 30)
-        Clock.schedule_interval(hb.hc.sw.redraw, 30)
-        Clock.schedule_interval(hb.hc.sbp.redraw, 30)
         Clock.schedule_interval(hb.hc.healthstats.statsimage.redraw, 30)
         return hb
 
