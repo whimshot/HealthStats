@@ -573,7 +573,6 @@ class Chartsel(Carousel):
             self.logger.addFilter(HostnameFilter())
             self.logger.debug('Setting up {0}.'.format(
                 self.__class__.__name__))
-            self.draw_chart()
         except Exception:
             self.logger.exception(
                 'Failed to instantiate {}.'.format(self.__class__.__name__))
@@ -602,7 +601,6 @@ class ChartApp(App):
             self.logger.addFilter(HostnameFilter())
             self.logger.debug('Setting up {0}.'.format(
                 self.__class__.__name__))
-            self.draw_chart()
         except Exception:
             self.logger.exception(
                 'Failed to instantiate {}.'.format(self.__class__.__name__))
