@@ -4,6 +4,8 @@ import httplib2
 import os
 
 from apiclient import discovery
+from datetime import datetime
+from dateutil import tz
 from oauth2client import client
 from oauth2client import tools
 from oauth2client.file import Storage
@@ -57,15 +59,19 @@ def main():
     students in a sample spreadsheet:
     https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
     """
+    # from_zone = tz.tzutc()
+    # to_zone = tz.tzlocal()
+
     credentials = get_credentials()
     http = credentials.authorize(httplib2.Http())
     discoveryUrl = ('https://sheets.googleapis.com/$discovery/rest?'
                     'version=v4')
+    print(discoveryUrl)
     service = discovery.build('sheets', 'v4', http=http,
                               discoveryServiceUrl=discoveryUrl)
 
-    spreadsheetId = '1z7-gf9otfqu7qnSlBGymz6PhHAOnJktreOH4kiwvg6E'
-    rangeName = 'systolic!A2:D'
+    spreadsheetId = '19-Q4v0r1TedP50e_hGsZcGFtDSQ6jwXIBRwBG8N3k-w'
+    rangeName = 'pulse!A2:B'
     result = service.spreadsheets().values().get(
         spreadsheetId=spreadsheetId, range=rangeName).execute()
     values = result.get('values', [])
@@ -73,10 +79,13 @@ def main():
     if not values:
         print('No data found.')
     else:
-        print('Name, Major:')
+        print('{0:21} {1:5}'.format('date', 'value'))
         for row in values:
+            # utc = datetime.strptime(row[3], '%Y-%m-%d %H:%M:%S UTC')
+            # utc = utc.replace(tzinfo=from_zone)
+            # local = utc.astimezone(to_zone).strftime('%Y/%m/%d %H:%M:%S')
             # Print columns A and E, which correspond to indices 0 and 4.
-            print('%s, %s' % (row[1], row[3]))
+            print('{0:21} {1:5}'.format(row[0], row[1]))
 
 
 if __name__ == '__main__':
