@@ -18,7 +18,7 @@ except ImportError:
 
 # If modifying these scopes, delete your previously saved credentials
 # at ~/.credentials/sheets.googleapis.com-python-quickstart.json
-SCOPES = 'https://www.googleapis.com/auth/spreadsheets.readonly'
+SCOPES = 'https://www.googleapis.com/auth/spreadsheets'
 CLIENT_SECRET_FILE = 'client_secret.json'
 APPLICATION_NAME = 'Google Sheets API Python Quickstart'
 
@@ -37,7 +37,7 @@ def get_credentials():
     if not os.path.exists(credential_dir):
         os.makedirs(credential_dir)
     credential_path = os.path.join(credential_dir,
-                                   'sheets.googleapis.com-python-quickstart.json')
+                                   'sheets.googleapis.com-whimshot-healthstats.json')
 
     store = Storage(credential_path)
     credentials = store.get()
@@ -59,19 +59,18 @@ def main():
     students in a sample spreadsheet:
     https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
     """
-    # from_zone = tz.tzutc()
-    # to_zone = tz.tzlocal()
+    from_zone = tz.tzutc()
+    to_zone = tz.tzlocal()
 
     credentials = get_credentials()
     http = credentials.authorize(httplib2.Http())
     discoveryUrl = ('https://sheets.googleapis.com/$discovery/rest?'
                     'version=v4')
-    print(discoveryUrl)
     service = discovery.build('sheets', 'v4', http=http,
                               discoveryServiceUrl=discoveryUrl)
 
     spreadsheetId = '19-Q4v0r1TedP50e_hGsZcGFtDSQ6jwXIBRwBG8N3k-w'
-    rangeName = 'pulse!A2:B'
+    rangeName = 'newdia!A2:D'
     result = service.spreadsheets().values().get(
         spreadsheetId=spreadsheetId, range=rangeName).execute()
     values = result.get('values', [])
@@ -79,13 +78,19 @@ def main():
     if not values:
         print('No data found.')
     else:
-        print('{0:21} {1:5}'.format('date', 'value'))
+        # print('{0:21} {1:5}'.format('date', 'value'))
+        print('date,value')
         for row in values:
             # utc = datetime.strptime(row[3], '%Y-%m-%d %H:%M:%S UTC')
             # utc = utc.replace(tzinfo=from_zone)
             # local = utc.astimezone(to_zone).strftime('%Y/%m/%d %H:%M:%S')
             # Print columns A and E, which correspond to indices 0 and 4.
-            print('{0:21} {1:5}'.format(row[0], row[1]))
+            utc = datetime.strptime(row[3], '%Y-%m-%d %H:%M:%S UTC')
+            utc = utc.replace(tzinfo=from_zone)
+            local = utc.astimezone(to_zone)
+            rowdate = local.strftime('%m/%d/%Y %H:%M:%S')
+            # print('{0:21} {1:5}'.format(rowdate, row[1]))
+            print('{0},{1}'.format(rowdate, row[1]))
 
 
 if __name__ == '__main__':
