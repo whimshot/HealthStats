@@ -10,6 +10,8 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.label import Label
+from chart import feeds
+
 
 AIO_KEY = config.get('Adafruit', 'aio_key')
 AIO_ID = config.get('Adafruit', 'aio_id')
@@ -135,10 +137,10 @@ class FunctionPad(BoxLayout):
             vital_stat = float(vital_text)
             if (btn_id == 'weight'):
                 bmi = int(vital_stat / BMI_CONSTANT)
-                self.aio.send('bmi', bmi)
+                feeds['bmi'].send_data(bmi)
                 self.logger.debug("BMI of {0}".format(bmi)
                                   + " calculated and sent.")
-            self.aio.send(btn_id, vital_stat)
+            feeds[btn_id].send_data(vital_stat)
             self.logger.debug("{0} updated with".format(btn_id)
                               + " {0}".format(vital_text))
         except Exception:
