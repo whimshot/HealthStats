@@ -23,33 +23,182 @@ CLIENT_SECRET_FILE = 'client_secret.json'
 APPLICATION_NAME = 'Google Sheets API Python Quickstart'
 
 
-def get_credentials():
-    """Gets valid user credentials from storage.
+class GData(object):
+    """Get and store data from Google Sheets."""
 
-    If nothing has been stored, or if the stored credentials are invalid,
-    the OAuth2 flow is completed to obtain the new credentials.
+    def __init__(self, sheet, **kwargs):
+        """Put together weight chart."""
+        super().__init__(**kwargs)
+        try:
+            self.logger = \
+                logging.getLogger('HealthStats.'
+                                  + self.__class__.__name__)
+            self.logger.addFilter(HostnameFilter())
+            self.data = []
+            self.dates = []
+            self.dates_utc = []
+            self.sheet = sheet
+            self.aio = Client(AIO_KEY)
+            self.get_data()
+            self.client = MQTTClient(AIO_ID, AIO_KEY)
+            self.client.on_connect = self.connected
+            self.client.on_disconnect = self.disconnected
+            self.client.on_message = self.message
+            self.client.connect()
+            self.client.loop_background()
+            self.logger.debug('Setting up {0} '.format(
+                self.__class__.__name__) + 'for {0}.'.format(sheet))
+        except Exception:
+            self.logger.exception(
+                'Failed to instantiate {}.'.format(self.__class__.__name__))
+        finally:
+            pass
 
-    Returns:
-        Credentials, the obtained credential.
-    """
-    home_dir = os.path.expanduser('~')
-    credential_dir = os.path.join(home_dir, '.credentials')
-    if not os.path.exists(credential_dir):
-        os.makedirs(credential_dir)
-    credential_path = os.path.join(credential_dir,
-                                   'sheets.googleapis.com-python-quickstart.json')
+    def get_credentials(self):
+        """
+        Get valid user credentials from storage.
 
-    store = Storage(credential_path)
-    credentials = store.get()
-    if not credentials or credentials.invalid:
-        flow = client.flow_from_clientsecrets(CLIENT_SECRET_FILE, SCOPES)
-        flow.user_agent = APPLICATION_NAME
-        if flags:
-            credentials = tools.run_flow(flow, store, flags)
-        else:  # Needed only for compatibility with Python 2.6
-            credentials = tools.run(flow, store)
-        print('Storing credentials to ' + credential_path)
-    return credentials
+        If nothing has been stored, or if the stored credentials are invalid,
+        the OAuth2 flow is completed to obtain the new credentials.
+
+        Returns:
+            Credentials, the obtained credential.
+        """
+        try:
+            self.quick_json = 'sheets.googleapis.com-whimshot-healthstats.json'
+            self.home_dir = os.path.expanduser('~')
+            self.credential_dir = os.path.join(self.home_dir, '.credentials')
+            if not os.path.exists(self.credential_dir):
+                os.makedirs(self.credential_dir)
+            self.credential_path = os.path.join(self.credential_dir,
+                                                self.quick_json)
+            self.store = Storage(self.credential_path)
+            self.credentials = self.store.get()
+            if not self.credentials or self.credentials.invalid:
+                self.flow = client.flow_from_clientsecrets(
+                    CLIENT_SECRET_FILE, SCOPES)
+                self.flow.user_agent = APPLICATION_NAME
+                self.credentials = tools.run(self.flow, self.store)
+                self.logger.info('Storing credentials to ' +
+                                 self.credential_path)
+            return self.credentials
+        except Exception as e:
+            raise
+        finally:
+            pass
+
+    def get_data(self):
+        """Show basic usage of the Sheets API.
+
+        Creates a Sheets API service object and prints the names and majors of
+        students in a sample spreadsheet:
+        https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
+        """
+        try:
+            # from_zone = tz.tzutc()
+            # to_zone = tz.tzlocal()
+            __old_data = self.data
+            self.data = []
+            self.data = []
+            __data = []
+            __dates = []
+            self.credentials = self.get_credentials()
+            self.http = self.credentials.authorize(httplib2.Http())
+            self.discoveryUrl = (
+                'https://sheets.googleapis.com/$discovery/rest?'
+                'version=v4')
+            self.service = discovery.build(
+                'sheets', 'v4', http=self.http,
+                discoveryServiceUrl=self.discoveryUrl)
+
+            self.spreadsheetId = \
+                '19-Q4v0r1TedP50e_hGsZcGFtDSQ6jwXIBRwBG8N3k-w'
+            self.rangeName = self.sheet + '!A2:B'
+            self.result = self.service.spreadsheets().values().get(
+                spreadsheetId=self.spreadsheetId,
+                range=self.rangeName).execute()
+            self.values = self.result.get('values', [])
+
+            if not self.values:
+                print('No data found.')
+            else:
+                # print('{0:21} {1:5}'.format('date', 'value'))
+                for row in self.values:
+                    # utc = datetime.strptime(row[3], '%Y-%m-%d %H:%M:%S UTC')
+                    # utc = utc.replace(tzinfo=from_zone)
+                    # local = utc.astimezone(to_zone).strftime('%Y/%m/%d %H:%M:%S')
+                    # Print columns A and E, which correspond to indices 0 and 4.
+                    row_date = datetime.strptime(row[0], '%m/%d/%Y %H:%M:%S')
+                    # print('{0:21} {1:5}'.format(row[0], row[1]))
+                    __data.append(row[1])
+                    __dates.append(row_date)
+            self.data = __data
+            self.dates = __dates
+            if self.data != __old_data:
+                self.updated = [True, True, True]
+        except Exception as e:
+            raise
+        finally:
+            pass
+
+    def send_data(self, value):
+        """
+        Send data to google sheets and to Adafruit.
+
+        Why? Because that is how we roll!
+        """
+        try:
+            __now_dt = datetime.now()
+            __now_str = __now_dt.strftime('%m/%d/%Y %H:%M:%S')
+            values = [[__now_str, value]]
+            self.credentials = self.get_credentials()
+            self.http = self.credentials.authorize(httplib2.Http())
+            self.discoveryUrl = ('https://sheets.googleapis.com/$discovery/rest?'
+                                 'version=v4')
+            self.service = discovery.build('sheets', 'v4', http=self.http,
+                                           discoveryServiceUrl=self.discoveryUrl)
+            self.spreadsheetId = '19-Q4v0r1TedP50e_hGsZcGFtDSQ6jwXIBRwBG8N3k-w'
+
+            body = {'values': values}
+            self.service.spreadsheets().values().append(
+                spreadsheetId=self.spreadsheetId, range=self.rangeName,
+                valueInputOption='USER_ENTERED', body=body).execute()
+            self.aio.send(self.sheet, value)
+        except Exception as e:
+            raise
+        finally:
+            pass
+
+    def connected(self, client):
+        """Called when connection to io.adafruit.com is successful."""
+        # Subscribe to changes for the feeds listed.
+        self.logger.debug('Connected to Adafruit.')
+        try:
+            self.logger.debug('Subscribing to {0} feed.'.format(self.sheet))
+            self.client.subscribe(self.sheet)
+        except Exception:
+            self.logger.exception('Failed to subscribe to feed.')
+
+    def disconnected(self, client):
+        """Called when disconnected from io.adafruit.com."""
+        self.logger.info('Disconnected from Adafruit IO!')
+
+    def message(self, client, feed_id, payload):
+        """Called when a subscribed feed gets new data."""
+        try:
+            self.logger.debug("Feed: {0} received".format(feed_id)
+                              + " new data: {0}".format(payload))
+            self.get_data()
+        except Exception:
+            raise
+        finally:
+            pass
+
+
+feed_names = ['bmi', 'weight', 'systolic', 'diastolic', 'pulse']
+feeds = {}
+for feed in feed_names:
+    feeds[feed] = GData(feed)
 
 
 class AdaFeed(object):
@@ -216,4 +365,9 @@ class AdaData():
 
 
 if __name__ == '__main__':
-    ad = AdaData()
+    gd = GData('bmi')
+    gd.get_data()
+    print(gd.data)
+    print(len(gd.data))
+    data = 23
+    gd.send_data(data)
