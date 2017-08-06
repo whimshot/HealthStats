@@ -18,9 +18,12 @@ from hslogger import HostnameFilter
 
 AIO_KEY = config.get('Adafruit', 'aio_key')
 AIO_ID = config.get('Adafruit', 'aio_id')
-SCOPES = 'https://www.googleapis.com/auth/spreadsheets.readonly'
-CLIENT_SECRET_FILE = 'client_secret.json'
-APPLICATION_NAME = 'Google Sheets API Python Quickstart'
+SCOPES = config.get('GoogleSheets', 'scopes')
+CLIENT_SECRET_FILE = config.get('GoogleSheets', 'client_secret_file')
+APPLICATION_NAME = config.get('GoogleSheets', 'application_name')
+QUICK_JSON = config.get('GoogleSheets', 'quick_json')
+DISCOVERYURL = config.get('GoogleSheets', 'discoveryurl')
+SPREADSHEETID = config.get('GoogleSheets', 'spreadsheetid')
 
 
 class GData(object):
@@ -65,7 +68,7 @@ class GData(object):
             Credentials, the obtained credential.
         """
         try:
-            self.quick_json = 'sheets.googleapis.com-whimshot-healthstats.json'
+            self.quick_json = QUICK_JSON
             self.home_dir = os.path.expanduser('~')
             self.credential_dir = os.path.join(self.home_dir, '.credentials')
             if not os.path.exists(self.credential_dir):
@@ -104,15 +107,12 @@ class GData(object):
             __dates = []
             self.credentials = self.get_credentials()
             self.http = self.credentials.authorize(httplib2.Http())
-            self.discoveryUrl = (
-                'https://sheets.googleapis.com/$discovery/rest?'
-                'version=v4')
+            self.discoveryUrl = DISCOVERYURL
             self.service = discovery.build(
                 'sheets', 'v4', http=self.http,
                 discoveryServiceUrl=self.discoveryUrl)
 
-            self.spreadsheetId = \
-                '19-Q4v0r1TedP50e_hGsZcGFtDSQ6jwXIBRwBG8N3k-w'
+            self.spreadsheetId = SPREADSHEETID
             self.rangeName = self.sheet + '!A2:B'
             self.result = self.service.spreadsheets().values().get(
                 spreadsheetId=self.spreadsheetId,
@@ -153,8 +153,7 @@ class GData(object):
             values = [[__now_str, value]]
             self.credentials = self.get_credentials()
             self.http = self.credentials.authorize(httplib2.Http())
-            self.discoveryUrl = ('https://sheets.googleapis.com/$discovery/rest?'
-                                 'version=v4')
+            self.discoveryUrl = DISCOVERYURL
             self.service = discovery.build('sheets', 'v4', http=self.http,
                                            discoveryServiceUrl=self.discoveryUrl)
             self.spreadsheetId = '19-Q4v0r1TedP50e_hGsZcGFtDSQ6jwXIBRwBG8N3k-w'
