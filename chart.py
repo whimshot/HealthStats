@@ -5,6 +5,7 @@ import logging.handlers
 import matplotlib
 import pandas as pd
 from adadata import AdaFeed
+from gdata import feeds
 from hsconfig import config
 from hslogger import HostnameFilter
 from kivy.app import App
@@ -27,11 +28,16 @@ matplotlib.rc('legend', framealpha=0.5, loc='best')
 
 matplotlib.rcParams['axes.linewidth'] = 0.5
 
-bmi = AdaFeed('bmi')
-weight = AdaFeed('weight')
-systolic = AdaFeed('systolic')
-diastolic = AdaFeed('diastolic')
-pulse = AdaFeed('pulse')
+# bmi = AdaFeed('bmi')
+# weight = AdaFeed('weight')
+# systolic = AdaFeed('systolic')
+# diastolic = AdaFeed('diastolic')
+# pulse = AdaFeed('pulse')
+# bmi = GData('bmi')
+# weight = GData('weight')
+# systolic = GData('systolic')
+# diastolic = GData('diastolic')
+# pulse = GData('pulse')
 
 
 class WeightChart(BoxLayout):
@@ -57,17 +63,17 @@ class WeightChart(BoxLayout):
     def redraw(self, dt):
         """Start the clock on redrawing the chart."""
         try:
-            if (any(weight.updated)
-                    and any(bmi.updated)):
+            if (any(feeds['weight'].updated)
+                    and any(feeds['bmi'].updated)):
                 self.logger.debug('Redrawing: {0}'.format(
                     self.__class__.__name__))
                 self.draw_chart()
-                weight.updated.pop(0)
-                weight.updated.append(False)
-                bmi.updated.pop(0)
-                bmi.updated.append(False)
-            self.logger.debug('Weight: {0}'.format(weight.updated))
-            self.logger.debug('BMI: {0}'.format(bmi.updated))
+                feeds['weight'].updated.pop(0)
+                feeds['weight'].updated.append(False)
+                feeds['bmi'].updated.pop(0)
+                feeds['bmi'].updated.append(False)
+            self.logger.debug('Weight: {0}'.format(feeds['weight'].updated))
+            self.logger.debug('BMI: {0}'.format(feeds['bmi'].updated))
         except Exception:
             self.logger.exception(
                 "Failed draw_chart for {0}".format(self.__class__.__name__))
@@ -85,8 +91,12 @@ class WeightChart(BoxLayout):
             weight_minor_locator = MultipleLocator(.2)
             bmi_major_locator = MultipleLocator(1)
             weight_chart.yaxis.set_minor_locator(weight_minor_locator)
-            wc = weight_chart.plot(weight.dates,
-                                   weight.data,
+            self.logger.debug(
+                'Weight dates: {0}'.format(len(feeds['weight'].dates)))
+            self.logger.debug(
+                'Weight data: {0}'.format(len(feeds['weight'].data)))
+            wc = weight_chart.plot(feeds['weight'].dates,
+                                   feeds['weight'].data,
                                    'C0', label='Weight (Kg)')
             weight_chart.set_ylabel('Weight (Kg)',
                                     fontsize='9',
@@ -105,8 +115,12 @@ class WeightChart(BoxLayout):
 
             bmi_chart = weight_chart.twinx()
             bmi_chart.yaxis.set_major_locator(bmi_major_locator)
-            bc = bmi_chart.plot(bmi.dates,
-                                bmi.data,
+            self.logger.debug(
+                'BMI dates: {0}'.format(len(feeds['bmi'].dates)))
+            self.logger.debug(
+                'BMI data: {0}'.format(len(feeds['bmi'].data)))
+            bc = bmi_chart.plot(feeds['bmi'].dates,
+                                feeds['bmi'].data,
                                 'C1', label='BMI')
             bmi_chart.set_ylabel('BMI',
                                  fontsize='9',
@@ -156,21 +170,23 @@ class BPChart(BoxLayout):
     def redraw(self, dt):
         """Start the clock on redrawing the chart."""
         try:
-            if (any(systolic.updated)
-                and any(diastolic.updated)
-                    and any(pulse.updated)):
+            if (any(feeds['systolic'].updated)
+                and any(feeds['diastolic'].updated)
+                    and any(feeds['pulse'].updated)):
                 self.logger.debug('Redrawing: {0}'.format(
                     self.__class__.__name__))
                 self.draw_chart()
-                systolic.updated.pop(0)
-                systolic.updated.append(False)
-                diastolic.updated.pop(0)
-                diastolic.updated.append(False)
-                pulse.updated.pop(0)
-                pulse.updated.append(False)
-            self.logger.debug('Systolic: {0}'.format(systolic.updated))
-            self.logger.debug('Diastolic: {0}'.format(diastolic.updated))
-            self.logger.debug('Pulse: {0}'.format(pulse.updated))
+                feeds['systolic'].updated.pop(0)
+                feeds['systolic'].updated.append(False)
+                feeds['diastolic'].updated.pop(0)
+                feeds['diastolic'].updated.append(False)
+                feeds['pulse'].updated.pop(0)
+                feeds['pulse'].updated.append(False)
+            self.logger.debug('Systolic: {0}'.format(
+                feeds['systolic'].updated))
+            self.logger.debug('Diastolic: {0}'.format(
+                feeds['diastolic'].updated))
+            self.logger.debug('Pulse: {0}'.format(feeds['pulse'].updated))
         except Exception:
             self.logger.exception(
                 "Failed draw_chart for {0}".format(self.__class__.__name__))
@@ -187,14 +203,26 @@ class BPChart(BoxLayout):
             fig, bp_chart = plt.subplots(1, figsize=(8, 4.8))
             plt.title('Blood Presure (mmHg) & Pulse (BPM) Measurements')
             bp_chart.yaxis.set_minor_locator(bp_minor_locator)
-            bp_chart.plot(systolic.dates,
-                          systolic.data,
+            self.logger.debug(
+                'Systolic dates: {0}'.format(len(feeds['systolic'].dates)))
+            self.logger.debug(
+                'Systolic data: {0}'.format(len(feeds['systolic'].data)))
+            bp_chart.plot(feeds['systolic'].dates,
+                          feeds['systolic'].data,
                           label='Systolic')
-            bp_chart.plot(diastolic.dates,
-                          diastolic.data,
+            self.logger.debug(
+                'Diastolic dates: {0}'.format(len(feeds['diastolic'].dates)))
+            self.logger.debug(
+                'Diastolic data: {0}'.format(len(feeds['diastolic'].data)))
+            bp_chart.plot(feeds['diastolic'].dates,
+                          feeds['diastolic'].data,
                           label='Diastolic')
-            bp_chart.plot(pulse.dates,
-                          pulse.data,
+            self.logger.debug(
+                'Pulse dates: {0}'.format(len(feeds['pulse'].dates)))
+            self.logger.debug(
+                'Pulse data: {0}'.format(len(feeds['pulse'].data)))
+            bp_chart.plot(feeds['pulse'].dates,
+                          feeds['pulse'].data,
                           label='Pulse')
             bp_chart.grid(which='major')
             bp_chart.yaxis.grid(which='minor')
@@ -240,23 +268,25 @@ class SmoothWeight(BoxLayout):
     def redraw(self, dt):
         """Start the clock on redrawing the chart."""
         try:
-            safe_to_plot = (len(weight.data) == len(bmi.data))
-            if (any(weight.updated)
-                    and any(bmi.updated)
+            safe_to_plot = (len(feeds['weight'].data)
+                            == len(feeds['bmi'].data))
+            if (any(feeds['weight'].updated)
+                    and any(feeds['bmi'].updated)
                     and safe_to_plot):
                 self.logger.debug('Redrawing: {0}'.format(
                     self.__class__.__name__))
-                self.logger.debug('Weight: {0}'.format(len(weight.data)))
-                self.logger.debug('BMI: {0}'.format(len(bmi.data)))
+                self.logger.debug('Weight: {0}'.format(
+                    len(feeds['weight'].data)))
+                self.logger.debug('BMI: {0}'.format(len(feeds['bmi'].data)))
                 self.draw_chart()
-                weight.updated.pop(0)
-                weight.updated.append(False)
-                bmi.updated.pop(0)
-                bmi.updated.append(False)
-            self.logger.debug('Weight: {0}'.format(weight.updated))
-            self.logger.debug('BMI: {0}'.format(bmi.updated))
-            self.logger.debug('Weight: {0}'.format(len(weight.data)))
-            self.logger.debug('BMI: {0}'.format(len(bmi.data)))
+                feeds['weight'].updated.pop(0)
+                feeds['weight'].updated.append(False)
+                feeds['bmi'].updated.pop(0)
+                feeds['bmi'].updated.append(False)
+            self.logger.debug('Weight: {0}'.format(feeds['weight'].updated))
+            self.logger.debug('BMI: {0}'.format(feeds['bmi'].updated))
+            self.logger.debug('Weight: {0}'.format(len(feeds['weight'].data)))
+            self.logger.debug('BMI: {0}'.format(len(feeds['bmi'].data)))
         except Exception:
             self.logger.exception(
                 "Failed draw_chart for {0}".format(self.__class__.__name__))
@@ -268,9 +298,9 @@ class SmoothWeight(BoxLayout):
         try:
             self.logger.debug('Redrawing the Smooth Weight chart.')
             self.clear_widgets()
-            ma_dates = pd.to_datetime(weight.dates_utc, utc=True)
+            ma_dates = pd.to_datetime(feeds['weight'].dates_utc, utc=True)
             _weights = []
-            for _w in weight.data:
+            for _w in feeds['weight'].data:
                 _weights.append(float(_w))
             self.df = pd.DataFrame(
                 {'Weight': _weights},
@@ -284,8 +314,8 @@ class SmoothWeight(BoxLayout):
             weight_minor_locator = MultipleLocator(.2)
             bmi_major_locator = MultipleLocator(1)
             _weight.yaxis.set_minor_locator(weight_minor_locator)
-            wc1 = _weight.plot(weight.dates,
-                               weight.data,
+            wc1 = _weight.plot(feeds['weight'].dates,
+                               feeds['weight'].data,
                                label='Weight (Kg)')
             wc2 = _weight.plot(interpolated.index,
                                interpolated['Weight'], '-',
@@ -297,8 +327,8 @@ class SmoothWeight(BoxLayout):
 
             _bmi = _weight.twinx()
             _bmi.yaxis.set_major_locator(bmi_major_locator)
-            bc = _bmi.plot(bmi.dates,
-                           bmi.data,
+            bc = _bmi.plot(feeds['bmi'].dates,
+                           feeds['bmi'].data,
                            'C2', label='BMI')
             _bmi.set_ylabel('BMI',
                             fontsize='9',
@@ -349,27 +379,32 @@ class SmoothBP(BoxLayout):
     def redraw(self, dt):
         """Start the clock on redrawing the chart."""
         try:
-            safe_to_plot = (len(systolic.data) == len(diastolic.data)
-                            and len(diastolic.data) == len(pulse.data))
-            if (any(systolic.updated)
-                and any(diastolic.updated)
-                    and any(pulse.updated)
+            safe_to_plot = (len(feeds['systolic'].data) == len(feeds['diastolic'].data)
+                            and len(feeds['diastolic'].data) == len(feeds['pulse'].data))
+            if (any(feeds['systolic'].updated)
+                and any(feeds['diastolic'].updated)
+                    and any(feeds['pulse'].updated)
                     and safe_to_plot):
                 self.logger.debug('Redrawing: {0}'.format(
                     self.__class__.__name__))
-                self.logger.debug('Systolic: {0}'.format(len(systolic.data)))
-                self.logger.debug('Diastolic: {0}'.format(len(diastolic.data)))
-                self.logger.debug('Pulse: {0}'.format(len(pulse.data)))
+                self.logger.debug('Systolic: {0}'.format(
+                    len(feeds['systolic'].data)))
+                self.logger.debug('Diastolic: {0}'.format(
+                    len(feeds['diastolic'].data)))
+                self.logger.debug('Pulse: {0}'.format(
+                    len(feeds['pulse'].data)))
                 self.draw_chart()
-                systolic.updated.pop(0)
-                systolic.updated.append(False)
-                diastolic.updated.pop(0)
-                diastolic.updated.append(False)
-                pulse.updated.pop(0)
-                pulse.updated.append(False)
-            self.logger.debug('Systolic: {0}'.format(systolic.updated))
-            self.logger.debug('Diastolic: {0}'.format(diastolic.updated))
-            self.logger.debug('Pulse: {0}'.format(pulse.updated))
+                feeds['systolic'].updated.pop(0)
+                feeds['systolic'].updated.append(False)
+                feeds['diastolic'].updated.pop(0)
+                feeds['diastolic'].updated.append(False)
+                feeds['pulse'].updated.pop(0)
+                feeds['pulse'].updated.append(False)
+            self.logger.debug('Systolic: {0}'.format(
+                feeds['systolic'].updated))
+            self.logger.debug('Diastolic: {0}'.format(
+                feeds['diastolic'].updated))
+            self.logger.debug('Pulse: {0}'.format(feeds['pulse'].updated))
         except Exception:
             self.logger.exception(
                 "Failed draw_chart for {0}".format(self.__class__.__name__))
@@ -381,15 +416,15 @@ class SmoothBP(BoxLayout):
         try:
             self.logger.debug('Redrawing the BP chart.')
             self.clear_widgets()
-            sys_dates = pd.to_datetime(systolic.dates_utc, utc=True)
+            sys_dates = pd.to_datetime(feeds['systolic'].dates_utc, utc=True)
             _systolic = []
-            for _sys in systolic.data:
+            for _sys in feeds['systolic'].data:
                 _systolic.append(float(_sys))
             _diastolic = []
-            for _dia in diastolic.data:
+            for _dia in feeds['diastolic'].data:
                 _diastolic.append(float(_dia))
             _pulse = []
-            for _pls in pulse.data:
+            for _pls in feeds['pulse'].data:
                 _pulse.append(float(_pls))
             self.logger.debug("Systolic: {0}".format(_systolic))
             self.logger.debug("Diastolic: {0}".format(_diastolic))
@@ -411,14 +446,14 @@ class SmoothBP(BoxLayout):
             bp_minor_locator = MultipleLocator(2)
             plt.title('Blood Presure (mmHg) & Pulse (BPM) Measurements')
             _bp.yaxis.set_minor_locator(bp_minor_locator)
-            _bp.plot(systolic.dates,
-                     systolic.data,
+            _bp.plot(feeds['systolic'].dates,
+                     feeds['systolic'].data,
                      label='Systolic')
-            _bp.plot(diastolic.dates,
-                     diastolic.data,
+            _bp.plot(feeds['diastolic'].dates,
+                     feeds['diastolic'].data,
                      label='Diastolic')
-            _bp.plot(pulse.dates,
-                     pulse.data,
+            _bp.plot(feeds['pulse'].dates,
+                     feeds['pulse'].data,
                      label='Pulse')
             _bp.plot(interpolated.index,
                      interpolated['Systolic'], '-',
@@ -473,33 +508,36 @@ class SmallCharts(BoxLayout):
     def redraw(self, dt):
         """Start the clock on redrawing the chart."""
         try:
-            safe_to_plot = (len(systolic.data) == len(diastolic.data)
-                            and len(diastolic.data) == len(pulse.data)
-                            and len(weight.data) == len(bmi.data))
-            if (any(systolic.updated)
-                and any(diastolic.updated)
-                    and any(pulse.updated)
-                    and any(weight.updated)
-                    and any(bmi.updated)
+            safe_to_plot = \
+                (len(feeds['systolic'].data) == len(feeds['diastolic'].data)
+                 and len(feeds['diastolic'].data) == len(feeds['pulse'].data)
+                 and len(feeds['weight'].data) == len(feeds['bmi'].data))
+            if (any(feeds['systolic'].updated)
+                and any(feeds['diastolic'].updated)
+                    and any(feeds['pulse'].updated)
+                    and any(feeds['weight'].updated)
+                    and any(feeds['bmi'].updated)
                     and safe_to_plot):
                 self.logger.debug('Redrawing: {0}'.format(
                     self.__class__.__name__))
                 self.draw_chart()
-                systolic.updated.pop(0)
-                systolic.updated.append(False)
-                diastolic.updated.pop(0)
-                diastolic.updated.append(False)
-                pulse.updated.pop(0)
-                pulse.updated.append(False)
-                weight.updated.pop(0)
-                weight.updated.append(False)
-                bmi.updated.pop(0)
-                bmi.updated.append(False)
-            self.logger.debug('Systolic: {0}'.format(systolic.updated))
-            self.logger.debug('Diastolic: {0}'.format(diastolic.updated))
-            self.logger.debug('Pulse: {0}'.format(pulse.updated))
-            self.logger.debug('Weight: {0}'.format(weight.updated))
-            self.logger.debug('BMI: {0}'.format(bmi.updated))
+                feeds['systolic'].updated.pop(0)
+                feeds['systolic'].updated.append(False)
+                feeds['diastolic'].updated.pop(0)
+                feeds['diastolic'].updated.append(False)
+                feeds['pulse'].updated.pop(0)
+                feeds['pulse'].updated.append(False)
+                feeds['weight'].updated.pop(0)
+                feeds['weight'].updated.append(False)
+                feeds['bmi'].updated.pop(0)
+                feeds['bmi'].updated.append(False)
+            self.logger.debug('Systolic: {0}'.format(
+                feeds['systolic'].updated))
+            self.logger.debug('Diastolic: {0}'.format(
+                feeds['diastolic'].updated))
+            self.logger.debug('Pulse: {0}'.format(feeds['pulse'].updated))
+            self.logger.debug('Weight: {0}'.format(feeds['weight'].updated))
+            self.logger.debug('BMI: {0}'.format(feeds['bmi'].updated))
         except Exception:
             self.logger.exception(
                 "Failed draw_chart for {0}".format(self.__class__.__name__))
@@ -515,20 +553,37 @@ class SmallCharts(BoxLayout):
             fig, (weight_chart, bp_chart) = plt.subplots(2, figsize=(4, 4.8))
             bmi_major_locator = MultipleLocator(1)
 
-            bp_chart.plot(systolic.dates,
-                          systolic.data,
+            self.logger.debug(
+                'Systolic dates: {0}'.format(len(feeds['systolic'].dates)))
+            self.logger.debug(
+                'Systolic data: {0}'.format(len(feeds['systolic'].data)))
+            bp_chart.plot(feeds['systolic'].dates,
+                          feeds['systolic'].data,
                           label='Systolic')
-            bp_chart.plot(diastolic.dates,
-                          diastolic.data,
+            self.logger.debug(
+                'Diastolic dates: {0}'.format(len(feeds['diastolic'].dates)))
+            self.logger.debug(
+                'Diastolic data: {0}'.format(len(feeds['diastolic'].data)))
+            bp_chart.plot(feeds['diastolic'].dates,
+                          feeds['diastolic'].data,
                           label='Diastolic')
-            bp_chart.plot(pulse.dates,
-                          pulse.data,
+            self.logger.debug(
+                'Pulse dates: {0}'.format(len(feeds['pulse'].dates)))
+            self.logger.debug(
+                'Pulse data: {0}'.format(len(feeds['pulse'].data)))
+            bp_chart.plot(feeds['pulse'].dates,
+                          feeds['pulse'].data,
                           label='Pulse')
+
             bp_chart.set_ylabel('Blood Pressure (mmHg)\nPulse (BPM)')
             bp_chart.tick_params(axis='y')
 
-            weight_chart.plot(weight.dates,
-                              weight.data, 'C0')
+            self.logger.debug(
+                'Weight dates: {0}'.format(len(feeds['weight'].dates)))
+            self.logger.debug(
+                'Weight data: {0}'.format(len(feeds['weight'].data)))
+            weight_chart.plot(feeds['weight'].dates,
+                              feeds['weight'].data, 'C0')
             weight_chart.set_ylabel('Weight (Kg)',
                                     fontsize='9',
                                     color='C0')
@@ -537,8 +592,12 @@ class SmallCharts(BoxLayout):
 
             bmi_chart = weight_chart.twinx()
             bmi_chart.yaxis.set_major_locator(bmi_major_locator)
-            bmi_chart.plot(bmi.dates,
-                           bmi.data, 'C1')
+            self.logger.debug(
+                'BMI dates: {0}'.format(len(feeds['bmi'].dates)))
+            self.logger.debug(
+                'BMI data: {0}'.format(len(feeds['bmi'].data)))
+            bmi_chart.plot(feeds['bmi'].dates,
+                           feeds['bmi'].data, 'C1')
             bmi_chart.set_ylabel('BMI',
                                  fontsize='9',
                                  color='C1')
@@ -573,7 +632,6 @@ class Chartsel(Carousel):
             self.logger.addFilter(HostnameFilter())
             self.logger.debug('Setting up {0}.'.format(
                 self.__class__.__name__))
-            self.draw_chart()
         except Exception:
             self.logger.exception(
                 'Failed to instantiate {}.'.format(self.__class__.__name__))
@@ -612,11 +670,11 @@ class ChartApp(App):
     def build(self):
         """Build the app."""
         cs = Chartsel()
-        cs.wc.redraw(2)
-        cs.bp.redraw(2)
-        cs.sc.redraw(2)
-        cs.sw.redraw(2)
-        cs.sbp.redraw(2)
+        # cs.wc.redraw(2)
+        # cs.bp.redraw(2)
+        # cs.sc.redraw(2)
+        # cs.sw.redraw(2)
+        # cs.sbp.redraw(2)
         Clock.schedule_interval(cs.next_slide_please, 5.0)
         return cs
 
