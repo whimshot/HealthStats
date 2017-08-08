@@ -2,21 +2,26 @@
 import cProfile
 import logging
 import logging.handlers
+import os
 
-import chart  # noqa
-import inputpad  # noqa
-from hslogger import logger, HostnameFilter
 from kivy.app import App
 from kivy.clock import Clock
 from kivy.config import Config, ConfigParser
+from kivy.core.window import Window
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.carousel import Carousel
 from kivy.uix.togglebutton import ToggleButton
-import os
+
+import chart  # noqa
+import inputpad  # noqa
+from hslogger import HostnameFilter, logger
+
 cwd = os.getcwd()
 
-Config.set('graphics', 'width', '800')
-Config.set('graphics', 'height', '480')
+Config.set('graphics', 'resizable', 0)
+Config.set('graphics', 'width', 800)
+Config.set('graphics', 'height', 480)
+Window.size = (800, 480)
 
 feeds = ['weight', 'diastolic', 'systolic', 'pulse', 'bmi']
 
