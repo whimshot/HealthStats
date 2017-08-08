@@ -2,6 +2,15 @@
 
 A little Kivy/Python program for recording basic health statistics (weight, bp, and pulse). The statistics are stored on [Adafruit IO](https://io.adafruit.com/). Right now it is designed to run on a [Raspberry Pi](https://www.raspberrypi.org/) with a [Raspbery Pi Touch Display](https://www.raspberrypi.org/products/raspberry-pi-touch-display/).
 
+## Screenshots
+
+### Input Screen
+![screenshot](screenshots/input.png)
+### Weight & BMI Chart
+![screenshot](screenshots/weight.png)
+### Blood Pressure Chart
+![screenshot](screenshots/bloodpressure.png)
+
 ## Getting Started
 
 If you are really interested feel free to download and take a look. The requirements file is for Python 2.7 & 3.
