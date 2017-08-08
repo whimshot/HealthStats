@@ -12,8 +12,8 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.carousel import Carousel
 from kivy.uix.togglebutton import ToggleButton
 
-import chart  # noqa
-import inputpad  # noqa
+import chart.chart  # noqa
+import inputpad.inputpad  # noqa
 from hslogger import HostnameFilter, logger
 
 cwd = os.getcwd()
