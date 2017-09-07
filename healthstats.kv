@@ -1,6 +1,6 @@
 #:kivy 1.10.0
-#:include inputpad.kv
-#:include chart.kv
+#:include inputpad/inputpad.kv
+#:include chart/chart.kv
 
 <TglBtn>
     on_press: self.toggle()
@@ -18,9 +18,6 @@
             pos: self.pos
             size: self.size
 
-<SmallCharts@Chart>
-    source: 'SmallCharts.png'
-
 <HealthStats>:
     inputpad: input_pad
     statsimage: stats_image
@@ -37,8 +34,6 @@
     healthstats: health_stats
     weightchart: weight_chart
     bpchart: bp_chart
-    sw: sw
-    sbp: sbp
     min_move: 0.05
     direction: 'right'
     loop: True
@@ -48,10 +43,6 @@
         id: weight_chart
     BPChart:
         id: bp_chart
-    SmoothWeight
-        id: sw
-    SmoothBP:
-        id: sbp
 
 <HealthBox>
     hc: hc
@@ -64,25 +55,22 @@
         id: toolbar
         TglBtn:
             id: toggle
-            text: 'Scroll Off'
+            text: 'Scroll'
             background_color: [0, 0, 1, 1]
-            on_press: root.hc.load_slide(root.hc.healthstats)
-        Label:
-            text: ''
-        Label:
-            text: ''
-        Button:
-            text: 'Weight Chart'
-            background_color: [0, 1, 1, 1]
-            on_press: root.hc.load_slide(root.hc.weightchart)
-        Button:
-            text: 'BP Chart'
-            background_color: [0, 1, 1, 1]
-            on_press: root.hc.load_slide(root.hc.bpchart)
         Button:
             text: 'Input Screen'
             background_color: [0, 1, 1, 1]
             on_press: root.hc.load_slide(root.hc.healthstats)
+        Button:
+            text: 'Weight\n& BMI'
+            background_color: [0, 1, 1, 1]
+            halign: 'center'
+            on_press: root.hc.load_slide(root.hc.weightchart)
+        Button:
+            text: 'Blood Pressure\n& Pulse'
+            background_color: [0, 1, 1, 1]
+            halign: 'center'
+            on_press: root.hc.load_slide(root.hc.bpchart)
         Button:
             text: 'Settings'
             on_press: app.open_settings()

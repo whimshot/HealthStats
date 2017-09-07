@@ -5,7 +5,6 @@ AdafruitIOKey.py
 __pycache__
 .buildozer
 bin/
-*.png
 envs/
 .env
 *.log*
@@ -14,3 +13,4 @@ envs/
 tags
 .tags
 *.profile
+client_secret.json

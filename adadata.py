@@ -65,7 +65,7 @@ class AdaFeed(object):
                 self.logger.debug('Appended {0}'.format(local))
             self.logger.debug('Retrieved data from {0}.'.format(self.feed))
             if self.data != old_data:
-                self.updated = [True, True, True, True, True]
+                self.updated = [True, True, True]
         except Exception:
             self.logger.exception('Caught exception.')
 

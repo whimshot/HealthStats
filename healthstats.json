@@ -29,6 +29,63 @@
     },
     {
         "type": "title",
+        "title": "Thunderforest"
+    },
+    {
+        "type": "string",
+        "title": "Thunderforest API Key",
+        "desc": "API key for thunderforest.org.",
+        "section": "Thunderforest",
+        "key": "apikey"
+    },
+    {
+        "type": "title",
+        "title": "GoogleSheets"
+    },
+    {
+        "type": "string",
+        "title": "Scopes",
+        "desc": "Scope of the rights to request.",
+        "section": "GoogleSheets",
+        "key": "scopes"
+    },
+    {
+        "type": "string",
+        "title": "Client Secret File",
+        "desc": "Where the client secret is stored.",
+        "section": "GoogleSheets",
+        "key": "client_secret_file"
+    },
+    {
+        "type": "string",
+        "title": "Application Name",
+        "desc": "Name to present when requesting access.",
+        "section": "GoogleSheets",
+        "key": "application_name"
+    },
+    {
+        "type": "string",
+        "title": "Spreadsheet ID",
+        "desc": "Unique identifier for the spreadsheet.",
+        "section": "GoogleSheets",
+        "key": "spreadsheetid"
+    },
+    {
+        "type": "string",
+        "title": "Discovery URL",
+        "desc": "URL for service discovery.",
+        "section": "GoogleSheets",
+        "key": "discoveryurl"
+    },
+    {
+        "type": "string",
+        "title": "Quick JSON",
+        "desc": "The name of the quick_json file.",
+        "section": "GoogleSheets",
+        "key": "quick_json"
+    },
+    {
+        "type": "title",
         "title": "Logging"
     },
     {
@@ -55,5 +112,12 @@
         "desc": "BMI = Weight (Kg)/(Height in Meters)[sup]2[/sup]",
         "section": "Constants",
         "key": "bmi_constant"
+    },
+    {
+        "type": "numeric",
+        "title": "Scrolling Delay",
+        "desc": "Number of seconds to delay before the next slide.",
+        "section": "Constants",
+        "key": "scrolldelay"
     }
 ]

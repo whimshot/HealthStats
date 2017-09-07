@@ -2,19 +2,26 @@
 import cProfile
 import logging
 import logging.handlers
+import os
 
-import chart  # noqa
-import inputpad  # noqa
-from hslogger import logger, HostnameFilter
 from kivy.app import App
 from kivy.clock import Clock
 from kivy.config import Config, ConfigParser
+from kivy.core.window import Window
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.carousel import Carousel
 from kivy.uix.togglebutton import ToggleButton
 
-Config.set('graphics', 'width', '800')
-Config.set('graphics', 'height', '480')
+import chart.chart  # noqa
+import inputpad.inputpad  # noqa
+from hslogger import HostnameFilter, logger
+
+cwd = os.getcwd()
+
+Config.set('graphics', 'resizable', 0)
+Config.set('graphics', 'width', 800)
+Config.set('graphics', 'height', 480)
+Window.size = (800, 480)
 
 feeds = ['weight', 'diastolic', 'systolic', 'pulse', 'bmi']
 
@@ -31,7 +38,7 @@ class TglBtn(ToggleButton):
                                   + self.__class__.__name__)
             self.logger.addFilter(HostnameFilter())
             self.logger.debug(self.__class__.__name__ + ": Created")
-            self.text = 'Scroll Off'
+            self.text = 'Scroll'
         except Exception:
             self.logger.exception("Caught exception.")
         finally:
@@ -41,9 +48,9 @@ class TglBtn(ToggleButton):
         """Toggle that button."""
         try:
             if self.state == 'normal':
-                self.text = 'Scroll Off'
+                self.text = 'Scroll'
             else:
-                self.text = 'Scroll On'
+                self.text = 'Scrolling'
         except Exception:
             raise
         finally:
@@ -102,12 +109,10 @@ class HealthStatsApp(App):
         """Build function for Health Stats kivy app."""
         logger.info('Starting HealthStatsApp.')
         hb = HealthBox()
+        Clock.schedule_interval(hb.hc.next_slide_please, 5)
         Clock.schedule_interval(hb.hc.weightchart.redraw, 30)
         Clock.schedule_interval(hb.hc.bpchart.redraw, 30)
-        Clock.schedule_interval(hb.hc.sw.redraw, 30)
-        Clock.schedule_interval(hb.hc.sbp.redraw, 30)
         Clock.schedule_interval(hb.hc.healthstats.statsimage.redraw, 30)
-        Clock.schedule_interval(hb.hc.next_slide_please, 10)
         return hb
 
 
