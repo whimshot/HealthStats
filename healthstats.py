@@ -1,4 +1,5 @@
 """Health Stats app in kivy."""
+import atexit
 import cProfile
 import logging
 import logging.handlers
@@ -24,6 +25,20 @@ Config.set('graphics', 'height', 480)
 Window.size = (800, 480)
 
 feeds = ['weight', 'diastolic', 'systolic', 'pulse', 'bmi']
+
+pid = str(os.getpid())
+pidfile = "/tmp/healthstats.pid"
+with open(pidfile) as pf:
+    pf.write(pid)
+
+
+def cleanup():
+    """Cleanup the pid file."""
+    if os.path.isfile(pidfile):
+        os.unlink(pidfile)
+
+
+atexit.register(cleanup)    # Register with atexit
 
 
 class TglBtn(ToggleButton):
@@ -90,14 +105,12 @@ class HealthStatsApp(App):
 
     def on_start(self):
         """Task performed on start."""
-        self.profile = cProfile.Profile()
-        self.profile.enable()
+        pass
 
     def on_stop(self):
         """Task performed on app stop."""
-        self.profile.disable()
-        self.profile.dump_stats('healthstats.profile')
-
+        pass
+        
     def build_settings(self, settings):
         """Set up the settings for this app."""
         self.config = ConfigParser()
