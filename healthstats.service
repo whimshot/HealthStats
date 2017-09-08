@@ -1,0 +1,11 @@
+[Unit]
+Description=Health Stats
+
+[Service]
+Type=idle
+WorkingDirectory=/home/pi/HealthStats
+ExecStart=/usr/bin/python3 /home/pi/infomatic/infomatic.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
