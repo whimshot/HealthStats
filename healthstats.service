@@ -4,7 +4,7 @@ Description=Health Stats
 [Service]
 Type=idle
 WorkingDirectory=/home/pi/HealthStats
-ExecStart=/usr/bin/python3 /home/pi/infomatic/infomatic.py
+ExecStart=/usr/bin/python3 /home/pi/HealthStats/healthstats.py
 Restart=always
 
 [Install]
