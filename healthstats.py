@@ -28,7 +28,7 @@ feeds = ['weight', 'diastolic', 'systolic', 'pulse', 'bmi']
 
 pid = str(os.getpid())
 pidfile = "/tmp/healthstats.pid"
-with open(pidfile) as pf:
+with open(pidfile, 'w') as pf:
     pf.write(pid)
 
 
@@ -110,7 +110,7 @@ class HealthStatsApp(App):
     def on_stop(self):
         """Task performed on app stop."""
         pass
-        
+
     def build_settings(self, settings):
         """Set up the settings for this app."""
         self.config = ConfigParser()
